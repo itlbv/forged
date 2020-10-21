@@ -3,40 +3,30 @@
 #include <SDL.h>
 #include <iostream>
 
-RenderWindow::RenderWindow(char *title, int width, int height)
-: window(nullptr), renderer(nullptr)
-{
-    window = SDL_CreateWindow(title,
-                              SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED,
-                              width,
-                              height,
-                              SDL_WINDOW_SHOWN);
+RenderWindow::RenderWindow(const char *title, int width, int height)
+        : window(SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, 0)),
+          renderer(SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED)) {
     if (window == nullptr)
         std::cout << "SDL_CreateWindow FAILED. Error: " << SDL_GetError();
 
-    surface = SDL_GetWindowSurface(window);
-    if (surface == nullptr)
-        std::cout << "SDL_GetWindowSurface FAILED. Error: " << SDL_GetError();
-
-    renderer = SDL_CreateRenderer(window,
-                                  -1,
-                                  SDL_RENDERER_ACCELERATED);
     if (renderer == nullptr)
         std::cout << "SDL_CreateRenderer FAILED. Error: " << SDL_GetError();
-
-    rect.x = 50;
-    rect.y = 50;
-    rect.w = 50;
-    rect.h = 50;
 }
 
-void RenderWindow::render() {
-    SDL_FillRect(surface, &rect, SDL_MapRGB(surface->format, 10, 200, 120));
-    SDL_UpdateWindowSurface(window);
+void RenderWindow::startFrame() {
+    SDL_SetRenderDrawColor(renderer, 90, 125, 70, 255); // set default green
+    SDL_RenderClear(renderer);
+}
+
+void RenderWindow::render(Entity* entity) {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    SDL_RenderFillRect(renderer, entity->getRect());
+}
+
+void RenderWindow::renderToScreen() {
+    SDL_RenderPresent(renderer);
 }
 
 void RenderWindow::cleanUp() {
-    SDL_FreeSurface(surface);
     SDL_DestroyWindow(window);
 }

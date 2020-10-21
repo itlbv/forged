@@ -1,18 +1,22 @@
 #ifndef FORGED_RENDERWINDOW_H
 #define FORGED_RENDERWINDOW_H
+
 #include "SDL.h"
+#include "Entity.h"
 
 class RenderWindow {
-
+private:
     SDL_Window *window;
-    SDL_Surface *surface;
     SDL_Renderer *renderer;
-
-    SDL_Rect rect{};
-
 public:
-    RenderWindow(char *title, int width, int height);
-    void render();
+    RenderWindow(const char *title, int width, int height);
+
+    void startFrame();
+
+    void render(Entity* entity);
+
+    void renderToScreen();
+
     void cleanUp();
 };
 
