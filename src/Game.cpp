@@ -10,7 +10,7 @@ Game::Game()
     createEntities();
 }
 
-void Game::run(float deltaTime) {
+void Game::run(unsigned int deltaTime) {
     Input::getInput();
 
     window.startFrame();

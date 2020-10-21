@@ -6,6 +6,7 @@
 RenderWindow::RenderWindow(const char *title, int width, int height)
         : window(SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, 0)),
           renderer(SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED)) {
+
     if (window == nullptr)
         std::cout << "SDL_CreateWindow FAILED. Error: " << SDL_GetError();
 
@@ -18,7 +19,7 @@ void RenderWindow::startFrame() {
     SDL_RenderClear(renderer);
 }
 
-void RenderWindow::render(Entity* entity) {
+void RenderWindow::render(Entity *entity) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
     SDL_RenderFillRect(renderer, entity->getRect());
 }

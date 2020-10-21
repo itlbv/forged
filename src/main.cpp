@@ -4,22 +4,26 @@
 #include "RenderWindow.h"
 #include "Game.h"
 
+#define MILLISECONDS_PER_FRAME 16
+
 int main(int argc, char **argv) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         std::cout << "SDL_Init FAILED. Error: " << SDL_GetError() << std::endl;
 
-    int oldTime = SDL_GetTicks();
-    float dt = 1 / 60.0;
-
+    unsigned int prevFrameTime, timePassed, deltaTime = 0;
+    prevFrameTime = SDL_GetTicks();
     Game game;
     while (!Game::quit) {
-        int newTime = SDL_GetTicks();
-        float frameTime = (float) (newTime - oldTime);
-        oldTime = newTime;
 
-        float deltaTime = std::min(dt, frameTime);
-        std::cout << newTime << std::endl;
+        timePassed = SDL_GetTicks() - prevFrameTime;
+        prevFrameTime = SDL_GetTicks();
+        deltaTime += timePassed;
+        if (deltaTime < MILLISECONDS_PER_FRAME)
+            continue;
+
         game.run(deltaTime);
+
+        deltaTime = 0;
     }
 
     SDL_Quit();
