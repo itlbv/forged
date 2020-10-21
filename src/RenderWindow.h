@@ -15,7 +15,7 @@ public:
 
     void render(Entity* entity);
 
-    void renderToScreen();
+    void showFrame();
 
     void cleanUp();
 };

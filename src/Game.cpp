@@ -16,7 +16,7 @@ void Game::run(float deltaTime) {
     window.startFrame();
     window.render(&player);
     renderEntities();
-    window.renderToScreen();
+    window.showFrame();
 }
 
 void Game::createEntities() {

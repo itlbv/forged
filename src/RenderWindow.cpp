@@ -23,7 +23,7 @@ void RenderWindow::render(Entity* entity) {
     SDL_RenderFillRect(renderer, entity->getRect());
 }
 
-void RenderWindow::renderToScreen() {
+void RenderWindow::showFrame() {
     SDL_RenderPresent(renderer);
 }
 
