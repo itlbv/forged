@@ -1,18 +1,18 @@
 #include "Entity.h"
 #include "RenderWindow.h"
 
-Entity::Entity(int x, int y) {
-    rect.x = x;
-    rect.y = y;
-    rect.w  = 30;
-    rect.h  = 30;
+Entity::Entity(float xa, float ya)
+        : x(xa), y(ya) {
+    rect.w = worldToScreen(0.49f);
+    rect.h = worldToScreen(0.49f);
 }
 
-void Entity::moveTo(int x, int y) {
-    rect.x = x;
-    rect.y = y;
-}
-
-SDL_Rect* Entity::getRect() {
+SDL_Rect *Entity::getRect() {
+    rect.x = worldToScreen(x);
+    rect.y = worldToScreen(y);
     return &rect;
+}
+
+int Entity::worldToScreen(float world) {
+    return world * 100;
 }

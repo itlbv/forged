@@ -4,11 +4,13 @@
 #include <SDL.h>
 
 class Entity {
+    float x, y;
     SDL_Rect rect{};
-public:
-    Entity(int x, int y);
 
-    void moveTo(int x, int y);
+    static int worldToScreen(float world);
+
+public:
+    Entity(float x, float y);
 
     SDL_Rect *getRect();
 };

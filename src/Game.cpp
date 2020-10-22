@@ -6,7 +6,7 @@ bool Game::quit = false;
 
 Game::Game()
         : window(RenderWindow("Forged", 800, 600)),
-          player(Entity(10, 10)) {
+          player(Entity(1, 1)) {
     createEntities();
 }
 
@@ -21,8 +21,8 @@ void Game::run(unsigned int deltaTime) {
 
 void Game::createEntities() {
     for (int i = 0; i < 5; ++i) {
-        int x = rand() % 800;
-        int y = rand() % 600;
+        int x = rand() % 8;
+        int y = rand() % 6;
         Entity e(x, y);
         entities.push_back(e);
     }
