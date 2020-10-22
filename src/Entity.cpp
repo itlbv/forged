@@ -14,5 +14,5 @@ SDL_Rect *Entity::getRect() {
 }
 
 int Entity::worldToScreen(float world) {
-    return world * 100;
+    return world * 50;
 }

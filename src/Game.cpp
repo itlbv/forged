@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Input.h"
+#include "Map.h"
 #include <random>
 
 bool Game::quit = false;
@@ -13,7 +14,10 @@ Game::Game()
 void Game::run(unsigned int deltaTime) {
     Input::getInput();
 
+    Map map(window);
+
     window.startFrame();
+    map.render();
     window.render(&player);
     renderEntities();
     window.showFrame();

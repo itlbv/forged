@@ -25,6 +25,11 @@ void RenderWindow::render(Entity *entity) {
     SDL_RenderFillRect(renderer, entity->getRect());
 }
 
+void RenderWindow::renderLine(int x1, int y1, int x2, int y2) {
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+}
+
 void RenderWindow::showFrame() {
     SDL_RenderPresent(renderer);
 }

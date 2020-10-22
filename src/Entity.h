@@ -7,12 +7,13 @@ class Entity {
     float x, y;
     SDL_Rect rect{};
 
-    static int worldToScreen(float world);
-
 public:
+
     Entity(float x, float y);
 
     SDL_Rect *getRect();
+
+    static int worldToScreen(float world);
 };
 
 
