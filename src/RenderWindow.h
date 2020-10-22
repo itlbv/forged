@@ -17,7 +17,7 @@ public:
 
     void showFrame();
 
-    void cleanUp();
+    ~RenderWindow();
 };
 
 
