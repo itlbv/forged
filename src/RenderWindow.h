@@ -11,6 +11,8 @@ private:
 public:
     RenderWindow(const char *title, int width, int height);
 
+    void updateViewport(SDL_Rect* viewport);
+
     void startFrame();
 
     void render(Entity* entity);

@@ -15,6 +15,10 @@ RenderWindow::RenderWindow(const char *title, int width, int height)
         std::cout << "SDL_CreateRenderer FAILED. Error: " << SDL_GetError();
 }
 
+void RenderWindow::updateViewport(SDL_Rect* viewport) {
+    SDL_RenderSetViewport(renderer, viewport);
+}
+
 void RenderWindow::startFrame() {
     SDL_SetRenderDrawColor(renderer, 90, 125, 70, 255); // set default green
     SDL_RenderClear(renderer);

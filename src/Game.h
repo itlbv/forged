@@ -18,6 +18,8 @@ class Game {
 public:
 
     static bool quit;
+    static SDL_Rect viewport;
+    static int zoomFactor;
 
     Game();
 

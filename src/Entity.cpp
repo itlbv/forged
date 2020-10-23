@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "RenderWindow.h"
+#include "Game.h"
 
 Entity::Entity(float xa, float ya)
         : x(xa), y(ya) {
@@ -14,5 +15,5 @@ SDL_Rect *Entity::getRect() {
 }
 
 int Entity::worldToScreen(float world) {
-    return world * 50;
+    return world * Game::zoomFactor;
 }

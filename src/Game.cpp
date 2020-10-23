@@ -1,9 +1,10 @@
 #include "Game.h"
 #include "Input.h"
 #include "Map.h"
-#include <random>
 
 bool Game::quit = false;
+SDL_Rect Game::viewport{0, 0, 800, 600};
+int Game::zoomFactor = 50;
 
 Game::Game()
         : window(RenderWindow("Forged", 800, 600)),
@@ -15,6 +16,8 @@ void Game::run(unsigned int deltaTime) {
     Input::getInput();
 
     Map map(window);
+
+    window.updateViewport(&viewport);
 
     window.startFrame();
     map.render();
