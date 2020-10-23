@@ -9,16 +9,16 @@
 
 class Game {
     RenderWindow window;
-    std::vector<Entity> entities;
+
     void createEntities();
 
     void renderEntities();
 
 public:
-
     static bool quit;
     static SDL_Rect viewport;
     static int zoomFactor;
+    static std::vector<Entity> entities;
     static Player player;
 
     Game();

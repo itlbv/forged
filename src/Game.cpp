@@ -6,6 +6,7 @@
 bool Game::quit = false;
 SDL_Rect Game::viewport{0, 0, 800, 600};
 int Game::zoomFactor = 50;
+std::vector<Entity> Game::entities;
 Player Game::player(1, 1);
 
 Game::Game()

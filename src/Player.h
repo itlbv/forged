@@ -8,6 +8,10 @@ class Player : public Entity {
 
     void move();
 
+    void checkCollision();
+
+    static float distanceBetween(Vect &vect1, Vect &vect2);
+
 public:
     Vect velocity{0, 0};
 

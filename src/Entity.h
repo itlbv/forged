@@ -2,11 +2,14 @@
 #define FORGED_ENTITY_H
 
 #include <SDL.h>
+#include "Body.h"
+#include "Vect.h"
 
 class Entity {
     SDL_Rect rect{};
 public:
-    float x, y;
+    Vect pos;
+    Body body{0.24f};
 
     Entity(float x, float y);
 
