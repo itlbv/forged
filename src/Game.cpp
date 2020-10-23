@@ -1,14 +1,15 @@
 #include "Game.h"
 #include "Input.h"
 #include "Map.h"
+#include "Player.h"
 
 bool Game::quit = false;
 SDL_Rect Game::viewport{0, 0, 800, 600};
 int Game::zoomFactor = 50;
+Player Game::player(1, 1);
 
 Game::Game()
-        : window(RenderWindow("Forged", 800, 600)),
-          player(Entity(1, 1)) {
+        : window(RenderWindow("Forged", 800, 600)) {
     createEntities();
 }
 
@@ -18,6 +19,8 @@ void Game::run(unsigned int deltaTime) {
     Map map(window);
 
     window.updateViewport(&viewport);
+
+    player.update();
 
     window.startFrame();
     map.render();
