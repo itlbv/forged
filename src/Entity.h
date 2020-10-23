@@ -4,10 +4,9 @@
 #include <SDL.h>
 
 class Entity {
-    float x, y;
     SDL_Rect rect{};
-
 public:
+    float x, y;
 
     Entity(float x, float y);
 
