@@ -2,20 +2,20 @@
 #include "RenderWindow.h"
 #include "Game.h"
 
-Entity::Entity(float x, float y)
+Entity::Entity(double x, double y)
         : pos(Vect{x, y}) {
-    rect.w = worldToScreen(0.49f);
-    rect.h = worldToScreen(0.49f);
+    drawingRect.w = worldToScreen(0.49);
+    drawingRect.h = worldToScreen(0.49);
 }
 
-SDL_Rect *Entity::getRect() {
-    rect.x = worldToScreen(pos.x);
-    rect.y = worldToScreen(pos.y);
-    rect.w = worldToScreen(0.49f);
-    rect.h = worldToScreen(0.49f);
-    return &rect;
+SDL_Rect *Entity::getDrawingRect() {
+    drawingRect.x = worldToScreen(pos.x) - drawingRect.w/2;
+    drawingRect.y = worldToScreen(pos.y) - drawingRect.h/2;
+    drawingRect.w = worldToScreen(0.49);
+    drawingRect.h = worldToScreen(0.49);
+    return &drawingRect;
 }
 
-int Entity::worldToScreen(float world) {
+int Entity::worldToScreen(double world) {
     return world * Game::zoomFactor;
 }

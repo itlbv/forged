@@ -1,13 +1,41 @@
-#ifndef FORGED_VECT_H
-#define FORGED_VECT_H
+#pragma once
+
+#include <cmath>
 
 struct Vect {
-    float x, y;
+    double x, y;
 
-    void operator+(const Vect& vect){
-        this->x += vect.x;
-        this->y += vect.y;
+    double length() {
+        using namespace std;
+        return sqrt(pow(x, 2) + pow(y, 2));
     };
-};
 
-#endif //FORGED_VECT_H
+    double distanceTo(Vect &vect) {
+        return sqrt(pow(abs(x - vect.x), 2) + pow(abs(y - vect.y), 2));
+    }
+
+    Vect vectorTo(Vect &vect) {
+        Vect vectorTo{};
+        vectorTo.x = x - vect.x;
+        vectorTo.y = y - vect.y;
+        return vectorTo;
+
+    }
+
+    void normalize() {
+        double length = this->length();
+        if (length > 0) {
+            x /= length;
+            y /= length;
+        }
+    }
+
+    void setToLength(double desiredLength) {
+        double length = this->length();
+        if (length > 0) {
+            double newLength = desiredLength / length;
+            x *= newLength;
+            y *= newLength;
+        }
+    }
+};

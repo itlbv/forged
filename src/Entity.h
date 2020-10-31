@@ -1,22 +1,18 @@
-#ifndef FORGED_ENTITY_H
-#define FORGED_ENTITY_H
+#pragma once
 
 #include <SDL.h>
 #include "Body.h"
 #include "Vect.h"
 
 class Entity {
-    SDL_Rect rect{};
+    SDL_Rect drawingRect{};
 public:
     Vect pos;
     Body body{0.24f};
 
-    Entity(float x, float y);
+    Entity(double x, double y);
 
-    SDL_Rect *getRect();
+    SDL_Rect *getDrawingRect();
 
-    static int worldToScreen(float world);
+    static int worldToScreen(double world);
 };
-
-
-#endif //FORGED_ENTITY_H

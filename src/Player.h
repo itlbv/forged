@@ -1,5 +1,4 @@
-#ifndef FORGED_PLAYER_H
-#define FORGED_PLAYER_H
+#pragma once
 
 #include "Entity.h"
 #include "Vect.h"
@@ -10,17 +9,12 @@ class Player : public Entity {
 
     void checkCollision();
 
-    static float distanceBetween(Vect &vect1, Vect &vect2);
-
 public:
     Vect velocity{0, 0};
 
-    Player(float x, float y);
+    Player(double x, double y);
 
     void update();
 
-    void setVelocity(float x, float y);
+    void setVelocity(double x, double y);
 };
-
-
-#endif //FORGED_PLAYER_H

@@ -25,7 +25,7 @@ void Game::run(unsigned int deltaTime) {
 
     window.startFrame();
     map.render();
-    window.render(player);
+    window.renderEntity(player);
     renderEntities();
     window.showFrame();
 }
@@ -41,7 +41,7 @@ void Game::createEntities() {
 
 void Game::renderEntities() {
     for (Entity &e : entities) {
-        window.render(e);
+        window.renderEntity(e);
     }
 }
 

@@ -1,9 +1,8 @@
 #include "Player.h"
 #include "Game.h"
-#include <cmath>
 #include <iostream>
 
-Player::Player(float x, float y) : Entity(x, y) {}
+Player::Player(double x, double y) : Entity(x, y) {}
 
 void Player::update() {
     move();
@@ -12,14 +11,16 @@ void Player::update() {
 
 void Player::checkCollision() {
     for (Entity &e : Game::entities) {
-        if (distanceBetween(pos, e.pos) < body.radius * 2)
-        std::cout << "Colliding" << std::endl;
+        double distance = pos.distanceTo(e.pos);
+        if (distance < body.radius * 2) {
+            double penetrationDistance = body.radius * 2 - distance;
+            Vect collisionNormal = pos.vectorTo(e.pos);         // TODO should it be written with pointers?
+            collisionNormal.setToLength(penetrationDistance);
+            setVelocity(collisionNormal.x, collisionNormal.y);
+            move();
+            std::cout << "Colliding " << penetrationDistance << std::endl;
+        }
     }
-}
-
-float Player::distanceBetween(Vect &vect1, Vect &vect2) {
-    using namespace std;
-    return sqrt(pow(abs(vect1.x - vect2.x), 2) + pow(abs(vect1.y - vect2.y), 2));
 }
 
 void Player::move() {
@@ -28,7 +29,7 @@ void Player::move() {
     //setVelocity(0, 0);
 }
 
-void Player::setVelocity(float x, float y) {
+void Player::setVelocity(double x, double y) {
     velocity.x = x;
     velocity.y = y;
 }

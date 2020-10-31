@@ -15,7 +15,7 @@ RenderWindow::RenderWindow(const char *title, int width, int height)
         std::cout << "SDL_CreateRenderer FAILED. Error: " << SDL_GetError();
 }
 
-void RenderWindow::updateViewport(SDL_Rect* viewport) {
+void RenderWindow::updateViewport(SDL_Rect *viewport) {
     SDL_RenderSetViewport(renderer, viewport);
 }
 
@@ -24,9 +24,11 @@ void RenderWindow::startFrame() {
     SDL_RenderClear(renderer);
 }
 
-void RenderWindow::render(Entity& entity) {
+void RenderWindow::renderEntity(Entity &e) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-    SDL_RenderFillRect(renderer, entity.getRect());
+    SDL_RenderFillRect(renderer, e.getDrawingRect());
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderDrawPoint(renderer, Entity::worldToScreen(e.pos.x), Entity::worldToScreen(e.pos.y));
 }
 
 void RenderWindow::renderLine(int x1, int y1, int x2, int y2) {
