@@ -15,7 +15,7 @@ public:
 
     void startFrame();
 
-    void render(Entity* entity);
+    void render(Entity& entity);
 
     void renderLine(int x1, int y1, int x2, int y2);
 

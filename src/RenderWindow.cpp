@@ -24,9 +24,9 @@ void RenderWindow::startFrame() {
     SDL_RenderClear(renderer);
 }
 
-void RenderWindow::render(Entity *entity) {
+void RenderWindow::render(Entity& entity) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-    SDL_RenderFillRect(renderer, entity->getRect());
+    SDL_RenderFillRect(renderer, entity.getRect());
 }
 
 void RenderWindow::renderLine(int x1, int y1, int x2, int y2) {
