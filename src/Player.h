@@ -16,5 +16,5 @@ public:
 
     void update();
 
-    void setVelocity(double x, double y);
+    void setVelocity(Vect& vel);
 };

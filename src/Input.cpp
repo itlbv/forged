@@ -5,6 +5,7 @@
 #include <iostream>
 
 SDL_Event Input::event;
+Vect Input::velocityPlayer{0, 0};
 
 void Input::getInput() {
     while (SDL_PollEvent(&event)) {
@@ -16,19 +17,14 @@ void Input::getInput() {
             //Game::viewport.y += 50;
         }
 
+        velocityPlayer.set(0,0);
         if (event.type == SDL_KEYUP) {
             switch (event.key.keysym.sym) {
                 case SDLK_LEFT:
-                    Game::player.setVelocity(0, 0);
-                    break;
                 case SDLK_RIGHT:
-                    Game::player.setVelocity(0, 0);
-                    break;
                 case SDLK_UP:
-                    Game::player.setVelocity(0, 0);
-                    break;
                 case SDLK_DOWN:
-                    Game::player.setVelocity(0, 0);
+                    velocityPlayer.set(0, 0);
                     break;
             }
         }
@@ -55,18 +51,19 @@ void Input::getInput() {
                     break;
 
                 case SDLK_LEFT:
-                    Game::player.setVelocity(-0.1, 0);
+                    velocityPlayer.set(-0.1, 0);
                     break;
                 case SDLK_RIGHT:
-                    Game::player.setVelocity(0.1, 0);
+                    velocityPlayer.set(0.1, 0);
                     break;
                 case SDLK_UP:
-                    Game::player.setVelocity(0, -0.1);
+                    velocityPlayer.set(0, -0.1);
                     break;
                 case SDLK_DOWN:
-                    Game::player.setVelocity(0, 0.1);
+                    velocityPlayer.set(0, 0.1);
                     break;
             }
         }
+        Game::player.setVelocity(velocityPlayer);
     }
 }

@@ -38,4 +38,9 @@ struct Vect {
             y *= newLength;
         }
     }
+
+    void set(double xa, double ya){
+        x = xa;
+        y = ya;
+    }
 };

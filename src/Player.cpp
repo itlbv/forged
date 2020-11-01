@@ -16,7 +16,7 @@ void Player::checkCollision() {
             double penetrationDistance = body.radius * 2 - distance;
             Vect collisionNormal = pos.vectorTo(e.pos);         // TODO should it be written with pointers?
             collisionNormal.setToLength(penetrationDistance);
-            setVelocity(collisionNormal.x, collisionNormal.y);
+            setVelocity(collisionNormal);
             move();
             std::cout << "Colliding " << penetrationDistance << std::endl;
         }
@@ -26,10 +26,10 @@ void Player::checkCollision() {
 void Player::move() {
     pos.x += velocity.x;
     pos.y += velocity.y;
-    //setVelocity(0, 0);
+    velocity.set(0, 0);
 }
 
-void Player::setVelocity(double x, double y) {
-    velocity.x = x;
-    velocity.y = y;
+void Player::setVelocity(Vect& vel) {
+    velocity.x = vel.x;
+    velocity.y = vel.y;
 }
