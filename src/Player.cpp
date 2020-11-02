@@ -15,7 +15,7 @@ void Player::checkCollision() {
         if (distance < body.radius * 2) {
             double penetrationDistance = body.radius * 2 - distance;
             Vect collisionNormal = pos.vectorTo(e.pos);         // TODO should it be written with pointers?
-            collisionNormal.setToLength(penetrationDistance);
+            collisionNormal.setLength(penetrationDistance);
             setVelocity(collisionNormal);
             move();
             std::cout << "Colliding " << penetrationDistance << std::endl;
