@@ -21,7 +21,17 @@ void Input::getInput() {
         }
 
         if (event.type == SDL_MOUSEBUTTONDOWN) {
-
+            if (event.button.button == SDL_BUTTON_LEFT) {
+                for (Entity &e : Game::entities) {
+                    if (SDL_PointInRect(&mousePos, e.getDrawingRect())) {
+                        selectedEntity = &e;
+                    }
+                }
+            } else if (event.button.button == SDL_BUTTON_RIGHT) {
+                if (selectedEntity != nullptr) {
+                    selectedEntity->pos.add(0.1, 0.1);
+                }
+            }
         }
 
         if (event.type == SDL_MOUSEWHEEL) {
