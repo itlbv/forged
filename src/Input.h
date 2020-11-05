@@ -2,13 +2,13 @@
 
 #include <SDL.h>
 #include "Vect.h"
-#include "Entity.h"
+#include "Mob.h"
 
 class Input {
     static Vect velocityPlayer;
     static SDL_Event event;
     static SDL_Point mousePos;
-    static Entity* selectedEntity;
+    static Mob* selectedMob;
     static bool playerMove;
 public:
     static void getInput();

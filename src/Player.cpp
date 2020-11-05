@@ -10,7 +10,7 @@ void Player::update() {
 }
 
 void Player::checkCollision() {
-    for (Entity &e : Game::entities) {
+    for (Entity &e : Game::mobs) {
         double distance = pos.distanceTo(e.pos);
         if (distance < body.radius * 2) {
             double penetrationDistance = body.radius * 2 - distance;

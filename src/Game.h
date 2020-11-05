@@ -1,16 +1,18 @@
-#ifndef FORGED_GAME_H
-#define FORGED_GAME_H
+#pragma once
 
 #include <SDL.h>
 #include <vector>
 #include "Entity.h"
 #include "RenderWindow.h"
 #include "Player.h"
+#include "Mob.h"
 
 class Game {
     RenderWindow window;
 
-    void createEntities();
+    void updateMobs();
+
+    void createMobs();
 
     void renderEntities();
 
@@ -18,13 +20,11 @@ public:
     static bool quit;
     static SDL_Rect viewport;
     static int zoomFactor;
-    static std::vector<Entity> entities;
+    static std::vector<Mob> mobs;
     static Player player;
+    static double delta;
 
     Game();
 
     void run(unsigned int deltaTime);
 };
-
-
-#endif //FORGED_GAME_H

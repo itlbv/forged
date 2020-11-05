@@ -7,7 +7,7 @@
 SDL_Event Input::event;
 Vect Input::velocityPlayer{0, 0};
 SDL_Point Input::mousePos{0, 0};
-Entity* Input::selectedEntity;
+Mob* Input::selectedMob;
 bool Input::playerMove = false;
 
 void Input::getInput() {
@@ -22,14 +22,16 @@ void Input::getInput() {
 
         if (event.type == SDL_MOUSEBUTTONDOWN) {
             if (event.button.button == SDL_BUTTON_LEFT) {
-                for (Entity &e : Game::entities) {
+                for (Mob &e : Game::mobs) {
                     if (SDL_PointInRect(&mousePos, e.getDrawingRect())) {
-                        selectedEntity = &e;
+                        selectedMob = &e;
                     }
                 }
             } else if (event.button.button == SDL_BUTTON_RIGHT) {
-                if (selectedEntity != nullptr) {
-                    selectedEntity->pos.add(0.1, 0.1);
+                if (selectedMob != nullptr) {
+                    //selectedMob->pos.add(0.1, 0.1);
+                    //Vect vect{mousePos.x, mousePos.y};
+                    selectedMob->setDest(Entity::screenToWorld(mousePos.x), Entity::screenToWorld(mousePos.y));
                 }
             }
         }

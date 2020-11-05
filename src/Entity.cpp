@@ -19,3 +19,7 @@ SDL_Rect *Entity::getDrawingRect() {
 int Entity::worldToScreen(double world) {
     return world * Game::zoomFactor;
 }
+
+double Entity::screenToWorld(int screen) {
+    return (double)screen / Game::zoomFactor;
+}

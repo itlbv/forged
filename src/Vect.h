@@ -16,8 +16,8 @@ struct Vect {
 
     Vect vectorTo(Vect &vect) const {
         Vect vectorTo{};
-        vectorTo.x = x - vect.x;
-        vectorTo.y = y - vect.y;
+        vectorTo.x = vect.x - x;
+        vectorTo.y = vect.y - y;
         return vectorTo;
 
     }

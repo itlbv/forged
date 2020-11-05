@@ -15,4 +15,6 @@ public:
     SDL_Rect *getDrawingRect();
 
     static int worldToScreen(double world);
+
+    static double screenToWorld(int screen);
 };
