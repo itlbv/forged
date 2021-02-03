@@ -8,10 +8,14 @@ class Mob : public Entity {
 
     void move();
 
+    void checkCollision();
+
 public:
     Mob(double x, double y);
 
     void update();
 
     void setDest(double x, double y);
+
+    void setVelocity(Vect& vel);
 };

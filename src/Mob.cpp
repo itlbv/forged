@@ -17,6 +17,27 @@ void Mob::move() {
 
 void Mob::update() {
     move();
+    checkCollision();
+}
+
+void Mob::checkCollision() {
+    for (Mob &m : Game::mobs) {
+        if (this == &m)
+            return;
+        double distance = pos.distanceTo(m.pos);
+        if (distance < body.radius * 2) {
+            double penetrationDistance = body.radius * 2 - distance;
+            Vect collisionNormal = pos.vectorTo(m.pos);         // TODO should it be written with pointers?
+            collisionNormal.setLength(penetrationDistance);
+            setVelocity(collisionNormal);
+            move();
+        }
+    }
+}
+
+void Mob::setVelocity(Vect& vel) {
+    velocity.x = vel.x;
+    velocity.y = vel.y;
 }
 
 void Mob::setDest(double x, double y) {
