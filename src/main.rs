@@ -1,10 +1,12 @@
 mod map;
 mod renderer;
 mod input_handler;
+mod ecs;
+mod components;
 
 use std::time::{Duration, Instant};
-use sdl2::EventPump;
-use sdl2::render::WindowCanvas;
+use crate::components::{Health, Name, Pos};
+use crate::ecs::Ecs;
 use crate::input_handler::InputHandler;
 use crate::map::Map;
 use crate::renderer::Renderer;
@@ -14,6 +16,7 @@ pub struct World {
     map: Map,
     renderer: Renderer,
     input_handler: InputHandler,
+    ecs: Ecs,
 }
 
 impl World {
@@ -23,6 +26,7 @@ impl World {
             map: Map::new(),
             renderer,
             input_handler,
+            ecs: Ecs::new(),
         }
     }
 
@@ -44,18 +48,39 @@ fn main() {
         .build()
         .unwrap();
 
-    let mut sdl_canvas = window.into_canvas().build().unwrap();
+    let sdl_canvas = window.into_canvas().build().unwrap();
     let renderer = Renderer::new(sdl_canvas);
 
-    let mut sdl_events = sdl_context.event_pump().unwrap();
-    let input_handler = InputHandler{sdl_events};
+    let sdl_events = sdl_context.event_pump().unwrap();
+    let input_handler = InputHandler { sdl_events };
 
     let mut world = World::new(renderer, input_handler);
+
+    world.ecs.register_component::<Pos>();
+    world.ecs.register_component::<Name>();
+    world.ecs.register_component::<Health>();
+
+    let entity_1 = world.ecs.create_entity();
+    world.ecs.add_component_to_entity::<Pos>(entity_1, Pos { x: 1.0, y: 1.0 });
+    world.ecs.add_component_to_entity::<Name>(entity_1, Name { name: "Alice".to_string() });
+    world.ecs.add_component_to_entity::<Health>(entity_1, Health { health: 5 });
+
+    let entity_2 = world.ecs.create_entity();
+    world.ecs.add_component_to_entity::<Pos>(entity_2, Pos { x: 2.0, y: 2.0 });
+    world.ecs.add_component_to_entity::<Name>(entity_2, Name { name: "Bob".to_string() });
+    world.ecs.add_component_to_entity::<Health>(entity_2, Health { health: 5 });
+
+    let entity_3 = world.ecs.create_entity();
+    world.ecs.add_component_to_entity::<Pos>(entity_3, Pos { x: 3.0, y: 3.0 });
+    world.ecs.add_component_to_entity::<Name>(entity_3, Name { name: "No health".to_string() });
+
+    let entity_4 = world.ecs.create_entity();
+    world.ecs.add_component_to_entity::<Pos>(entity_4, Pos { x: 1.0, y: 1.0 });
 
     let mut instant = Instant::now();
     while !world.quit {
         let frame_time = Instant::now() - instant;
-        if frame_time < Duration::from_millis(16) { continue }
+        if frame_time < Duration::from_millis(16) { continue; }
         instant = Instant::now();
         world.tick(frame_time.as_millis() as i32)
     }

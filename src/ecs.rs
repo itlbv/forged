@@ -1,98 +1,45 @@
-use std::cell::RefCell;
+use std::any::{Any, TypeId};
+use std::borrow::BorrowMut;
+use std::collections::HashMap;
 
-trait ComponentVec {
-    fn as_any(&self) -> &dyn std::any::Any;
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any;
-    fn push_none(&mut self);
+type EntityIdx = usize;
+
+pub trait Component {}
+
+struct ComponentVec {
+    vec: Vec<Option<Box<dyn Component>>>,
 }
 
-impl<T> ComponentVec for RefCell<Vec<Option<T>>> {
-    fn as_any(&self) -> &dyn std::any::Any {
-        self as &dyn std::any::Any
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any {
-        self as &mut dyn std::any::Any
-    }
-
-    fn push_none(&mut self) {
-        self.get_mut().push(None);
-    }
-}
-
-struct Ecs {
-    entities_count: usize,
-    component_vecs: Vec<Box<dyn ComponentVec>>,
+pub struct Ecs {
+    entity_count: EntityIdx,
+    comps_registry: HashMap<TypeId, ComponentVec>,
 }
 
 impl Ecs {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
-            entities_count: 0,
-            component_vecs: Vec::new(),
+            entity_count: 0,
+            comps_registry: Default::default(),
         }
     }
 
-    fn new_entity(&mut self) -> usize {
-        let entity_id = self.entities_count;
-        for component_vec in self.component_vecs.iter_mut() {
-            component_vec.push_none();
-        }
-        self.entities_count += 1;
-        entity_id
+    pub fn register_component<C: Component + 'static>(&mut self) {
+        self.comps_registry.insert(TypeId::of::<C>(), ComponentVec{vec: vec![]});
     }
 
-    fn add_component_to_entity<ComponentType: 'static>(
-        &mut self,
-        entity: usize,
-        component: ComponentType,
-    ) {
-        for component_vec in self.component_vecs.iter_mut() {
-            if let Some(component_vec) = component_vec
-                .as_any_mut()
-                .downcast_mut::<RefCell<Vec<Option<ComponentType>>>>() {
-                component_vec.get_mut[entity] = Some(component);
-                return;
-            }
+    pub fn create_entity(&mut self) -> EntityIdx {
+        self.entity_count += 1;
+        for (_, comp_vec) in self.comps_registry.borrow_mut() {
+            comp_vec.vec.push(Option::None);
         }
-
-        // No matching component storage exists yet, so we have to make one.
-        let mut new_component_vec: Vec<Option<ComponentType>> =
-            Vec::with_capacity(self.entities_count);
-
-        // All existing entities don't have this component, so we give them `None`
-        for _ in 0..self.entities_count {
-            new_component_vec.push(None);
-        }
-
-        // Give this Entity the Component.
-        new_component_vec[entity] = Some(component);
-        self.component_vecs.push(Box::new(RefCell::new(new_component_vec)));
+        self.entity_count
     }
 
-    fn borrow_component_vec<ComponentType: 'static>(&self) -> Option<RefMut<Vec<Option<ComponentType>>>> {
-        for component_vec in self.component_vecs.iter() {
-            if let Some(component_vec) = component_vec
-                .as_any()
-                .downcast_ref::<Vec<Option<ComponentType>>>()
-            {
-                return Some(component_vec.borrow_mut());
-            }
-        }
-        None
+    pub fn add_component_to_entity<C: Component + 'static>(&mut self, entity_idx: EntityIdx, comp: C) {
+        self.comps_registry
+            .get_mut(&comp.type_id())
+            .unwrap()
+            .vec
+            .insert(entity_idx, Option::Some(Box::new(comp)));
     }
 }
-
-/*
-let mut healths = world.borrow_component_vec_mut::<Health>().unwrap();
-let mut names = world.borrow_component_vec_mut::<Name>().unwrap();
-let zip = healths.iter_mut().zip(names.iter_mut());
-let iter = zip.filter_map(|(health, name)| Some((health.as_mut()?, name.as_mut()?)));
-
-for (health, name) in iter
-{
-    if name.0 == "Perseus" && health.0 <= 0 {
-        *health = Health(100);
-    }
-}
- */
