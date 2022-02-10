@@ -10,6 +10,12 @@ struct ComponentVec {
     vec: Vec<Option<Box<dyn Component>>>,
 }
 
+impl ComponentVec {
+    fn borrow_comp_vec_mut(&mut self) -> &mut Vec<Option<Box<dyn Component>>> {
+        &mut self.vec
+    }
+}
+
 pub struct Ecs {
     entity_count: EntityIdx,
     comps_registry: HashMap<TypeId, ComponentVec>,
@@ -24,7 +30,7 @@ impl Ecs {
     }
 
     pub fn register_component<C: Component + 'static>(&mut self) {
-        self.comps_registry.insert(TypeId::of::<C>(), ComponentVec{vec: vec![]});
+        self.comps_registry.insert(TypeId::of::<C>(), ComponentVec { vec: vec![] });
     }
 
     pub fn create_entity(&mut self) -> EntityIdx {
@@ -41,5 +47,14 @@ impl Ecs {
             .unwrap()
             .vec
             .insert(entity_idx, Option::Some(Box::new(comp)));
+    }
+
+    pub fn borrow_component_vec<C: Component + 'static>(&mut self) -> &mut Vec<Option<Box<dyn Component>>>{
+        let type_id = TypeId::of::<C>();
+        let vec = self.comps_registry
+            .get_mut(&type_id)
+            .unwrap()
+            .borrow_comp_vec_mut();
+        vec
     }
 }
