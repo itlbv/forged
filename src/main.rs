@@ -61,38 +61,29 @@ fn main() {
     world.ecs.register_component::<Health>();
 
     let entity_1 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity::<Pos>(entity_1, Pos { x: 1.0, y: 1.0 });
-    world.ecs.add_component_to_entity::<Name>(entity_1, Name { name: "Alice".to_string() });
-    world.ecs.add_component_to_entity::<Health>(entity_1, Health { health: 5 });
+    world.ecs.add_component_to_entity_mut::<Pos>(entity_1, Pos { x: 1.0, y: 1.0 });
+    world.ecs.add_component_to_entity_mut::<Name>(entity_1, Name { name: "Alice".to_string() });
+    world.ecs.add_component_to_entity_mut::<Health>(entity_1, Health { health: 5 });
 
     let entity_2 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity::<Pos>(entity_2, Pos { x: 2.0, y: 2.0 });
-    world.ecs.add_component_to_entity::<Name>(entity_2, Name { name: "Bob".to_string() });
-    world.ecs.add_component_to_entity::<Health>(entity_2, Health { health: 5 });
+    world.ecs.add_component_to_entity_mut::<Pos>(entity_2, Pos { x: 2.0, y: 2.0 });
+    world.ecs.add_component_to_entity_mut::<Name>(entity_2, Name { name: "Bob".to_string() });
+    world.ecs.add_component_to_entity_mut::<Health>(entity_2, Health { health: 5 });
 
     let entity_3 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity::<Pos>(entity_3, Pos { x: 3.0, y: 3.0 });
-    world.ecs.add_component_to_entity::<Name>(entity_3, Name { name: "No health".to_string() });
+    world.ecs.add_component_to_entity_mut::<Pos>(entity_3, Pos { x: 3.0, y: 3.0 });
+    world.ecs.add_component_to_entity_mut::<Name>(entity_3, Name { name: "No health".to_string() });
 
     let entity_4 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity::<Pos>(entity_4, Pos { x: 1.0, y: 1.0 });
+    world.ecs.add_component_to_entity_mut::<Pos>(entity_4, Pos { x: 1.0, y: 1.0 });
 
     {
-        let mut pos = world.ecs.borrow::<Pos>().unwrap();
-        let mut name = world.ecs.borrow::<Name>().unwrap();
+        let mut pos = world.ecs.borrow_component_vec_mut::<Pos>();
+        let mut name = world.ecs.borrow_component_vec_mut::<Name>();
         let zip = pos.iter_mut().zip(name.iter_mut());
         let iter = zip.filter_map(|(pos, name)| Some((pos.as_mut()?, name.as_mut()?)));
         for (pos, name) in iter {
-            println!("{}, {}", pos.x, name.name);
-        }
-    };
-
-    {
-        let mut pos = world.ecs.borrow_vec_m::<Pos>();
-        let mut name = world.ecs.borrow_vec_m::<Name>();
-        let zip = pos.iter_mut().zip(name.iter_mut());
-        let iter = zip.filter_map(|(pos, name)| Some((pos.as_mut()?, name.as_mut()?)));
-        for (pos, name) in iter {
+            // name.name = "name".to_string();
             println!("{}, {}", pos.x, name.name);
         }
     }

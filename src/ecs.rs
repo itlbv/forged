@@ -30,46 +30,6 @@ pub struct Ecs {
 }
 
 impl Ecs {
-    pub fn borrow_vec_m<C: 'static>(&self) -> RefMut<'_, Vec<Option<C>>> {
-        let type_id = TypeId::of::<C>();
-        let vec = self.component_registry
-            .get(&type_id)
-            .unwrap()
-            .as_any()
-            .downcast_ref::<RefCell<Vec<Option<C>>>>()
-            .unwrap()
-            .borrow_mut();
-        vec
-    }
-
-    pub fn borrow<C: 'static>(&self) -> Option<RefMut<Vec<Option<C>>>> {
-        let type_id = TypeId::of::<C>();
-        let vec = self.component_registry
-            .get(&type_id);
-
-        if let Some(v) = vec.unwrap().as_any().downcast_ref::<RefCell<Vec<Option<C>>>>() {
-            return Some(v.borrow_mut());
-        }
-        None
-    }
-
-    pub fn borrow_component_vec_mut<C: 'static>(&self) -> Option<RefMut<'_, Vec<Option<C>>>> {
-        // let comp_vec =
-        //     self.component_registry
-        //     .get(&TypeId::of::<C>());
-        //
-        // if let comp_vec = Some(comp_vec
-        //     .unwrap()
-        //     .as_any_mut()
-        //     .downcast_ref::<RefCell<Vec<Option<C>>>>()) {
-        //     return Some(comp_vec.unwrap().unwrap().borrow_mut());
-        // }
-        // .unwrap()
-        // .borrow_mut();
-        // res
-        None
-    }
-
     pub fn new() -> Self {
         Self {
             entity_count: 0,
@@ -90,7 +50,11 @@ impl Ecs {
         new_entity_id
     }
 
-    pub fn add_component_to_entity<C: 'static>(&mut self, entity_id: usize, comp: C) {
+    pub fn add_component_to_entity<C: 'static>(&self, entity_id: usize, comp: C) {
+        self.borrow_component_vec_mut::<C>()[entity_id] = Some(comp);
+    }
+
+    pub fn add_component_to_entity_mut<C: 'static>(&mut self, entity_id: usize, comp: C) {
         self.component_registry
             .get_mut(&TypeId::of::<C>())
             .unwrap()
@@ -99,5 +63,25 @@ impl Ecs {
             .unwrap()
             .get_mut()
             [entity_id] = Some(comp);
+    }
+
+    pub fn borrow_component_vec_mut<C: 'static>(&self) -> RefMut<'_, Vec<Option<C>>> {
+        self.component_registry
+            .get(&TypeId::of::<C>())
+            .unwrap()
+            .as_any()
+            .downcast_ref::<RefCell<Vec<Option<C>>>>()
+            .unwrap()
+            .borrow_mut()
+    }
+
+    pub fn borrow_component_vec_mut_option<C: 'static>(&self) -> Option<RefMut<Vec<Option<C>>>> {
+        let vec = self.component_registry.get(&TypeId::of::<C>()).unwrap();
+        if let Some(v) = vec
+            .as_any()
+            .downcast_ref::<RefCell<Vec<Option<C>>>>() {
+            return Some(v.borrow_mut());
+        }
+        None
     }
 }
