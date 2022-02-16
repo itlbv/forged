@@ -4,6 +4,7 @@ mod input_handler;
 mod ecs;
 mod components;
 
+use std::borrow::BorrowMut;
 use std::time::{Duration, Instant};
 use crate::components::{Health, Name, Pos};
 use crate::ecs::Ecs;
@@ -38,7 +39,6 @@ impl World {
         self.quit = self.input_handler.update();
     }
 }
-
 
 fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -76,6 +76,26 @@ fn main() {
 
     let entity_4 = world.ecs.create_entity();
     world.ecs.add_component_to_entity::<Pos>(entity_4, Pos { x: 1.0, y: 1.0 });
+
+    {
+        let mut pos = world.ecs.borrow::<Pos>().unwrap();
+        let mut name = world.ecs.borrow::<Name>().unwrap();
+        let zip = pos.iter_mut().zip(name.iter_mut());
+        let iter = zip.filter_map(|(pos, name)| Some((pos.as_mut()?, name.as_mut()?)));
+        for (pos, name) in iter {
+            println!("{}, {}", pos.x, name.name);
+        }
+    };
+
+    {
+        let mut pos = world.ecs.borrow_vec_m::<Pos>();
+        let mut name = world.ecs.borrow_vec_m::<Name>();
+        let zip = pos.iter_mut().zip(name.iter_mut());
+        let iter = zip.filter_map(|(pos, name)| Some((pos.as_mut()?, name.as_mut()?)));
+        for (pos, name) in iter {
+            println!("{}, {}", pos.x, name.name);
+        }
+    }
 
     let mut instant = Instant::now();
     while !world.quit {

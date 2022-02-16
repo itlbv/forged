@@ -1,60 +1,103 @@
 use std::any::{Any, TypeId};
 use std::borrow::BorrowMut;
+use std::cell::{RefCell, RefMut};
 use std::collections::HashMap;
+use crate::{Name, Pos};
 
-type EntityIdx = usize;
-
-pub trait Component {}
-
-struct ComponentVec {
-    vec: Vec<Option<Box<dyn Component>>>,
+trait ComponentVec {
+    fn as_any(&self) -> &dyn Any;
+    fn as_any_mut(&mut self) -> &mut dyn Any;
+    fn push_none(&mut self);
 }
 
-impl ComponentVec {
-    fn borrow_comp_vec_mut(&mut self) -> &mut Vec<Option<Box<dyn Component>>> {
-        &mut self.vec
+impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
+    fn as_any(&self) -> &dyn Any {
+        self as &dyn Any
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self as &mut dyn Any
+    }
+
+    fn push_none(&mut self) {
+        self.get_mut().push(None);
     }
 }
 
 pub struct Ecs {
-    entity_count: EntityIdx,
-    comps_registry: HashMap<TypeId, ComponentVec>,
+    entity_count: usize,
+    component_registry: HashMap<TypeId, Box<dyn ComponentVec>>,
 }
 
 impl Ecs {
+    pub fn borrow_vec_m<C: 'static>(&self) -> RefMut<'_, Vec<Option<C>>> {
+        let type_id = TypeId::of::<C>();
+        let vec = self.component_registry
+            .get(&type_id)
+            .unwrap()
+            .as_any()
+            .downcast_ref::<RefCell<Vec<Option<C>>>>()
+            .unwrap()
+            .borrow_mut();
+        vec
+    }
+
+    pub fn borrow<C: 'static>(&self) -> Option<RefMut<Vec<Option<C>>>> {
+        let type_id = TypeId::of::<C>();
+        let vec = self.component_registry
+            .get(&type_id);
+
+        if let Some(v) = vec.unwrap().as_any().downcast_ref::<RefCell<Vec<Option<C>>>>() {
+            return Some(v.borrow_mut());
+        }
+        None
+    }
+
+    pub fn borrow_component_vec_mut<C: 'static>(&self) -> Option<RefMut<'_, Vec<Option<C>>>> {
+        // let comp_vec =
+        //     self.component_registry
+        //     .get(&TypeId::of::<C>());
+        //
+        // if let comp_vec = Some(comp_vec
+        //     .unwrap()
+        //     .as_any_mut()
+        //     .downcast_ref::<RefCell<Vec<Option<C>>>>()) {
+        //     return Some(comp_vec.unwrap().unwrap().borrow_mut());
+        // }
+        // .unwrap()
+        // .borrow_mut();
+        // res
+        None
+    }
+
     pub fn new() -> Self {
         Self {
             entity_count: 0,
-            comps_registry: Default::default(),
+            component_registry: Default::default(),
         }
     }
 
-    pub fn register_component<C: Component + 'static>(&mut self) {
-        self.comps_registry.insert(TypeId::of::<C>(), ComponentVec { vec: vec![] });
+    pub fn register_component<C: 'static>(&mut self) {
+        self.component_registry.insert(TypeId::of::<C>(), Box::new(RefCell::new(vec![] as Vec<Option<C>>)));
     }
 
-    pub fn create_entity(&mut self) -> EntityIdx {
+    pub fn create_entity(&mut self) -> usize {
+        let new_entity_id = self.entity_count;
         self.entity_count += 1;
-        for (_, comp_vec) in self.comps_registry.borrow_mut() {
-            comp_vec.vec.push(Option::None);
+        for (_, comp) in self.component_registry.borrow_mut() {
+            comp.push_none();
         }
-        self.entity_count
+        new_entity_id
     }
 
-    pub fn add_component_to_entity<C: Component + 'static>(&mut self, entity_idx: EntityIdx, comp: C) {
-        self.comps_registry
-            .get_mut(&comp.type_id())
+    pub fn add_component_to_entity<C: 'static>(&mut self, entity_id: usize, comp: C) {
+        self.component_registry
+            .get_mut(&TypeId::of::<C>())
             .unwrap()
-            .vec
-            .insert(entity_idx, Option::Some(Box::new(comp)));
-    }
-
-    pub fn borrow_component_vec<C: Component + 'static>(&mut self) -> &mut Vec<Option<Box<dyn Component>>>{
-        let type_id = TypeId::of::<C>();
-        let vec = self.comps_registry
-            .get_mut(&type_id)
+            .as_any_mut()
+            .downcast_mut::<RefCell<Vec<Option<C>>>>()
             .unwrap()
-            .borrow_comp_vec_mut();
-        vec
+            .get_mut()
+            [entity_id] = Some(comp);
     }
 }
