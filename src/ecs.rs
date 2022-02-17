@@ -4,24 +4,40 @@ use std::cell::{RefCell, RefMut};
 use std::collections::HashMap;
 use crate::{Name, Pos};
 
-trait ComponentVec {
-    fn as_any(&self) -> &dyn Any;
-    fn as_any_mut(&mut self) -> &mut dyn Any;
-    fn push_none(&mut self);
-}
+macro_rules! izip {
+    // @closure creates a tuple-flattening closure for .map() call. usage:
+    // @closure partial_pattern => partial_tuple , rest , of , iterators
+    // eg. izip!( @closure ((a, b), c) => (a, b, c) , dd , ee )
+    ( @closure $p:pat => $tup:expr ) => {
+        |$p| $tup
+    };
 
-impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
-    fn as_any(&self) -> &dyn Any {
-        self as &dyn Any
-    }
+    // The "b" identifier is a different identifier on each recursion level thanks to hygiene.
+    ( @closure $p:pat => ( $($tup:tt)* ) , $_iter:expr $( , $tail:expr )* ) => {
+        $crate::izip!(@closure ($p, b) => ( $($tup)*, b ) $( , $tail )*)
+    };
 
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self as &mut dyn Any
-    }
+    // unary
+    ($first:expr $(,)*) => {
+        IntoIterator::into_iter($first)
+    };
 
-    fn push_none(&mut self) {
-        self.get_mut().push(None);
-    }
+    // binary
+    ($first:expr, $second:expr $(,)*) => {
+        $crate::izip!($first)
+            .zip($second)
+    };
+
+    // n-ary where n > 2
+    ( $first:expr $( , $rest:expr )* $(,)* ) => {
+        $crate::izip!($first)
+            $(
+                .zip($rest)
+            )*
+            .map(
+                $crate::izip!(@closure a => (a) $( , $rest )*)
+            )
+    };
 }
 
 pub struct Ecs {
@@ -83,5 +99,25 @@ impl Ecs {
             return Some(v.borrow_mut());
         }
         None
+    }
+}
+
+trait ComponentVec {
+    fn as_any(&self) -> &dyn Any;
+    fn as_any_mut(&mut self) -> &mut dyn Any;
+    fn push_none(&mut self);
+}
+
+impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
+    fn as_any(&self) -> &dyn Any {
+        self as &dyn Any
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self as &mut dyn Any
+    }
+
+    fn push_none(&mut self) {
+        self.get_mut().push(None);
     }
 }

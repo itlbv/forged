@@ -6,6 +6,8 @@ mod components;
 
 use std::borrow::BorrowMut;
 use std::time::{Duration, Instant};
+use std::iter::IntoIterator;
+// use core::iter::IntoIterator;
 use crate::components::{Health, Name, Pos};
 use crate::ecs::Ecs;
 use crate::input_handler::InputHandler;
@@ -80,11 +82,13 @@ fn main() {
     {
         let mut pos = world.ecs.borrow_component_vec_mut::<Pos>();
         let mut name = world.ecs.borrow_component_vec_mut::<Name>();
-        let zip = pos.iter_mut().zip(name.iter_mut());
-        let iter = zip.filter_map(|(pos, name)| Some((pos.as_mut()?, name.as_mut()?)));
-        for (pos, name) in iter {
-            // name.name = "name".to_string();
-            println!("{}, {}", pos.x, name.name);
+        let mut health = world.ecs.borrow_component_vec_mut::<Health>();
+
+        for (pos, name, health) in izip!(pos.iter_mut(), name.iter_mut(), health.iter_mut()) {
+            let p = pos.as_ref().unwrap();
+            let n = name.as_ref().unwrap();
+            let h = health.as_ref().unwrap();
+            println!("x: {}, y:{}, name: {}, health: {}", p.x, p.y, n.name, h.health);
         }
     }
 
