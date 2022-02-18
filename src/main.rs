@@ -4,12 +4,9 @@ mod input_handler;
 mod ecs;
 mod components;
 
-use std::borrow::BorrowMut;
 use std::time::{Duration, Instant};
-use std::iter::IntoIterator;
-// use core::iter::IntoIterator;
-use crate::components::{Health, Name, Pos};
-use crate::ecs::Ecs;
+use crate::components::{Name, Position, RenderShape};
+use crate::ecs::{Ecs};
 use crate::input_handler::InputHandler;
 use crate::map::Map;
 use crate::renderer::Renderer;
@@ -36,9 +33,29 @@ impl World {
     fn tick(&mut self, delta_time: i32) {
         self.renderer.clear_frame();
         self.renderer.render_map(&mut self.map);
+        render_sys(self);
         self.renderer.present_frame();
 
         self.quit = self.input_handler.update();
+    }
+}
+
+fn render_sys(world: &mut World) {
+    let mut shapes = world.ecs.borrow_component_vec_mut::<RenderShape>();
+    let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
+
+    let zip = shapes.iter_mut().zip(positions.iter_mut());
+    let iter = zip.filter_map(
+        |(shape, pos)| Some((shape.as_ref()?, pos.as_ref()?))
+    );
+
+    for (shape, pos) in iter {
+        let x = Renderer::world_to_screen(pos.x);
+        let y = Renderer::world_to_screen(pos.y);
+        let w = Renderer::world_to_screen(shape.w);
+        let h = Renderer::world_to_screen(shape.h);
+        world.renderer.render_rect(x, y, w, h);
+        world.renderer.render_dot(x, y); //render true position
     }
 }
 
@@ -58,39 +75,7 @@ fn main() {
 
     let mut world = World::new(renderer, input_handler);
 
-    world.ecs.register_component::<Pos>();
-    world.ecs.register_component::<Name>();
-    world.ecs.register_component::<Health>();
-
-    let entity_1 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity_mut::<Pos>(entity_1, Pos { x: 1.0, y: 1.0 });
-    world.ecs.add_component_to_entity_mut::<Name>(entity_1, Name { name: "Alice".to_string() });
-    world.ecs.add_component_to_entity_mut::<Health>(entity_1, Health { health: 5 });
-
-    let entity_2 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity_mut::<Pos>(entity_2, Pos { x: 2.0, y: 2.0 });
-    world.ecs.add_component_to_entity_mut::<Name>(entity_2, Name { name: "Bob".to_string() });
-    world.ecs.add_component_to_entity_mut::<Health>(entity_2, Health { health: 5 });
-
-    let entity_3 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity_mut::<Pos>(entity_3, Pos { x: 3.0, y: 3.0 });
-    world.ecs.add_component_to_entity_mut::<Name>(entity_3, Name { name: "No health".to_string() });
-
-    let entity_4 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity_mut::<Pos>(entity_4, Pos { x: 1.0, y: 1.0 });
-
-    {
-        let mut pos = world.ecs.borrow_component_vec_mut::<Pos>();
-        let mut name = world.ecs.borrow_component_vec_mut::<Name>();
-        let mut health = world.ecs.borrow_component_vec_mut::<Health>();
-
-        for (pos, name, health) in izip!(pos.iter_mut(), name.iter_mut(), health.iter_mut()) {
-            let p = pos.as_ref().unwrap();
-            let n = name.as_ref().unwrap();
-            let h = health.as_ref().unwrap();
-            println!("x: {}, y:{}, name: {}, health: {}", p.x, p.y, n.name, h.health);
-        }
-    }
+    setup_world(&mut world);
 
     let mut instant = Instant::now();
     while !world.quit {
@@ -99,4 +84,31 @@ fn main() {
         instant = Instant::now();
         world.tick(frame_time.as_millis() as i32)
     }
+}
+
+fn setup_world(world: &mut World) {
+    world.ecs.register_component::<Position>();
+    world.ecs.register_component::<Name>();
+    world.ecs.register_component::<RenderShape>();
+
+    let entity_1 = world.ecs.create_entity();
+    world.ecs.add_component_to_entity_mut::<Position>(entity_1, Position { x: 1.0, y: 1.0 });
+    world.ecs.add_component_to_entity_mut::<Name>(entity_1, Name { v: "Alice".to_string() });
+    world.ecs.add_component_to_entity_mut::<RenderShape>(entity_1, RenderShape {w: 0.49, h: 0.49});
+
+    let entity_2 = world.ecs.create_entity();
+    world.ecs.add_component_to_entity_mut::<Position>(entity_2, Position { x: 2.0, y: 2.0 });
+    world.ecs.add_component_to_entity_mut::<Name>(entity_2, Name { v: "Bob".to_string() });
+    world.ecs.add_component_to_entity_mut::<RenderShape>(entity_2, RenderShape {w: 0.49, h: 0.49});
+
+    let entity_3 = world.ecs.create_entity();
+    world.ecs.add_component_to_entity_mut::<Position>(entity_3, Position { x: 3.0, y: 3.0 });
+    world.ecs.add_component_to_entity_mut::<Name>(entity_3, Name { v: "Entity 3".to_string() });
+    world.ecs.add_component_to_entity_mut::<RenderShape>(entity_3, RenderShape {w: 0.49, h: 0.49});
+
+    let entity_4 = world.ecs.create_entity();
+    world.ecs.add_component_to_entity_mut::<Position>(entity_4, Position { x: 4.0, y: 4.0 });
+    world.ecs.add_component_to_entity_mut::<Name>(entity_4, Name { v: "Entity 4".to_string() });
+    world.ecs.add_component_to_entity_mut::<RenderShape>(entity_4, RenderShape {w: 0.49, h: 0.49});
+
 }

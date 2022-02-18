@@ -1,12 +1,13 @@
-pub struct Pos {
+pub struct Position {
     pub(crate) x: f32,
     pub(crate) y: f32,
 }
 
 pub struct Name {
-    pub(crate) name: String,
+    pub(crate) v: String,
 }
 
-pub struct Health {
-    pub(crate) health: usize,
+pub struct RenderShape {
+    pub(crate) w: f32,
+    pub(crate) h: f32,
 }
