@@ -17,13 +17,6 @@ impl Renderer {
         Self { sdl_canvas }
     }
 
-    pub fn render_map(&mut self, map: &mut Map) {
-        self.sdl_canvas.set_draw_color(Color::RGB(85, 125, 70)); // green
-        for map_node in &map.nodes {
-            self.sdl_canvas.fill_rect(Rect::new(map_node.x * 50, map_node.y * 50, 50, 50));
-        }
-    }
-
     pub fn clear_frame(&mut self) {
         self.sdl_canvas.set_draw_color(DEFAULT_CLEAR_FRAME_COLOR);
         self.sdl_canvas.clear();
@@ -33,8 +26,8 @@ impl Renderer {
         self.sdl_canvas.present();
     }
 
-    pub fn render_rect(&mut self, x: i32, y: i32, w: i32, h: i32) {
-        self.sdl_canvas.set_draw_color(Color::RGB(0, 0, 150));
+    pub fn render_rect(&mut self, x: i32, y: i32, w: i32, h: i32, r: u8, g: u8, b: u8) {
+        self.sdl_canvas.set_draw_color(Color::RGB(r, g, b));
         self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
     }
 

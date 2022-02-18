@@ -5,7 +5,7 @@ mod ecs;
 mod components;
 
 use std::time::{Duration, Instant};
-use crate::components::{Name, Position, RenderShape};
+use crate::components::{Color, Name, Position, RenderShape};
 use crate::ecs::{Ecs};
 use crate::input_handler::InputHandler;
 use crate::map::Map;
@@ -32,15 +32,28 @@ impl World {
 
     fn tick(&mut self, delta_time: i32) {
         self.renderer.clear_frame();
-        self.renderer.render_map(&mut self.map);
-        render_sys(self);
+
+        render_map_sys(self);
+        render_entities_sys(self);
+
         self.renderer.present_frame();
 
         self.quit = self.input_handler.update();
     }
 }
 
-fn render_sys(world: &mut World) {
+fn render_map_sys(world: &mut World) {
+    for map_node in &world.map.nodes {
+        let x = Renderer::world_to_screen(map_node.x as f32);
+        let y = Renderer::world_to_screen(map_node.y as f32);
+        let w = Renderer::world_to_screen(1.0);
+        let h = Renderer::world_to_screen(1.0);
+        world.renderer.render_rect(x - w / 2, y - h / 2, w, h, map_node.color.r, map_node.color.g, map_node.color.b);
+        world.renderer.render_dot(x, y); //render true position
+    }
+}
+
+fn render_entities_sys(world: &mut World) {
     let mut shapes = world.ecs.borrow_component_vec_mut::<RenderShape>();
     let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
 
@@ -54,7 +67,7 @@ fn render_sys(world: &mut World) {
         let y = Renderer::world_to_screen(pos.y);
         let w = Renderer::world_to_screen(shape.w);
         let h = Renderer::world_to_screen(shape.h);
-        world.renderer.render_rect(x, y, w, h);
+        world.renderer.render_rect(x - w / 2, y - h / 2, w, h, shape.color.r, shape.color.g, shape.color.b);
         world.renderer.render_dot(x, y); //render true position
     }
 }
@@ -91,24 +104,15 @@ fn setup_world(world: &mut World) {
     world.ecs.register_component::<Name>();
     world.ecs.register_component::<RenderShape>();
 
-    let entity_1 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity_mut::<Position>(entity_1, Position { x: 1.0, y: 1.0 });
-    world.ecs.add_component_to_entity_mut::<Name>(entity_1, Name { v: "Alice".to_string() });
-    world.ecs.add_component_to_entity_mut::<RenderShape>(entity_1, RenderShape {w: 0.49, h: 0.49});
+    create_mob(world, 1.0, 1.0, "Alice");
+    create_mob(world, 2.0, 2.0, "Bob");
+    create_mob(world, 3.0, 3.0, "Jim");
+    create_mob(world, 4.0, 4.0, "Karen");
+}
 
-    let entity_2 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity_mut::<Position>(entity_2, Position { x: 2.0, y: 2.0 });
-    world.ecs.add_component_to_entity_mut::<Name>(entity_2, Name { v: "Bob".to_string() });
-    world.ecs.add_component_to_entity_mut::<RenderShape>(entity_2, RenderShape {w: 0.49, h: 0.49});
-
-    let entity_3 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity_mut::<Position>(entity_3, Position { x: 3.0, y: 3.0 });
-    world.ecs.add_component_to_entity_mut::<Name>(entity_3, Name { v: "Entity 3".to_string() });
-    world.ecs.add_component_to_entity_mut::<RenderShape>(entity_3, RenderShape {w: 0.49, h: 0.49});
-
-    let entity_4 = world.ecs.create_entity();
-    world.ecs.add_component_to_entity_mut::<Position>(entity_4, Position { x: 4.0, y: 4.0 });
-    world.ecs.add_component_to_entity_mut::<Name>(entity_4, Name { v: "Entity 4".to_string() });
-    world.ecs.add_component_to_entity_mut::<RenderShape>(entity_4, RenderShape {w: 0.49, h: 0.49});
-
+fn create_mob(world: &mut World, x: f32, y: f32, name: &str) {
+    let new_mob_id = world.ecs.create_entity();
+    world.ecs.add_component_to_entity_mut::<Position>(new_mob_id, Position { x, y });
+    world.ecs.add_component_to_entity_mut::<Name>(new_mob_id, Name { v: name.to_string() });
+    world.ecs.add_component_to_entity_mut::<RenderShape>(new_mob_id, RenderShape { w: 0.49, h: 0.49, color: Color { r: 0, g: 0, b: 150 } });
 }

@@ -1,6 +1,9 @@
+use crate::Color;
+
 pub struct MapNode {
     pub x: i32,
     pub y: i32,
+    pub(crate) color: Color,
 }
 
 pub struct Map {
@@ -9,13 +12,18 @@ pub struct Map {
 
 impl Map {
     pub(crate) fn new() -> Self {
-        Self{
-            nodes: vec![
-                MapNode{ x: 1, y: 1 },
-                MapNode{ x: 3, y: 1 },
-                MapNode{ x: 1, y: 3 },
-                MapNode{ x: 3, y: 3 },
-            ]
+        Self {
+            nodes: Map::create_map(),
         }
+    }
+
+    fn create_map() -> Vec<MapNode> {
+        let mut map_nodes = vec![];
+        for y in 0..25 {
+            for x in 00..25 {
+                map_nodes.push(MapNode { x, y, color: Color { r: 85, g: 125, b: 70 } });
+            }
+        }
+        map_nodes
     }
 }
