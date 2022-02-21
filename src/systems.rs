@@ -32,9 +32,13 @@ pub fn render_map_sys(world: &mut World) {
     for map_node in &world.map.nodes {
         let x = Renderer::world_to_screen(map_node.x as f32);
         let y = Renderer::world_to_screen(map_node.y as f32);
-        let w = Renderer::world_to_screen(1.0);
-        let h = Renderer::world_to_screen(1.0);
-        world.renderer.render_rect(x - w / 2, y - h / 2, w, h, map_node.color.r, map_node.color.g, map_node.color.b);
+        let node_size = Renderer::world_to_screen(MAP_NODE_SIZE);
+        world.renderer.render_rect(
+            x,
+            y,
+            node_size,
+            node_size,
+            map_node.color.r, map_node.color.g, map_node.color.b);
         world.renderer.render_dot(x, y); // true position
     }
 
@@ -46,7 +50,7 @@ pub fn render_map_sys(world: &mut World) {
         world.renderer.render_line(x_1, y_1, x_2, y_2);
     }
 
-    for y in 0..=MAP_WIDTH { // horizontal lines
+    for y in 0..=MAP_HEIGHT { // horizontal lines
         let x_1: i32 = 0;
         let y_1: i32 = 50 * y * MAP_NODE_SIZE as i32;
         let x_2: i32 = 50 * MAP_WIDTH * MAP_NODE_SIZE as i32;
