@@ -5,15 +5,18 @@ mod ecs;
 mod components;
 mod btree;
 mod systems;
+mod physics;
+mod tasks;
 
 use std::time::{Duration, Instant};
-use crate::btree::{Sequence, MoveTask};
+use crate::btree::{Sequence};
 use crate::components::{Behavior, Color, Name, Position, RenderShape};
 use crate::ecs::{Ecs};
 use crate::input_handler::InputHandler;
 use crate::map::{Map, MAP_HEIGHT, MAP_WIDTH};
 use crate::renderer::Renderer;
 use crate::systems::{behavior_sys, render_entities_sys, render_map_sys};
+use crate::tasks::MoveTask;
 
 pub struct World {
     pub quit: bool,
