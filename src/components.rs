@@ -1,3 +1,16 @@
+use crate::btree::BehaviorTreeNode;
+use crate::World;
+
+pub struct Behavior {
+    pub(crate) behavior_tree: Box<dyn BehaviorTreeNode>,
+}
+
+impl Behavior {
+    pub fn run(&self, world: &mut World) {
+        self.behavior_tree.run(world);
+    }
+}
+
 pub struct Position {
     pub(crate) x: f32,
     pub(crate) y: f32,

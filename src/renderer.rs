@@ -1,6 +1,5 @@
 extern crate sdl2;
 
-use crate::map::Map;
 use self::sdl2::render::WindowCanvas;
 use sdl2::pixels::Color;
 use sdl2::rect::Point;
@@ -29,6 +28,10 @@ impl Renderer {
     pub fn render_rect(&mut self, x: i32, y: i32, w: i32, h: i32, r: u8, g: u8, b: u8) {
         self.sdl_canvas.set_draw_color(Color::RGB(r, g, b));
         self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
+    }
+
+    pub fn render_line(&mut self, x_1: i32, y_1: i32, x_2: i32, y_2: i32) {
+        self.sdl_canvas.draw_line(Point::new(x_1, y_1), Point::new(x_2, y_2));
     }
 
     pub fn render_dot(&mut self, x: i32, y: i32) {
