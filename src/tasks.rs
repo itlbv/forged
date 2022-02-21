@@ -1,11 +1,12 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{RUNNING, SUCCESS};
 use crate::{Position, World};
+use crate::constants::MOB_SPEED;
+use crate::physics::{distance_between, Vec, vector_to};
 
 pub struct MoveTask {
     owner_id: usize,
-    dest_x: f32,
-    dest_y: f32,
+    destination: Vec,
 }
 
 impl BehaviorTreeNode for MoveTask {
@@ -16,17 +17,23 @@ impl BehaviorTreeNode for MoveTask {
 
 impl MoveTask {
     pub fn new(owner_id: usize, x: f32, y: f32) -> Self {
-        Self { owner_id, dest_x: x, dest_y: y }
+        Self { owner_id, destination: Vec { x, y } }
     }
 
     fn move_to(&self, world: &World) -> Status {
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
-        let position = positions.get_mut(self.owner_id).unwrap().as_mut().unwrap();
-        if (self.dest_x - position.x) < 0.1 {
+        let pos = positions.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+
+        if distance_between(&self.destination, &Vec::of(pos.x, pos.y)) < 0.02 {
             return SUCCESS;
         }
-        position.x += 0.01;
-        position.y += 0.01;
+
+        let mut direction = vector_to(&Vec::of(pos.x, pos.y), &self.destination);
+        direction.normalize();
+        direction.set_length(direction.length() * world.delta_time * MOB_SPEED);
+
+        pos.x += direction.x;
+        pos.y += direction.y;
         RUNNING
     }
 }

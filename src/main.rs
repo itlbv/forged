@@ -7,6 +7,7 @@ mod btree;
 mod systems;
 mod physics;
 mod tasks;
+mod constants;
 
 use std::time::{Duration, Instant};
 use crate::btree::{Sequence};
@@ -20,6 +21,7 @@ use crate::tasks::MoveTask;
 
 pub struct World {
     pub quit: bool,
+    pub delta_time: f32,
     map: Map,
     renderer: Renderer,
     input_handler: InputHandler,
@@ -29,6 +31,7 @@ pub struct World {
 impl World {
     fn new(renderer: Renderer, input_handler: InputHandler) -> Self {
         Self {
+            delta_time: 0.0,
             quit: false,
             map: Map::new(),
             renderer,
@@ -37,7 +40,9 @@ impl World {
         }
     }
 
-    fn tick(&mut self, delta_time: i32) {
+    fn tick(&mut self, delta_time: f32) {
+        self.delta_time = delta_time;
+
         behavior_sys(self);
 
         self.renderer.clear_frame();
@@ -72,7 +77,7 @@ fn main() {
         let frame_time = Instant::now() - instant;
         if frame_time < Duration::from_millis(16) { continue; }
         instant = Instant::now();
-        world.tick(frame_time.as_millis() as i32)
+        world.tick(frame_time.as_millis() as f32 / 1000.0)
     }
 }
 
@@ -93,7 +98,7 @@ fn create_mob(world: &mut World, x: f32, y: f32, name: &str) {
 
     let sequence = Sequence {
         children: vec![
-            Box::new(MoveTask::new(new_mob_id, 3.0, 3.0)),
+            Box::new(MoveTask::new(new_mob_id, 3.5, 8.5)),
         ]
     };
     let behavior = Behavior { behavior_tree: Box::new(sequence) };
