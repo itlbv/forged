@@ -2,7 +2,7 @@ use std::slice::IterMut;
 use crate::{Behavior, MAP_HEIGHT, MAP_WIDTH, Position, Renderer, RenderShape, World};
 use crate::map::MAP_NODE_SIZE;
 
-pub fn behavior_sys(world: &World) {
+pub fn behavior(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
     for behavior in behaviors.iter_mut() {
         let b = behavior.as_ref();
@@ -10,7 +10,7 @@ pub fn behavior_sys(world: &World) {
     }
 }
 
-pub fn render_entities_sys(world: &mut World) {
+pub fn render_entities(world: &mut World) {
     let mut shapes = world.ecs.borrow_component_vec_mut::<RenderShape>();
     let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
 
@@ -29,7 +29,7 @@ pub fn render_entities_sys(world: &mut World) {
     }
 }
 
-pub fn render_map_sys(world: &mut World) {
+pub fn render_map(world: &mut World) {
     for map_node in &world.map.nodes {
         let x = Renderer::world_to_screen(map_node.x as f32);
         let y = Renderer::world_to_screen(map_node.y as f32);

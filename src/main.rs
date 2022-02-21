@@ -16,7 +16,6 @@ use crate::ecs::{Ecs};
 use crate::input_handler::InputHandler;
 use crate::map::{Map, MAP_HEIGHT, MAP_WIDTH};
 use crate::renderer::Renderer;
-use crate::systems::{behavior_sys, render_entities_sys, render_map_sys};
 use crate::tasks::MoveTask;
 
 pub struct World {
@@ -43,11 +42,11 @@ impl World {
     fn tick(&mut self, delta_time: f32) {
         self.delta_time = delta_time;
 
-        behavior_sys(self);
+        systems::behavior(self);
 
         self.renderer.clear_frame();
-        render_map_sys(self);
-        render_entities_sys(self);
+        systems::render_map(self);
+        systems::render_entities(self);
         self.renderer.present_frame();
 
         self.quit = self.input_handler.update();
