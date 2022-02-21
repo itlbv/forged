@@ -6,7 +6,7 @@ pub struct Behavior {
 }
 
 impl Behavior {
-    pub fn run(&self, world: &mut World) {
+    pub fn run(&self, world: &World) {
         self.behavior_tree.run(world);
     }
 }

@@ -1,5 +1,5 @@
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::World;
+use crate::{Name, Position, RenderShape, World};
 
 pub enum Status {
     SUCCESS,
@@ -8,7 +8,7 @@ pub enum Status {
 }
 
 pub(crate) trait BehaviorTreeNode {
-    fn run(&self, world: &mut World) -> Status;
+    fn run(&self, world: &World) -> Status;
 }
 
 pub struct MoveTask {
@@ -22,13 +22,20 @@ impl MoveTask {
         Self { owner_id, dest_x: x, dest_y: y }
     }
 
-    fn move_to(&self, world: &mut World) -> Status {
-        SUCCESS
+    fn move_to(&self, world: &World) -> Status {
+        let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
+        let position = positions.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+        if (self.dest_x - position.x) < 0.1 {
+            return SUCCESS;
+        }
+        position.x += 0.01;
+        position.y += 0.01;
+        RUNNING
     }
 }
 
 impl BehaviorTreeNode for MoveTask {
-    fn run(&self, world: &mut World) -> Status {
+    fn run(&self, world: &World) -> Status {
         self.move_to(world)
     }
 }
@@ -38,7 +45,7 @@ pub struct Sequence {
 }
 
 impl BehaviorTreeNode for Sequence {
-    fn run(&self, world: &mut World) -> Status {
+    fn run(&self, world: &World) -> Status {
         for child in &self.children {
             match child.run(world) {
                 SUCCESS => { continue; }

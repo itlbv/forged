@@ -1,11 +1,12 @@
+use std::slice::IterMut;
 use crate::{Behavior, MAP_HEIGHT, MAP_WIDTH, Position, Renderer, RenderShape, World};
 use crate::map::MAP_NODE_SIZE;
 
-pub fn behavior_sys(world: &mut World) {
+pub fn behavior_sys(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
     for behavior in behaviors.iter_mut() {
         let b = behavior.as_ref();
-        // b.unwrap().run(world);
+        b.unwrap().run(world);
     }
 }
 
