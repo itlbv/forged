@@ -1,6 +1,6 @@
 pub struct Vec {
-    pub(crate) x: f32,
-    pub(crate) y: f32,
+    pub x: f32,
+    pub y: f32,
 }
 
 impl Vec {

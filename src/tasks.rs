@@ -1,6 +1,7 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{RUNNING, SUCCESS};
-use crate::{Position, World};
+use crate::components::Position;
+use crate::World;
 use crate::constants::MOB_SPEED;
 use crate::physics::{distance_between, Vec, vector_to};
 

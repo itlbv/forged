@@ -1,13 +1,10 @@
-use crate::Color;
-
-pub const MAP_WIDTH: i32 = 15;
-pub const MAP_HEIGHT: i32 = 10;
-pub const MAP_NODE_SIZE: f32 = 1.0;
+use crate::components::Color;
+use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 
 pub struct MapNode {
     pub x: i32,
     pub y: i32,
-    pub(crate) color: Color,
+    pub color: Color,
 }
 
 pub struct Map {
@@ -15,7 +12,7 @@ pub struct Map {
 }
 
 impl Map {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             nodes: Map::create_map(),
         }

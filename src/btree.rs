@@ -1,5 +1,5 @@
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::{Name, Position, RenderShape, World};
+use crate::World;
 
 pub enum Status {
     SUCCESS,
@@ -7,12 +7,12 @@ pub enum Status {
     RUNNING,
 }
 
-pub(crate) trait BehaviorTreeNode {
+pub trait BehaviorTreeNode {
     fn run(&self, world: &World) -> Status;
 }
 
 pub struct Sequence {
-    pub(crate) children: Vec<Box<dyn BehaviorTreeNode>>,
+    pub children: Vec<Box<dyn BehaviorTreeNode>>,
 }
 
 impl BehaviorTreeNode for Sequence {

@@ -1,6 +1,6 @@
-use std::slice::IterMut;
-use crate::{Behavior, MAP_HEIGHT, MAP_WIDTH, Position, Renderer, RenderShape, World};
-use crate::map::MAP_NODE_SIZE;
+use crate::components::{Behavior, Position, RenderShape};
+use crate::{Renderer, World};
+use crate::constants::{MAP_HEIGHT, MAP_NODE_SIZE, MAP_WIDTH};
 
 pub fn behavior(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
