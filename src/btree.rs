@@ -15,6 +15,14 @@ pub struct Sequence {
     pub children: Vec<Box<dyn BehaviorTreeNode>>,
 }
 
+impl Sequence {
+    pub fn of(children: Vec<Box<dyn BehaviorTreeNode>>) -> Self {
+        Self {
+            children,
+        }
+    }
+}
+
 impl BehaviorTreeNode for Sequence {
     fn run(&self, world: &World) -> Status {
         for child in &self.children {

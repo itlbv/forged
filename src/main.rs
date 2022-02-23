@@ -1,3 +1,5 @@
+extern crate core;
+
 mod map;
 mod renderer;
 mod input_handler;
@@ -9,6 +11,7 @@ mod physics;
 mod tasks;
 mod constants;
 mod world;
+mod behavior_factory;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;

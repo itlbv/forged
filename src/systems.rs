@@ -5,8 +5,11 @@ use crate::constants::{MAP_HEIGHT, MAP_NODE_SIZE, MAP_WIDTH};
 pub fn behavior(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
     for behavior in behaviors.iter_mut() {
-        let b = behavior.as_ref();
-        b.unwrap().run(world);
+        let b = behavior.as_mut();
+        match b {
+            None => { continue; }
+            Some(_) => { b.unwrap().run(world) }
+        };
     }
 }
 

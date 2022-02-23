@@ -1,6 +1,6 @@
 use std::any::{Any, TypeId};
 use std::borrow::BorrowMut;
-use std::cell::{RefCell, RefMut};
+use std::cell::{Ref, RefCell, RefMut};
 use std::collections::HashMap;
 
 pub struct Ecs {
@@ -52,6 +52,16 @@ impl Ecs {
             .downcast_ref::<RefCell<Vec<Option<C>>>>()
             .unwrap()
             .borrow_mut()
+    }
+
+    pub fn borrow_component_vec<C: 'static>(&self) -> Ref<'_, Vec<Option<C>>> {
+        self.component_registry
+            .get(&TypeId::of::<C>())
+            .unwrap()
+            .as_any()
+            .downcast_ref::<RefCell<Vec<Option<C>>>>()
+            .unwrap()
+            .borrow()
     }
 
     pub fn borrow_component_vec_mut_option<C: 'static>(&self) -> Option<RefMut<Vec<Option<C>>>> {

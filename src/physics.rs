@@ -1,9 +1,10 @@
-pub struct Vec {
+#[derive(Clone)]
+pub struct Vect {
     pub x: f32,
     pub y: f32,
 }
 
-impl Vec {
+impl Vect {
     pub fn new() -> Self {
         Self { x: 0.0, y: 0.0 }
     }
@@ -28,10 +29,10 @@ impl Vec {
     }
 }
 
-pub fn distance_between(vec_1: &Vec, vec_2: &Vec) -> f32 {
+pub fn distance_between(vec_1: &Vect, vec_2: &Vect) -> f32 {
     (vec_1.x - vec_2.x).hypot(vec_1.y - vec_2.y)
 }
 
-pub fn vector_to(source: &Vec, target: &Vec) -> Vec {
-    Vec::of(target.x - source.x, target.y - source.y)
+pub fn vector_to(source: &Vect, target: &Vect) -> Vect {
+    Vect::of(target.x - source.x, target.y - source.y)
 }
