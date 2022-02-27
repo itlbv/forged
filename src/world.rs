@@ -1,5 +1,5 @@
 use crate::map::Map;
-use crate::{behavior_factory, InputHandler, Renderer, systems};
+use crate::{behavior_factory, entity_factory, InputHandler, Renderer, systems};
 use crate::components::{Behavior, Color, Food, Name, Position, Remove, RenderShape, TargetEntity, TargetPosition};
 use crate::ecs::Ecs;
 
@@ -34,30 +34,12 @@ impl World {
         self.ecs.register_component::<TargetEntity>();
         self.ecs.register_component::<TargetPosition>();
 
-        self.create_mob(1.5, 1.5, "Alice");
+        entity_factory::create_mob(1.5, 1.5, "Alice", self);
 
-        self.create_food(5.5, 8.5);
-        self.create_food(4.5, 1.5);
-        self.create_food(2.5, 4.5);
-        self.create_food(9.5, 6.5);
-    }
-
-    fn create_mob(&mut self, x: f32, y: f32, name: &str) {
-        let new_mob_id = self.ecs.create_entity();
-
-        let behavior = Behavior { behavior_tree: Box::new(behavior_factory::find_food_sequence(new_mob_id)) };
-
-        self.ecs.add_component_to_entity_mut::<Position>(new_mob_id, Position::of(x, y, new_mob_id));
-        self.ecs.add_component_to_entity_mut::<Name>(new_mob_id, Name { v: name.to_string() });
-        self.ecs.add_component_to_entity_mut::<RenderShape>(new_mob_id, RenderShape { w: 0.49, h: 0.49, color: Color { r: 0, g: 0, b: 150 } });
-        self.ecs.add_component_to_entity_mut::<Behavior>(new_mob_id, behavior);
-    }
-
-    fn create_food(&mut self, x: f32, y: f32) {
-        let new_entity_id = self.ecs.create_entity();
-        self.ecs.add_component_to_entity_mut::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
-        self.ecs.add_component_to_entity_mut::<RenderShape>(new_entity_id, RenderShape { w: 0.2, h: 0.2, color: Color { r: 0, g: 0, b: 150 } });
-        self.ecs.add_component_to_entity_mut::<Food>(new_entity_id, Food{});
+        entity_factory::create_food(5.5, 8.5, self);
+        entity_factory::create_food(4.5, 1.5, self);
+        entity_factory::create_food(2.5, 4.5, self);
+        entity_factory::create_food(9.5, 6.5, self);
     }
 
     pub fn tick(&mut self, delta_time: f32) {

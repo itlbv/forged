@@ -12,6 +12,7 @@ mod tasks;
 mod constants;
 mod world;
 mod behavior_factory;
+mod entity_factory;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
