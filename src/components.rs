@@ -12,6 +12,17 @@ impl Behavior {
     }
 }
 
+pub struct TargetPosition {
+    pub x: f32,
+    pub y: f32,
+}
+
+impl TargetPosition {
+    pub fn new(x: f32, y: f32) -> Self {
+        Self { x, y }
+    }
+}
+
 pub struct TargetEntity {
     pub target_id: usize,
 }

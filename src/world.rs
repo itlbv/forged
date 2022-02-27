@@ -1,6 +1,6 @@
 use crate::map::Map;
 use crate::{behavior_factory, InputHandler, Renderer, systems};
-use crate::components::{Behavior, Color, Food, Name, Position, Remove, RenderShape, TargetEntity};
+use crate::components::{Behavior, Color, Food, Name, Position, Remove, RenderShape, TargetEntity, TargetPosition};
 use crate::ecs::Ecs;
 
 pub struct World {
@@ -32,6 +32,7 @@ impl World {
         self.ecs.register_component::<Food>();
         self.ecs.register_component::<Remove>();
         self.ecs.register_component::<TargetEntity>();
+        self.ecs.register_component::<TargetPosition>();
 
         self.create_mob(1.5, 1.5, "Alice");
 
