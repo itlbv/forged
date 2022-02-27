@@ -14,11 +14,8 @@ pub fn behavior(world: &World) {
 }
 
 pub fn remove_entities(world: &mut World) {
-
     let mut entity_ids_to_remove: Vec<usize> = vec![];
     {
-        let positions = world.ecs.borrow_component_vec::<Position>();
-
         let removals = world.ecs.borrow_component_vec::<Remove>();
         let iter = removals.iter().filter_map(|removal| Some(removal.as_ref()?)).clone();
         for removal in iter {

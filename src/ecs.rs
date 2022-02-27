@@ -2,17 +2,19 @@ use std::any::{Any, TypeId};
 use std::borrow::BorrowMut;
 use std::cell::{Ref, RefCell, RefMut};
 use std::collections::HashMap;
+use std::ops::Add;
 use std::process::id;
+use std::slice::SliceIndex;
 
 pub struct Ecs {
-    entity_count: usize,
+    entity_count: RefCell<usize>,
     component_registry: HashMap<TypeId, Box<dyn ComponentVec>>,
 }
 
 impl Ecs {
     pub fn new() -> Self {
         Self {
-            entity_count: 0,
+            entity_count: RefCell::new(0),
             component_registry: Default::default(),
         }
     }
@@ -21,10 +23,10 @@ impl Ecs {
         self.component_registry.insert(TypeId::of::<C>(), Box::new(RefCell::new(vec![] as Vec<Option<C>>)));
     }
 
-    pub fn create_entity(&mut self) -> usize {
-        let new_entity_id = self.entity_count;
-        self.entity_count += 1;
-        for (_, comp) in self.component_registry.borrow_mut() {
+    pub fn create_entity(&self) -> usize {
+        let new_entity_id = self.entity_count.take();
+        self.entity_count.replace(new_entity_id + 1);
+        for (_, comp) in &self.component_registry {
             comp.push_none();
         }
         new_entity_id
@@ -46,7 +48,7 @@ impl Ecs {
     }
 
     pub fn remove_entity(&mut self, entity_id: usize) {
-        for (_, comp_vec) in self.component_registry.borrow_mut() {
+        for (_, comp_vec) in &self.component_registry {
             comp_vec.set_none_at_index(entity_id);
         }
     }
@@ -85,8 +87,8 @@ impl Ecs {
 trait ComponentVec {
     fn as_any(&self) -> &dyn Any;
     fn as_any_mut(&mut self) -> &mut dyn Any;
-    fn push_none(&mut self);
-    fn set_none_at_index(&mut self, idx: usize);
+    fn push_none(&self);
+    fn set_none_at_index(&self, idx: usize);
 }
 
 impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
@@ -98,11 +100,11 @@ impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
         self as &mut dyn Any
     }
 
-    fn push_none(&mut self) {
-        self.get_mut().push(None);
+    fn push_none(&self) {
+        self.borrow_mut().push(None);
     }
 
-    fn set_none_at_index(&mut self, idx: usize) {
-        self.get_mut()[idx] = None;
+    fn set_none_at_index(&self, idx: usize) {
+        self.borrow_mut()[idx] = None;
     }
 }
