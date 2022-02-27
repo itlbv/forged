@@ -1,9 +1,7 @@
 use crate::map::Map;
 use crate::{behavior_factory, InputHandler, Renderer, systems};
-use crate::btree::Sequence;
-use crate::components::{Behavior, Color, Food, Name, Position, RenderShape};
+use crate::components::{Behavior, Color, Food, Name, Position, Remove, RenderShape, TargetEntity};
 use crate::ecs::Ecs;
-use crate::tasks::MoveTask;
 
 pub struct World {
     pub quit: bool,
@@ -32,6 +30,8 @@ impl World {
         self.ecs.register_component::<RenderShape>();
         self.ecs.register_component::<Behavior>();
         self.ecs.register_component::<Food>();
+        self.ecs.register_component::<Remove>();
+        self.ecs.register_component::<TargetEntity>();
 
         self.create_mob(1.5, 1.5, "Alice");
 
@@ -63,6 +63,7 @@ impl World {
         self.delta_time = delta_time;
 
         systems::behavior(self);
+        systems::remove_entities(self);
 
         self.renderer.clear_frame();
         systems::render_map(self);

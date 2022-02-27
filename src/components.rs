@@ -1,6 +1,5 @@
 use crate::btree::BehaviorTreeNode;
-use crate::systems::behavior;
-use crate::{behavior_factory, World};
+use crate::{World};
 
 pub struct Behavior {
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
@@ -9,7 +8,17 @@ pub struct Behavior {
 impl Behavior {
     pub fn run(&mut self, world: &World) {
         self.behavior_tree.run(world);
-        self.behavior_tree = Box::new(behavior_factory::do_nothing());
+        // self.behavior_tree = Box::new(behavior_factory::do_nothing());
+    }
+}
+
+pub struct TargetEntity {
+    pub target_id: usize,
+}
+
+impl TargetEntity {
+    pub fn new(target_id: usize) -> Self {
+        Self { target_id }
     }
 }
 
@@ -36,6 +45,10 @@ pub struct RenderShape {
 }
 
 pub struct Food {}
+
+pub struct Remove {
+    pub owner_id: usize,
+}
 
 pub struct Color {
     pub r: u8,

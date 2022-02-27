@@ -1,6 +1,6 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position};
+use crate::components::{Food, Position, Remove, TargetEntity};
 use crate::World;
 use crate::constants::MOB_SPEED;
 use crate::physics::{distance_between, Vect, vector_to};
@@ -8,8 +8,14 @@ use crate::physics::{distance_between, Vect, vector_to};
 pub struct DoNothingTask {}
 
 impl BehaviorTreeNode for DoNothingTask {
-    fn run(&self, world: &World) -> Status {
+    fn run(&self, _: &World) -> Status {
         SUCCESS
+    }
+}
+
+impl DoNothingTask {
+    pub fn new() -> Self {
+        Self {}
     }
 }
 
@@ -24,7 +30,12 @@ impl BehaviorTreeNode for FindFoodTask {
 }
 
 impl FindFoodTask {
+    pub fn new(owner_id: usize) -> Self {
+        Self { owner_id }
+    }
+
     fn find_food(&self, world: &World) -> Status {
+        println!("find food");
         let foods = world.ecs.borrow_component_vec::<Food>();
         let positions = world.ecs.borrow_component_vec::<Position>();
 
@@ -40,15 +51,11 @@ impl FindFoodTask {
 
         let mut target_entity_id: i32 = -1;
         let mut shortest_distance: f32 = 10000.0;
-        let mut target_x = 0.0;
-        let mut target_y = 0.0;
-        for (food, pos) in iter {
+        for (_food, pos) in iter {
             let distance = distance_between(&own_pos_vect, &Vect::of(pos.x, pos.y));
             if distance < shortest_distance {
                 shortest_distance = distance;
                 target_entity_id = pos.entity_id as i32;
-                target_x = pos.x;
-                target_y = pos.y;
             }
         }
 
@@ -57,23 +64,47 @@ impl FindFoodTask {
             return FAILURE;
         }
 
-        println!("Closest food is at: {}, {}", target_x, target_y);
+        world.ecs.add_component_to_entity(self.owner_id, TargetEntity::new(target_entity_id as usize));
         SUCCESS
     }
 }
 
-pub struct MoveTask {
+pub struct EatTargetTask {
+    owner_id: usize,
+}
+
+impl BehaviorTreeNode for EatTargetTask {
+    fn run(&self, world: &World) -> Status {
+        self.eat(world)
+    }
+}
+
+impl EatTargetTask {
+    pub fn new(owner_id: usize) -> Self {
+        Self { owner_id }
+    }
+
+    fn eat(&self, world: &World) -> Status {
+        println!("eat food");
+        let targets = world.ecs.borrow_component_vec::<TargetEntity>();
+        let target_id = targets.get(self.owner_id).unwrap().as_ref().unwrap().target_id;
+        world.ecs.add_component_to_entity::<Remove>(target_id, Remove { owner_id: target_id });
+        SUCCESS
+    }
+}
+
+pub struct MoveToPositionTask {
     owner_id: usize,
     destination: Vect,
 }
 
-impl BehaviorTreeNode for MoveTask {
+impl BehaviorTreeNode for MoveToPositionTask {
     fn run(&self, world: &World) -> Status {
         self.move_to(world)
     }
 }
 
-impl MoveTask {
+impl MoveToPositionTask {
     pub fn new(owner_id: usize, x: f32, y: f32) -> Self {
         Self { owner_id, destination: Vect { x, y } }
     }
@@ -97,33 +128,46 @@ impl MoveTask {
     }
 }
 
-pub struct MoveCloseTask {
+pub struct MoveCloseToTargetTask {
     owner_id: usize,
-    destination: Vect,
 }
 
-impl BehaviorTreeNode for MoveCloseTask {
+impl BehaviorTreeNode for MoveCloseToTargetTask {
     fn run(&self, world: &World) -> Status {
         self.move_close(world)
     }
 }
 
-impl MoveCloseTask {
-    fn move_close(&self, world: &World) -> Status {
-        let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
-        let pos = positions.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+impl MoveCloseToTargetTask {
+    pub fn new(owner_id: usize) -> Self {
+        Self { owner_id }
+    }
 
-        if distance_between(&self.destination, &Vect::of(pos.x, pos.y)) < 1.0 {
+    fn move_close(&self, world: &World) -> Status {
+        println!("move close to");
+        let targets = world.ecs.borrow_component_vec::<TargetEntity>();
+        let target_id = targets.get(self.owner_id).unwrap().as_ref().unwrap().target_id;
+
+        let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
+
+        let destination = Vect::of(
+            positions.get(target_id).unwrap().as_ref().unwrap().x,
+            positions.get(target_id).unwrap().as_ref().unwrap().y,
+        );
+
+        let own_pos = positions.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+
+        if distance_between(&destination, &Vect::of(own_pos.x, own_pos.y)) < 0.5 {
             return SUCCESS;
         }
 
         let velocity_vec = get_velocity_vec_to(
-            &Vect::of(pos.x, pos.y),
-            &self.destination,
+            &Vect::of(own_pos.x, own_pos.y),
+            &destination,
             world.delta_time);
 
-        pos.x += velocity_vec.x;
-        pos.y += velocity_vec.y;
+        own_pos.x += velocity_vec.x;
+        own_pos.y += velocity_vec.y;
         RUNNING
     }
 }

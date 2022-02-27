@@ -1,4 +1,4 @@
-use crate::components::{Behavior, Position, RenderShape};
+use crate::components::{Behavior, Position, Remove, RenderShape};
 use crate::{Renderer, World};
 use crate::constants::{MAP_HEIGHT, MAP_NODE_SIZE, MAP_WIDTH};
 
@@ -13,11 +13,28 @@ pub fn behavior(world: &World) {
     }
 }
 
-pub fn render_entities(world: &mut World) {
-    let mut shapes = world.ecs.borrow_component_vec_mut::<RenderShape>();
-    let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
+pub fn remove_entities(world: &mut World) {
 
-    let zip = shapes.iter_mut().zip(positions.iter_mut());
+    let mut entity_ids_to_remove: Vec<usize> = vec![];
+    {
+        let positions = world.ecs.borrow_component_vec::<Position>();
+
+        let removals = world.ecs.borrow_component_vec::<Remove>();
+        let iter = removals.iter().filter_map(|removal| Some(removal.as_ref()?)).clone();
+        for removal in iter {
+            entity_ids_to_remove.push(removal.owner_id);
+        }
+    }
+    for entity_id in entity_ids_to_remove {
+        world.ecs.remove_entity(entity_id);
+    }
+}
+
+pub fn render_entities(world: &mut World) {
+    let shapes = world.ecs.borrow_component_vec::<RenderShape>();
+    let positions = world.ecs.borrow_component_vec::<Position>();
+
+    let zip = shapes.iter().zip(positions.iter());
     let iter = zip.filter_map(
         |(shape, pos)| Some((shape.as_ref()?, pos.as_ref()?))
     );

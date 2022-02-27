@@ -1,6 +1,8 @@
+use sdl2::libc::stat;
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::World;
 
+#[derive(PartialEq)] // needed for match expression
 pub enum Status {
     SUCCESS,
     FAILURE,
@@ -26,11 +28,15 @@ impl Sequence {
 impl BehaviorTreeNode for Sequence {
     fn run(&self, world: &World) -> Status {
         for child in &self.children {
-            match child.run(world) {
-                SUCCESS => { continue; }
-                FAILURE => { FAILURE }
-                RUNNING => { RUNNING }
-            };
+            let status = child.run(world);
+            if status == SUCCESS {
+                continue;
+            } else { return status; }
+            // match status {
+            //     SUCCESS => continue,
+            //     FAILURE => FAILURE,
+            //     RUNNING => RUNNING,
+            // };
         }
         SUCCESS
     }

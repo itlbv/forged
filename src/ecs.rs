@@ -2,6 +2,7 @@ use std::any::{Any, TypeId};
 use std::borrow::BorrowMut;
 use std::cell::{Ref, RefCell, RefMut};
 use std::collections::HashMap;
+use std::process::id;
 
 pub struct Ecs {
     entity_count: usize,
@@ -44,6 +45,12 @@ impl Ecs {
             [entity_id] = Some(comp);
     }
 
+    pub fn remove_entity(&mut self, entity_id: usize) {
+        for (_, comp_vec) in self.component_registry.borrow_mut() {
+            comp_vec.set_none_at_index(entity_id);
+        }
+    }
+
     pub fn borrow_component_vec_mut<C: 'static>(&self) -> RefMut<'_, Vec<Option<C>>> {
         self.component_registry
             .get(&TypeId::of::<C>())
@@ -79,6 +86,7 @@ trait ComponentVec {
     fn as_any(&self) -> &dyn Any;
     fn as_any_mut(&mut self) -> &mut dyn Any;
     fn push_none(&mut self);
+    fn set_none_at_index(&mut self, idx: usize);
 }
 
 impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
@@ -92,5 +100,9 @@ impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
 
     fn push_none(&mut self) {
         self.get_mut().push(None);
+    }
+
+    fn set_none_at_index(&mut self, idx: usize) {
+        self.get_mut()[idx] = None;
     }
 }
