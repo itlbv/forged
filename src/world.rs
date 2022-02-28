@@ -1,6 +1,6 @@
 use crate::map::Map;
-use crate::{behavior_factory, entity_factory, InputHandler, Renderer, systems};
-use crate::components::{Behavior, Color, Food, Name, Position, Remove, RenderShape, TargetEntity, TargetPosition};
+use crate::{entity_factory, InputHandler, Renderer, systems};
+use crate::components::{Behavior, Food, Name, Position, Remove, RenderShape, TargetEntity, TargetPosition};
 use crate::ecs::Ecs;
 
 pub struct World {

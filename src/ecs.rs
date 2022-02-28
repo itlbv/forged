@@ -1,11 +1,6 @@
 use std::any::{Any, TypeId};
-use std::borrow::BorrowMut;
-use std::cell::{BorrowMutError, Ref, RefCell, RefMut};
+use std::cell::{Ref, RefCell, RefMut};
 use std::collections::HashMap;
-use std::convert::TryInto;
-use std::ops::Add;
-use std::process::id;
-use std::slice::SliceIndex;
 
 pub struct Ecs {
     entity_count: RefCell<usize>,
@@ -37,7 +32,7 @@ impl Ecs {
         self.borrow_component_vec_mut::<C>()[entity_id] = Some(comp);
     }
 
-    pub fn add_component_to_entity_mut<C: 'static>(&mut self, entity_id: usize, comp: C) {
+    pub fn _add_component_to_entity_mut<C: 'static>(&mut self, entity_id: usize, comp: C) {
         self.component_registry
             .get_mut(&TypeId::of::<C>())
             .unwrap()
@@ -74,7 +69,7 @@ impl Ecs {
             .borrow()
     }
 
-    pub fn borrow_component_vec_mut_option<C: 'static>(&self) -> Option<RefMut<Vec<Option<C>>>> {
+    pub fn _borrow_component_vec_mut_option<C: 'static>(&self) -> Option<RefMut<Vec<Option<C>>>> {
         let vec = self.component_registry.get(&TypeId::of::<C>()).unwrap();
         if let Some(v) = vec
             .as_any()

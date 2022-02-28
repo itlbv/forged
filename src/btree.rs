@@ -1,5 +1,4 @@
-use sdl2::libc::stat;
-use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
+use crate::btree::Status::SUCCESS;
 use crate::World;
 
 #[derive(PartialEq)] // needed for match expression

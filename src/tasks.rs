@@ -3,7 +3,6 @@ use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::components::{Food, Position, Remove, TargetEntity, TargetPosition};
 use crate::{entity_factory, World};
 use crate::constants::MOB_SPEED;
-use crate::entity_factory::EntitiesToCreate;
 use crate::physics::{distance_between, Vect, vector_to};
 
 pub struct BuildHouseTask {}

@@ -5,7 +5,7 @@ pub struct Vect {
 }
 
 impl Vect {
-    pub fn new() -> Self {
+    pub fn _new() -> Self {
         Self { x: 0.0, y: 0.0 }
     }
 
