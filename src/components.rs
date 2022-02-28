@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use crate::btree::BehaviorTreeNode;
 use crate::{behavior_factory, World};
 use crate::btree::Status::SUCCESS;
@@ -13,6 +14,8 @@ impl Behavior {
         }
     }
 }
+
+pub struct Item {}
 
 pub struct TargetPosition {
     pub x: f32,
