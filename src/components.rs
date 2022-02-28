@@ -1,5 +1,6 @@
 use crate::btree::BehaviorTreeNode;
-use crate::{World};
+use crate::{behavior_factory, World};
+use crate::btree::Status::SUCCESS;
 
 pub struct Behavior {
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
@@ -7,8 +8,9 @@ pub struct Behavior {
 
 impl Behavior {
     pub fn run(&mut self, world: &World) {
-        self.behavior_tree.run(world);
-        // self.behavior_tree = Box::new(behavior_factory::do_nothing());
+        if self.behavior_tree.run(world) == SUCCESS {
+            self.behavior_tree = Box::new(behavior_factory::do_nothing());
+        }
     }
 }
 

@@ -20,7 +20,7 @@ impl BuildHouseTask {
     }
 
     fn build(&self, world: &World) -> Status {
-        // entity_factory::create_house(1.0, 1.0, world);
+        entity_factory::create_house(1.0, 1.0, world);
         SUCCESS
     }
 }

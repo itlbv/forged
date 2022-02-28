@@ -1,7 +1,8 @@
 use std::any::{Any, TypeId};
 use std::borrow::BorrowMut;
-use std::cell::{Ref, RefCell, RefMut};
+use std::cell::{BorrowMutError, Ref, RefCell, RefMut};
 use std::collections::HashMap;
+use std::convert::TryInto;
 use std::ops::Add;
 use std::process::id;
 use std::slice::SliceIndex;
@@ -101,7 +102,15 @@ impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
     }
 
     fn push_none(&self) {
-        self.borrow_mut().push(None);
+        match self.try_borrow_mut() {
+            Ok(mut vec) => { vec.push(None); }
+            Err(_) => {
+                unsafe {
+                    let vec = &mut *self.as_ptr();
+                    vec.push(None);
+                }
+            }
+        }
     }
 
     fn set_none_at_index(&self, idx: usize) {
