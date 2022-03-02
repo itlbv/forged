@@ -99,7 +99,7 @@ impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
     fn collect_non_empty(&self) -> HashSet<usize> {
         let mut entities = HashSet::new();
         for (i, comp) in self.borrow().iter().enumerate() {
-            if let Some(c) = comp.as_ref() {
+            if let Some(_) = comp.as_ref() {
                 entities.insert(i);
             }
         };

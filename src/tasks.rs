@@ -1,10 +1,8 @@
-use std::collections::HashSet;
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Inventory, Position, Recipe, Remove, TargetEntity, TargetPosition};
-use crate::{entity_factory, items, World};
-use crate::constants::MOB_SPEED;
-use crate::physics::{distance_between, Vect, vector_to};
+use crate::components::{Food, Position, Recipe, Remove, TargetEntity};
+use crate::physics::{distance_between, Vect};
+use crate::World;
 
 pub struct DoUntilFailure {
     pub children: Vec<Box<dyn BehaviorTreeNode>>,
