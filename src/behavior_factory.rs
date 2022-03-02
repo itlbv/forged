@@ -1,6 +1,6 @@
 use crate::btree::Sequence;
 use crate::recipes;
-use crate::tasks::{BuildHouseTask, CheckIfIngredientsAvailable, DoNothingTask, EatTargetTask, FindFoodTask, FindPlaceToBuildTask, MoveCloseToTargetTask, MoveToPositionTask, SetRecipeTask};
+use crate::tasks::{BuildHouseTask, CheckIfIngredientsAvailable, DoNothingTask, DoUntilFailure, EatTargetTask, FindFoodTask, FindPlaceToBuildTask, MoveCloseToTargetTask, MoveToPositionTask, SetRecipeTask};
 
 pub fn find_food_sequence(owner_id: usize) -> Sequence {
     Sequence::of(vec![
@@ -17,8 +17,20 @@ pub fn build_house_sequence(owner_id: usize) -> Sequence {
         Box::new(FindPlaceToBuildTask::new(owner_id)),
         Box::new(MoveToPositionTask::new(owner_id)),
         Box::new(BuildHouseTask::new()),
-        // collect ingredients
+        Box::new(collect_ingredients_sequence(owner_id)),
         // finish building
+    ])
+}
+
+pub fn collect_ingredients_sequence(owner_id: usize) -> Sequence {
+    Sequence::of(vec![
+        Box::new(
+            DoUntilFailure::of(vec![
+                // choose ingredient
+                // move close to target
+                // pick up target
+            ])
+        ),
     ])
 }
 
