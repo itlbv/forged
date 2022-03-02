@@ -1,6 +1,8 @@
+use std::arch::x86_64::_mm256_undefined_si256;
+use std::collections::HashSet;
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Recipe, Remove, TargetEntity, TargetPosition};
+use crate::components::{Food, Inventory, Position, Recipe, Remove, TargetEntity, TargetPosition};
 use crate::{entity_factory, items, World};
 use crate::constants::MOB_SPEED;
 use crate::physics::{distance_between, Vect, vector_to};
@@ -23,10 +25,26 @@ impl CheckIfIngredientsAvailable {
     fn check(&self, world: &World) -> Status {
         let recipes = world.ecs.borrow_component_vec::<Recipe>();
         let recipe = recipes.get(self.owner_id).unwrap().as_ref().unwrap();
+        let mut items = HashSet::new();
         for (item_type_id, amount) in &recipe.ingredients_type_ids {
-            let items = world.ecs.get_entities_by_type_id(item_type_id);
+            let items_of_type = world.ecs.get_entities_by_type_id(item_type_id);
+            if items_of_type.len() >= *amount {
+                items.extend(items_of_type);
+            } else {
+                items.clear();
+                break;
+            }
         }
-        SUCCESS
+        if items.len() > 0 {
+            println!("items found");
+            let mut inventories = world.ecs.borrow_component_vec_mut::<Inventory>();
+            let inventory = inventories.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+            inventory.items_needed = items;
+            SUCCESS
+        } else {
+            println!("not enough items");
+            FAILURE
+        }
     }
 }
 

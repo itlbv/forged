@@ -1,5 +1,5 @@
 use std::any::TypeId;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use crate::btree::BehaviorTreeNode;
 use crate::{behavior_factory, World};
 use crate::btree::Status::SUCCESS;
@@ -17,7 +17,17 @@ impl Behavior {
 }
 
 pub struct Inventory {
-    items_ids: Vec<usize>
+    pub items_needed: HashSet<usize>,
+    pub items_taken: HashSet<usize>
+}
+
+impl Inventory {
+    pub fn new() -> Self {
+        Self {
+            items_taken: HashSet::new(),
+            items_needed: HashSet::new(),
+        }
+    }
 }
 
 pub struct Recipe {

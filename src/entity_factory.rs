@@ -1,4 +1,4 @@
-use crate::components::{Behavior, Color, Food, Name, Position, RenderShape};
+use crate::components::{Behavior, Color, Food, Inventory, Name, Position, RenderShape};
 use crate::{behavior_factory, World};
 use crate::items::{Item, Stone, Wood};
 
@@ -41,4 +41,5 @@ pub fn create_mob(x: f32, y: f32, name: &str, world: &World) {
     world.ecs.add_component_to_entity::<Name>(new_entity_id, Name { v: name.to_string() });
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape { w: 0.49, h: 0.49, color: Color { r: 0, g: 0, b: 150 } }); // blue
     world.ecs.add_component_to_entity::<Behavior>(new_entity_id, behavior);
+    world.ecs.add_component_to_entity::<Inventory>(new_entity_id, Inventory::new());
 }
