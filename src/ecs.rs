@@ -15,8 +15,8 @@ impl Ecs {
         }
     }
 
-    pub fn register_component<C: 'static>(&mut self) {
-        self.component_registry.insert(TypeId::of::<C>(), Box::new(RefCell::new(vec![] as Vec<Option<C>>)));
+    pub fn register_component<Comp: 'static>(&mut self) {
+        self.component_registry.insert(TypeId::of::<Comp>(), Box::new(RefCell::new(vec![] as Vec<Option<Comp>>)));
     }
 
     pub fn create_entity(&self) -> usize {
@@ -28,8 +28,8 @@ impl Ecs {
         new_entity_id
     }
 
-    pub fn add_component_to_entity<C: 'static>(&self, entity_id: usize, comp: C) {
-        self.borrow_component_vec_mut::<C>()[entity_id] = Some(comp);
+    pub fn add_component_to_entity<Comp: 'static>(&self, entity_id: usize, comp: Comp) {
+        self.borrow_component_vec_mut::<Comp>()[entity_id] = Some(comp);
     }
 
     pub fn remove_entity(&mut self, entity_id: usize) {
@@ -45,20 +45,20 @@ impl Ecs {
             .collect_non_empty()
     }
 
-    pub fn borrow_component_vec<C: 'static>(&self) -> Ref<'_, Vec<Option<C>>> {
-        self.get_component_vec::<C>().borrow()
+    pub fn borrow_component_vec<Comp: 'static>(&self) -> Ref<'_, Vec<Option<Comp>>> {
+        self.get_component_vec::<Comp>().borrow()
     }
 
-    pub fn borrow_component_vec_mut<C: 'static>(&self) -> RefMut<'_, Vec<Option<C>>> {
-        self.get_component_vec::<C>().borrow_mut()
+    pub fn borrow_component_vec_mut<Comp: 'static>(&self) -> RefMut<'_, Vec<Option<Comp>>> {
+        self.get_component_vec::<Comp>().borrow_mut()
     }
 
-    fn get_component_vec<T: 'static>(&self) -> &RefCell<Vec<Option<T>>> {
+    fn get_component_vec<Comp: 'static>(&self) -> &RefCell<Vec<Option<Comp>>> {
         self.component_registry
-            .get(&TypeId::of::<T>())
+            .get(&TypeId::of::<Comp>())
             .unwrap()
             .as_any()
-            .downcast_ref::<RefCell<Vec<Option<T>>>>()
+            .downcast_ref::<RefCell<Vec<Option<Comp>>>>()
             .unwrap()
     }
 }
@@ -71,7 +71,7 @@ trait ComponentVec {
     fn collect_non_empty(&self) -> HashSet<usize>;
 }
 
-impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
+impl<Comp: 'static> ComponentVec for RefCell<Vec<Option<Comp>>> {
     fn as_any(&self) -> &dyn Any {
         self as &dyn Any
     }
