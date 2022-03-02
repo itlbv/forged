@@ -1,9 +1,61 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Remove, TargetEntity, TargetPosition};
-use crate::{entity_factory, World};
+use crate::components::{Food, Position, Recipe, Remove, TargetEntity, TargetPosition};
+use crate::{entity_factory, items, World};
 use crate::constants::MOB_SPEED;
 use crate::physics::{distance_between, Vect, vector_to};
+
+pub struct CheckIfIngredientsAvailable {
+    owner_id: usize,
+}
+
+impl BehaviorTreeNode for CheckIfIngredientsAvailable {
+    fn run(&self, world: &World) -> Status {
+        self.check(world)
+    }
+}
+
+impl CheckIfIngredientsAvailable {
+    pub fn new(owner_id: usize) -> Self {
+        Self { owner_id }
+    }
+
+    fn check(&self, world: &World) -> Status {
+        let recipes = world.ecs.borrow_component_vec::<Recipe>();
+        let recipe = recipes.get(self.owner_id).unwrap().as_ref().unwrap();
+        for (item_type_id, amount) in &recipe.ingredients_type_ids {
+            let items = world.ecs.get_entities_by_type_id(item_type_id);
+        }
+        SUCCESS
+    }
+}
+
+pub struct SetRecipeTask {
+    owner_id: usize,
+    recipe: Recipe,
+}
+
+impl BehaviorTreeNode for SetRecipeTask {
+    fn run(&self, world: &World) -> Status {
+        self.set_recipe(world)
+    }
+}
+
+impl SetRecipeTask {
+    pub fn new(owner_id: usize, recipe: Recipe) -> Self {
+        Self { owner_id, recipe }
+    }
+
+    fn set_recipe(&self, world: &World) -> Status {
+        // let recipes = world.ecs.borrow_component_vec_mut::<Recipe>();
+        // let mut recipe = recipes.get(self.owner_id).unwrap().as_ref();
+        // recipe = Some(&self.recipe);
+        // let recipe = self.recipe.clone();
+        // world.ecs.add_component_to_entity(self.owner_id, recipe);
+
+        SUCCESS
+    }
+}
 
 pub struct BuildHouseTask {}
 

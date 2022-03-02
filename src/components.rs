@@ -1,3 +1,4 @@
+use std::any::TypeId;
 use std::collections::HashMap;
 use crate::btree::BehaviorTreeNode;
 use crate::{behavior_factory, World};
@@ -15,7 +16,14 @@ impl Behavior {
     }
 }
 
-pub struct Item {}
+pub struct Inventory {
+    items_ids: Vec<usize>
+}
+
+pub struct Recipe {
+    pub ingredients_type_ids: HashMap<TypeId, usize>,
+    pub render_shape: RenderShape,
+}
 
 pub struct TargetPosition {
     pub x: f32,

@@ -1,7 +1,8 @@
 use crate::map::Map;
 use crate::{entity_factory, InputHandler, Renderer, systems};
-use crate::components::{Behavior, Food, Item, Name, Position, Remove, RenderShape, TargetEntity, TargetPosition};
+use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, TargetEntity, TargetPosition};
 use crate::ecs::Ecs;
+use crate::items::{Item, Stone, Wood};
 
 pub struct World {
     pub quit: bool,
@@ -34,6 +35,10 @@ impl World {
         self.ecs.register_component::<TargetEntity>();
         self.ecs.register_component::<TargetPosition>();
         self.ecs.register_component::<Item>();
+        self.ecs.register_component::<Wood>();
+        self.ecs.register_component::<Stone>();
+        self.ecs.register_component::<Inventory>();
+        self.ecs.register_component::<Recipe>();
 
         entity_factory::create_mob(1.5, 1.5, "Alice", self);
 
@@ -51,6 +56,10 @@ impl World {
         entity_factory::create_tree(3.5, 2.5, self);
         entity_factory::create_tree(5.5, 3.5, self);
         entity_factory::create_tree(6.5, 2.5, self);
+
+        entity_factory::create_stone(13.5, 6.5, self);
+        entity_factory::create_stone(14.5, 9.5, self);
+        entity_factory::create_stone(12.5, 7.5, self);
     }
 
     pub fn tick(&mut self, delta_time: f32) {

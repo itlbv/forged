@@ -1,6 +1,6 @@
 use std::any::{Any, TypeId};
 use std::cell::{Ref, RefCell, RefMut};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 pub struct Ecs {
     entity_count: RefCell<usize>,
@@ -32,31 +32,17 @@ impl Ecs {
         self.borrow_component_vec_mut::<C>()[entity_id] = Some(comp);
     }
 
-    pub fn _add_component_to_entity_mut<C: 'static>(&mut self, entity_id: usize, comp: C) {
-        self.component_registry
-            .get_mut(&TypeId::of::<C>())
-            .unwrap()
-            .as_any_mut()
-            .downcast_mut::<RefCell<Vec<Option<C>>>>()
-            .unwrap()
-            .get_mut()
-            [entity_id] = Some(comp);
-    }
-
     pub fn remove_entity(&mut self, entity_id: usize) {
         for (_, comp_vec) in &self.component_registry {
             comp_vec.set_none_at_index(entity_id);
         }
     }
 
-    pub fn borrow_component_vec_mut<C: 'static>(&self) -> RefMut<'_, Vec<Option<C>>> {
+    pub fn get_entities_by_type_id(&self, type_id: &TypeId) -> HashSet<usize> {
         self.component_registry
-            .get(&TypeId::of::<C>())
+            .get(type_id)
             .unwrap()
-            .as_any()
-            .downcast_ref::<RefCell<Vec<Option<C>>>>()
-            .unwrap()
-            .borrow_mut()
+            .collect_non_empty()
     }
 
     pub fn borrow_component_vec<C: 'static>(&self) -> Ref<'_, Vec<Option<C>>> {
@@ -69,14 +55,14 @@ impl Ecs {
             .borrow()
     }
 
-    pub fn _borrow_component_vec_mut_option<C: 'static>(&self) -> Option<RefMut<Vec<Option<C>>>> {
-        let vec = self.component_registry.get(&TypeId::of::<C>()).unwrap();
-        if let Some(v) = vec
+    pub fn borrow_component_vec_mut<C: 'static>(&self) -> RefMut<'_, Vec<Option<C>>> {
+        self.component_registry
+            .get(&TypeId::of::<C>())
+            .unwrap()
             .as_any()
-            .downcast_ref::<RefCell<Vec<Option<C>>>>() {
-            return Some(v.borrow_mut());
-        }
-        None
+            .downcast_ref::<RefCell<Vec<Option<C>>>>()
+            .unwrap()
+            .borrow_mut()
     }
 }
 
@@ -85,6 +71,7 @@ trait ComponentVec {
     fn as_any_mut(&mut self) -> &mut dyn Any;
     fn push_none(&self);
     fn set_none_at_index(&self, idx: usize);
+    fn collect_non_empty(&self) -> HashSet<usize>;
 }
 
 impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
@@ -110,5 +97,15 @@ impl<T: 'static> ComponentVec for RefCell<Vec<Option<T>>> {
 
     fn set_none_at_index(&self, idx: usize) {
         self.borrow_mut()[idx] = None;
+    }
+
+    fn collect_non_empty(&self) -> HashSet<usize> {
+        let mut entities = HashSet::new();
+        for (i, comp) in self.borrow().iter().enumerate() {
+            if let Some(c) = comp.as_ref() {
+                entities.insert(i);
+            }
+        };
+        entities
     }
 }
