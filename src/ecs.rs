@@ -1,6 +1,6 @@
 use std::any::{Any, TypeId};
 use std::cell::{Ref, RefCell, RefMut};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 pub struct Ecs {
     entity_count: RefCell<usize>,
@@ -38,7 +38,7 @@ impl Ecs {
         }
     }
 
-    pub fn get_entities_by_type_id(&self, type_id: &TypeId) -> HashSet<usize> {
+    pub fn get_entities_by_type_id(&self, type_id: &TypeId) -> Vec<usize> {
         self.component_registry
             .get(type_id)
             .unwrap()
@@ -68,7 +68,7 @@ trait ComponentVec {
     fn as_any_mut(&mut self) -> &mut dyn Any;
     fn push_none(&self);
     fn set_none_at_index(&self, idx: usize);
-    fn collect_non_empty(&self) -> HashSet<usize>;
+    fn collect_non_empty(&self) -> Vec<usize>;
 }
 
 impl<Comp: 'static> ComponentVec for RefCell<Vec<Option<Comp>>> {
@@ -96,11 +96,11 @@ impl<Comp: 'static> ComponentVec for RefCell<Vec<Option<Comp>>> {
         self.borrow_mut()[idx] = None;
     }
 
-    fn collect_non_empty(&self) -> HashSet<usize> {
-        let mut entities = HashSet::new();
+    fn collect_non_empty(&self) -> Vec<usize> {
+        let mut entities = Vec::new();
         for (i, comp) in self.borrow().iter().enumerate() {
             if let Some(_) = comp.as_ref() {
-                entities.insert(i);
+                entities.push(i);
             }
         };
         entities

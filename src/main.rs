@@ -18,6 +18,7 @@ mod items;
 mod move_tasks;
 mod item_tasks;
 mod build_tasks;
+mod util;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;

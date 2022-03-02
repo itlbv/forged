@@ -1,45 +1,46 @@
-use std::collections::HashSet;
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::components::{Inventory, Recipe};
-use crate::World;
+use crate::{util, World};
 
-pub struct CheckIfIngredientsAvailable {
+pub struct FindIngredients {
     owner_id: usize,
 }
 
-impl BehaviorTreeNode for CheckIfIngredientsAvailable {
+impl BehaviorTreeNode for FindIngredients {
     fn run(&self, world: &World) -> Status {
-        self.check(world)
+        self.find(world)
     }
 }
 
-impl CheckIfIngredientsAvailable {
+impl FindIngredients {
     pub fn new(owner_id: usize) -> Self {
         Self { owner_id }
     }
 
-    fn check(&self, world: &World) -> Status {
+    fn find(&self, world: &World) -> Status {
         let recipes = world.ecs.borrow_component_vec::<Recipe>();
         let recipe = recipes.get(self.owner_id).unwrap().as_ref().unwrap();
-        let mut items = HashSet::new();
-        for (item_type_id, amount) in &recipe.ingredients_type_ids {
-            let items_of_type = world.ecs.get_entities_by_type_id(item_type_id);
-            if items_of_type.len() >= *amount {
-                items.extend(items_of_type);
-            } else {
-                items.clear();
-                break;
+
+        let mut ingredients = Vec::new();
+        for (ingr_type_id, amount) in &recipe.ingredients_type_ids {
+            let items_of_type = world.ecs.get_entities_by_type_id(ingr_type_id);
+            if items_of_type.len() < *amount { return FAILURE; }
+
+            util::sort_entities_by_proximity(self.owner_id, &items_of_type);
+
+            for i in 0..*amount {
+                ingredients.push(items_of_type[i]);
             }
         }
-        if items.len() > 0 {
+        if ingredients.len() > 0 {
+            util::sort_entities_by_proximity(self.owner_id, &ingredients);
+
             let mut inventories = world.ecs.borrow_component_vec_mut::<Inventory>();
             let inventory = inventories.get_mut(self.owner_id).unwrap().as_mut().unwrap();
-            inventory.items_needed = items;
+            inventory.items_needed = ingredients;
             SUCCESS
-        } else {
-            FAILURE
-        }
+        } else { FAILURE }
     }
 }
 
