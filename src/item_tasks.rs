@@ -1,6 +1,6 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{Inventory, Recipe};
+use crate::components::{Inventory, Recipe, TargetEntity};
 use crate::{util, World};
 
 pub struct FindIngredients {
@@ -41,6 +41,38 @@ impl FindIngredients {
             inventory.items_needed = ingredients;
             SUCCESS
         } else { FAILURE }
+    }
+}
+
+pub struct ChooseIngredient {
+    owner_id: usize,
+}
+
+impl BehaviorTreeNode for ChooseIngredient {
+    fn run(&self, world: &World) -> Status {
+        self.choose_ingredient(world)
+    }
+}
+
+impl ChooseIngredient {
+    pub fn new(owner_id: usize) -> Self {
+        Self { owner_id }
+    }
+
+    fn choose_ingredient(&self, world: &World) -> Status {
+        let inventories = world.ecs.borrow_component_vec::<Inventory>();
+        let inventory = inventories.get(self.owner_id).unwrap().as_ref().unwrap();
+
+        if inventory.items_needed.len() == 0 {
+            println!("Items needed are empty!");
+            return FAILURE;
+        }
+
+        world.ecs.add_component_to_entity(
+            self.owner_id,
+            TargetEntity::new(inventory.items_needed[0]));
+
+        SUCCESS
     }
 }
 
