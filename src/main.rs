@@ -15,6 +15,7 @@ mod behavior_factory;
 mod entity_factory;
 mod recipes;
 mod items;
+mod move_tasks;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
