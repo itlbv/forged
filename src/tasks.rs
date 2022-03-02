@@ -6,6 +6,28 @@ use crate::{entity_factory, items, World};
 use crate::constants::MOB_SPEED;
 use crate::physics::{distance_between, Vect, vector_to};
 
+pub struct TargetIngredient {
+    owner_id: usize,
+}
+
+impl BehaviorTreeNode for TargetIngredient {
+    fn run(&self, world: &World) -> Status {
+        self.target_ingredient(world)
+    }
+}
+
+impl TargetIngredient {
+    pub fn new(owner_id: usize) -> Self {
+        Self { owner_id }
+    }
+
+    fn target_ingredient(&self, world: &World) -> Status {
+        let inventories = world.ecs.borrow_component_vec::<Inventory>();
+        let inventory = inventories.get(self.owner_id).unwrap().as_ref().unwrap();
+        SUCCESS
+    }
+}
+
 pub struct DoUntilFailure {
     pub children: Vec<Box<dyn BehaviorTreeNode>>,
 }
