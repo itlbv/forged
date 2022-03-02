@@ -46,23 +46,20 @@ impl Ecs {
     }
 
     pub fn borrow_component_vec<C: 'static>(&self) -> Ref<'_, Vec<Option<C>>> {
-        self.component_registry
-            .get(&TypeId::of::<C>())
-            .unwrap()
-            .as_any()
-            .downcast_ref::<RefCell<Vec<Option<C>>>>()
-            .unwrap()
-            .borrow()
+        self.get_component_vec::<C>().borrow()
     }
 
     pub fn borrow_component_vec_mut<C: 'static>(&self) -> RefMut<'_, Vec<Option<C>>> {
+        self.get_component_vec::<C>().borrow_mut()
+    }
+
+    fn get_component_vec<T: 'static>(&self) -> &RefCell<Vec<Option<T>>> {
         self.component_registry
-            .get(&TypeId::of::<C>())
+            .get(&TypeId::of::<T>())
             .unwrap()
             .as_any()
-            .downcast_ref::<RefCell<Vec<Option<C>>>>()
+            .downcast_ref::<RefCell<Vec<Option<T>>>>()
             .unwrap()
-            .borrow_mut()
     }
 }
 
