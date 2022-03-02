@@ -16,6 +16,7 @@ mod entity_factory;
 mod recipes;
 mod items;
 mod move_tasks;
+mod item_tasks;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
