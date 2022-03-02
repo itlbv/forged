@@ -47,12 +47,7 @@ impl SetRecipeTask {
     }
 
     fn set_recipe(&self, world: &World) -> Status {
-        // let recipes = world.ecs.borrow_component_vec_mut::<Recipe>();
-        // let mut recipe = recipes.get(self.owner_id).unwrap().as_ref();
-        // recipe = Some(&self.recipe);
-        // let recipe = self.recipe.clone();
-        // world.ecs.add_component_to_entity(self.owner_id, recipe);
-
+        world.ecs.add_component_to_entity(self.owner_id, self.recipe.clone());
         SUCCESS
     }
 }

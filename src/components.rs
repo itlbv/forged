@@ -25,6 +25,15 @@ pub struct Recipe {
     pub render_shape: RenderShape,
 }
 
+impl Clone for Recipe {
+    fn clone(&self) -> Self {
+        Self {
+            ingredients_type_ids: self.ingredients_type_ids.clone(),
+            render_shape: self.render_shape.clone(),
+        }
+    }
+}
+
 pub struct TargetPosition {
     pub x: f32,
     pub y: f32,
@@ -66,6 +75,20 @@ pub struct RenderShape {
     pub w: f32,
     pub h: f32,
     pub color: Color,
+}
+
+impl Clone for RenderShape {
+    fn clone(&self) -> Self {
+        Self {
+            w: self.w,
+            h: self.h,
+            color: Color {
+                r: self.color.r,
+                g: self.color.g,
+                b: self.color.b
+            }
+        }
+    }
 }
 
 pub struct Food {}
