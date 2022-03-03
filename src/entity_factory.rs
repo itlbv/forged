@@ -2,10 +2,11 @@ use crate::components::{Behavior, Color, Food, Inventory, Name, Position, Render
 use crate::{behaviors, World};
 use crate::items::{Item, Stone, Wood};
 
-pub fn create_house(x: f32, y: f32, world: &World) {
+pub fn create_house(x: f32, y: f32, world: &World) -> usize {
     let new_entity_id = world.ecs.create_entity();
     world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape { w: 5.0, h: 3.0, color: Color { r: 100, g: 100, b: 100 } }); // grey
+    new_entity_id
 }
 
 pub fn create_tree(x: f32, y: f32, world: &World) {

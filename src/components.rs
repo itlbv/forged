@@ -65,6 +65,16 @@ impl TargetEntity {
     }
 }
 
+pub struct TargetMain {
+    pub target_id: usize,
+}
+
+impl TargetMain {
+    pub fn new(target_id: usize) -> Self {
+        Self { target_id }
+    }
+}
+
 pub struct Position {
     pub x: f32,
     pub y: f32,

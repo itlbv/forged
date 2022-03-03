@@ -1,6 +1,6 @@
 use crate::map::Map;
 use crate::{entity_factory, InputHandler, Renderer, systems};
-use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, TargetEntity, TargetPosition};
+use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, TargetEntity, TargetMain, TargetPosition};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
 
@@ -34,6 +34,7 @@ impl World {
         self.ecs.register_component::<Remove>();
         self.ecs.register_component::<TargetEntity>();
         self.ecs.register_component::<TargetPosition>();
+        self.ecs.register_component::<TargetMain>();
         self.ecs.register_component::<Item>();
         self.ecs.register_component::<Wood>();
         self.ecs.register_component::<Stone>();
