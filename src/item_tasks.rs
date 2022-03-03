@@ -8,7 +8,7 @@ pub struct FindIngredients {
 }
 
 impl BehaviorTreeNode for FindIngredients {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.find(world)
     }
 }
@@ -49,7 +49,7 @@ pub struct ChooseIngredient {
 }
 
 impl BehaviorTreeNode for ChooseIngredient {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.choose_ingredient(world)
     }
 }
@@ -80,7 +80,7 @@ pub struct TargetIngredient {
 }
 
 impl BehaviorTreeNode for TargetIngredient {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.target_ingredient(world)
     }
 }

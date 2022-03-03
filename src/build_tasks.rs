@@ -6,7 +6,7 @@ use crate::components::TargetPosition;
 pub struct BuildHouseTask {}
 
 impl BehaviorTreeNode for BuildHouseTask {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.build(world)
     }
 }
@@ -27,7 +27,7 @@ pub struct FindPlaceToBuildTask {
 }
 
 impl BehaviorTreeNode for FindPlaceToBuildTask {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.find_place(world)
     }
 }

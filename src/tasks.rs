@@ -6,24 +6,30 @@ use crate::World;
 
 pub struct DoUntilFailure {
     pub children: Vec<Box<dyn BehaviorTreeNode>>,
+    idx: i8,
 }
 
 impl DoUntilFailure {
     pub fn of(children: Vec<Box<dyn BehaviorTreeNode>>) -> Self {
-        Self { children }
+        Self { children, idx: -1, }
     }
 }
 
 impl BehaviorTreeNode for DoUntilFailure {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         loop {
-            for child in &self.children {
+            for (i, child) in self.children.iter_mut().enumerate() {
+                if self.idx >= 0 && self.idx != i as i8 { continue; }
+
                 let status = child.run(world);
                 if status == SUCCESS {
+                    self.idx = -1;
                     continue;
                 } else if status == RUNNING {
+                    self.idx = i as i8;
                     return RUNNING;
                 } else if status == FAILURE {
+                    self.idx = -1;
                     return FAILURE;
                 }
             }
@@ -37,7 +43,7 @@ pub struct SetRecipeTask {
 }
 
 impl BehaviorTreeNode for SetRecipeTask {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.set_recipe(world)
     }
 }
@@ -56,7 +62,7 @@ impl SetRecipeTask {
 pub struct DoNothingTask {}
 
 impl BehaviorTreeNode for DoNothingTask {
-    fn run(&self, _: &World) -> Status {
+    fn run(&mut self, _: &World) -> Status {
         SUCCESS
     }
 }
@@ -72,7 +78,7 @@ pub struct FindFoodTask {
 }
 
 impl BehaviorTreeNode for FindFoodTask {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.find_food(world)
     }
 }
@@ -121,7 +127,7 @@ pub struct EatTargetTask {
 }
 
 impl BehaviorTreeNode for EatTargetTask {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.eat(world)
     }
 }

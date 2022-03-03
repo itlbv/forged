@@ -10,7 +10,7 @@ pub struct MoveToPositionTask {
 }
 
 impl BehaviorTreeNode for MoveToPositionTask {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.move_to(world)
     }
 }
@@ -47,7 +47,7 @@ pub struct MoveCloseToTargetTask {
 }
 
 impl BehaviorTreeNode for MoveCloseToTargetTask {
-    fn run(&self, world: &World) -> Status {
+    fn run(&mut self, world: &World) -> Status {
         self.move_close(world)
     }
 }

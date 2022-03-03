@@ -1,4 +1,4 @@
-use crate::btree::Status::SUCCESS;
+use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::World;
 
 #[derive(PartialEq)] // needed for match expression
@@ -9,33 +9,39 @@ pub enum Status {
 }
 
 pub trait BehaviorTreeNode {
-    fn run(&self, world: &World) -> Status;
+    fn run(&mut self, world: &World) -> Status;
 }
 
 pub struct Sequence {
     pub children: Vec<Box<dyn BehaviorTreeNode>>,
+    idx: i8,
 }
 
 impl Sequence {
     pub fn of(children: Vec<Box<dyn BehaviorTreeNode>>) -> Self {
         Self {
             children,
+            idx: -1,
         }
     }
 }
 
 impl BehaviorTreeNode for Sequence {
-    fn run(&self, world: &World) -> Status {
-        for child in &self.children {
+    fn run(&mut self, world: &World) -> Status {
+        for (i, child) in self.children.iter_mut().enumerate() {
+            if self.idx >= 0 && self.idx != i as i8 { continue; }
+
             let status = child.run(world);
             if status == SUCCESS {
+                self.idx = -1;
                 continue;
-            } else { return status; }
-            // match status {
-            //     SUCCESS => continue,
-            //     FAILURE => FAILURE,
-            //     RUNNING => RUNNING,
-            // };
+            } else if status == RUNNING {
+                self.idx = i as i8;
+                return RUNNING;
+            } else if status == FAILURE {
+                self.idx = -1;
+                return FAILURE;
+            }
         }
         SUCCESS
     }
