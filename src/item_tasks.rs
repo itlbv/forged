@@ -21,7 +21,7 @@ impl PickUpTarget {
         let mut inventory = inventories.get_mut(self.owner_id).unwrap().as_mut().unwrap();
 
         let target_id = inventory.items_needed.remove(0);
-        inventory.items_taken.push(target_id);
+        inventory.items_storage.push(target_id);
 
         world.ecs.add_component_to_entity(target_id, Remove { owner_id: target_id });
 

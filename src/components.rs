@@ -17,16 +17,28 @@ impl Behavior {
 }
 
 pub struct Inventory {
+    pub item_carried: i32,
     pub items_needed: Vec<usize>,
-    pub items_taken: Vec<usize>
+    pub items_storage: Vec<usize>
 }
 
 impl Inventory {
     pub fn new() -> Self {
         Self {
+            item_carried: -1,
             items_needed: Vec::new(),
-            items_taken: Vec::new(),
+            items_storage: Vec::new(),
         }
+    }
+}
+
+pub struct Storage {
+    pub items: Vec<usize>
+}
+
+impl Storage {
+    pub fn new() -> Self {
+        Self { items: Vec::new(), }
     }
 }
 

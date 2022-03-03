@@ -42,17 +42,17 @@ impl MoveToPositionTask {
     }
 }
 
-pub struct MoveCloseToTargetTask {
+pub struct MoveCloseToTargetEntity {
     owner_id: usize,
 }
 
-impl BehaviorTreeNode for MoveCloseToTargetTask {
+impl BehaviorTreeNode for MoveCloseToTargetEntity {
     fn run(&mut self, world: &World) -> Status {
         self.move_close(world)
     }
 }
 
-impl MoveCloseToTargetTask {
+impl MoveCloseToTargetEntity {
     pub fn new(owner_id: usize) -> Self {
         Self { owner_id }
     }
