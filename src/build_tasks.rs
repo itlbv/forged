@@ -1,7 +1,7 @@
 use crate::{entity_factory, World};
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::SUCCESS;
-use crate::components::{MainTarget, Destination};
+use crate::components::{MainTarget, Destination, Recipe};
 
 pub struct FinishBuilding {
     own_id: usize,
@@ -24,7 +24,7 @@ impl FinishBuilding {
 }
 
 pub struct BuildFoundation {
-    owner_id: usize,
+    own_id: usize,
 }
 
 impl BehaviorTreeNode for BuildFoundation {
@@ -34,13 +34,19 @@ impl BehaviorTreeNode for BuildFoundation {
 }
 
 impl BuildFoundation {
-    pub fn new(owner_id: usize) -> Self {
-        Self { owner_id }
+    pub fn new(own_id: usize) -> Self {
+        Self { own_id }
     }
 
     fn build(&self, world: &World) -> Status {
-        let house_id = entity_factory::create_house(1.0, 1.0, world);
-        world.ecs.add_component_to_entity(self.owner_id, MainTarget::new(house_id));
+        let recipe;
+        {
+            let recipes = world.ecs.borrow_component_vec::<Recipe>();
+            recipe = recipes.get(self.own_id).unwrap().as_ref().unwrap().clone();
+        }
+        let foundation_id = entity_factory::foundation(5.5, 6.5, recipe, world);
+
+        world.ecs.add_component_to_entity(self.own_id, MainTarget::new(foundation_id));
         SUCCESS
     }
 }

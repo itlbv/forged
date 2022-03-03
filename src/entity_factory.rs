@@ -1,6 +1,23 @@
-use crate::components::{Behavior, Color, Food, Inventory, Name, Position, RenderShape, Storage};
-use crate::{behaviors, World};
+use crate::components::{Behavior, Color, Food, Inventory, Name, Position, Recipe, RenderShape, Storage};
+use crate::{behaviors, recipes, World};
 use crate::items::{Item, Stone, Wood};
+
+pub fn foundation(x: f32, y: f32, recipe: Recipe, world: &World) -> usize {
+    let new_entity_id = world.ecs.create_entity();
+    world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
+
+    let r_shape = &recipe.render_shape;
+    world.ecs.add_component_to_entity::<RenderShape>(new_entity_id,
+                                                     RenderShape::new(
+                                                         r_shape.w,
+                                                         r_shape.h,
+                                                         Color::new(140, 140, 140))); // light grey
+
+    world.ecs.add_component_to_entity::<Recipe>(new_entity_id, recipe);
+    world.ecs.add_component_to_entity::<Storage>(new_entity_id, Storage::new());
+
+    new_entity_id
+}
 
 pub fn create_house(x: f32, y: f32, world: &World) -> usize {
     let new_entity_id = world.ecs.create_entity();

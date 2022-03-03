@@ -1,5 +1,6 @@
 use std::any::TypeId;
 use std::collections::HashMap;
+use sdl2::keyboard::Scancode::S;
 use crate::btree::BehaviorTreeNode;
 use crate::btree::Status::SUCCESS;
 use crate::{behaviors, World};
@@ -31,18 +32,27 @@ impl Inventory {
 }
 
 pub struct Storage {
-    pub items: Vec<usize>
+    pub items: Vec<usize>,
 }
 
 impl Storage {
     pub fn new() -> Self {
-        Self { items: Vec::new(), }
+        Self { items: Vec::new() }
     }
 }
 
 pub struct Recipe {
     pub ingredients_type_ids: HashMap<TypeId, usize>,
     pub render_shape: RenderShape,
+}
+
+impl Recipe {
+    pub fn new(ingredients_type_ids: HashMap<TypeId, usize>, render_shape: RenderShape) -> Self {
+        Self {
+            ingredients_type_ids,
+            render_shape,
+        }
+    }
 }
 
 impl Clone for Recipe {
@@ -107,28 +117,34 @@ pub struct RenderShape {
     pub color: Color,
 }
 
+impl RenderShape {
+    pub fn new(w: f32, h: f32, color: Color) -> Self {
+        Self { w, h, color }
+    }
+}
+
 impl Clone for RenderShape {
     fn clone(&self) -> Self {
         Self {
             w: self.w,
             h: self.h,
-            color: Color {
-                r: self.color.r,
-                g: self.color.g,
-                b: self.color.b
-            }
+            color: Color::new(self.color.r, self.color.g, self.color.b),
         }
     }
-}
-
-pub struct Food {}
-
-pub struct Remove {
-    pub owner_id: usize,
 }
 
 pub struct Color {
     pub r: u8,
     pub g: u8,
     pub b: u8,
+}
+
+impl Color {
+    pub fn new(r: u8, g: u8, b: u8) -> Self { Self { r, g, b } }
+}
+
+pub struct Food {}
+
+pub struct Remove {
+    pub owner_id: usize,
 }

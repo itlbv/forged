@@ -8,12 +8,10 @@ pub fn house() -> Recipe {
     ingredients_type_ids.insert(TypeId::of::<Wood>(), 3);
     ingredients_type_ids.insert(TypeId::of::<Stone>(), 2);
 
-    Recipe {
-        ingredients_type_ids,
-        render_shape: RenderShape {
-            w: 5.0,
-            h: 3.0,
-            color: Color { r: 100, g: 100, b: 100 },
-        },
-    }
+    Recipe::new(ingredients_type_ids,
+                RenderShape::new(
+                    5.0,
+                    3.0,
+                    Color::new(100, 100, 100))
+    )
 }

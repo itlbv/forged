@@ -18,7 +18,7 @@ impl SetDestinationFromMainTarget {
     pub fn new(owner_id: usize) -> Self { Self { owner_id } }
 
     fn set_destination(&self, world: &World) -> Status {
-        world.ecs.add_component_to_entity(self.owner_id, Destination::new(5.0, 5.0));
+        world.ecs.add_component_to_entity(self.owner_id, Destination::new(5.5, 7.5));
         SUCCESS
     }
 }
