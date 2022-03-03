@@ -18,14 +18,14 @@ impl Behavior {
 
 pub struct Inventory {
     pub items_needed: Vec<usize>,
-    pub items_taken: HashSet<usize>
+    pub items_taken: Vec<usize>
 }
 
 impl Inventory {
     pub fn new() -> Self {
         Self {
             items_needed: Vec::new(),
-            items_taken: HashSet::new(),
+            items_taken: Vec::new(),
         }
     }
 }

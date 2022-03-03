@@ -1,7 +1,33 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{Inventory, Recipe, TargetEntity};
+use crate::components::{Inventory, Recipe, Remove, TargetEntity};
 use crate::{util, World};
+
+pub struct PickUpTarget {
+    owner_id: usize,
+}
+
+impl BehaviorTreeNode for PickUpTarget {
+    fn run(&mut self, world: &World) -> Status {
+        self.pick_up(world)
+    }
+}
+
+impl PickUpTarget {
+    pub fn new(owner_id: usize) -> Self { Self { owner_id } }
+
+    fn pick_up(&mut self, world: &World) -> Status {
+        let mut inventories = world.ecs.borrow_component_vec_mut::<Inventory>();
+        let mut inventory = inventories.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+
+        let target_id = inventory.items_needed.remove(0);
+        inventory.items_taken.push(target_id);
+
+        world.ecs.add_component_to_entity(target_id, Remove { owner_id: target_id });
+
+        SUCCESS
+    }
+}
 
 pub struct FindIngredients {
     owner_id: usize,
