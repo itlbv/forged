@@ -1,8 +1,8 @@
 use std::any::TypeId;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use crate::btree::BehaviorTreeNode;
-use crate::{behaviors, World};
 use crate::btree::Status::SUCCESS;
+use crate::{behaviors, World};
 
 pub struct Behavior {
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
@@ -54,32 +54,32 @@ impl Clone for Recipe {
     }
 }
 
-pub struct TargetPosition {
+pub struct Destination {
     pub x: f32,
     pub y: f32,
 }
 
-impl TargetPosition {
+impl Destination {
     pub fn new(x: f32, y: f32) -> Self {
         Self { x, y }
     }
 }
 
-pub struct TargetEntity {
+pub struct Target {
     pub target_id: usize,
 }
 
-impl TargetEntity {
+impl Target {
     pub fn new(target_id: usize) -> Self {
         Self { target_id }
     }
 }
 
-pub struct TargetMain {
+pub struct MainTarget {
     pub own_id: usize,
 }
 
-impl TargetMain {
+impl MainTarget {
     pub fn new(target_id: usize) -> Self {
         Self { own_id: target_id }
     }

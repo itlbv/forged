@@ -1,6 +1,6 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{Inventory, Recipe, Remove, Storage, TargetEntity, TargetMain};
+use crate::components::{Inventory, Recipe, Remove, Storage, Target, MainTarget};
 use crate::{util, World};
 
 pub struct DropItemToMainTargetStorage {
@@ -17,11 +17,11 @@ impl DropItemToMainTargetStorage {
     pub fn new(owner_id: usize) -> Self { Self { own_id: owner_id } }
 
     fn drop_item(&self, world: &World) -> Status {
-        let main_targets = world.ecs.borrow_component_vec::<TargetMain>();
+        let main_targets = world.ecs.borrow_component_vec::<MainTarget>();
         let main_target_id = main_targets.get(self.own_id).unwrap().as_ref().unwrap().own_id;
 
         let mut storages = world.ecs.borrow_component_vec_mut::<Storage>();
-        let mut storage = storages.get_mut(main_target_id).unwrap().as_mut().unwrap();
+        let storage = storages.get_mut(main_target_id).unwrap().as_mut().unwrap();
 
         let mut inventories = world.ecs.borrow_component_vec_mut::<Inventory>();
         let mut own_inventory = inventories.get_mut(self.own_id).unwrap().as_mut().unwrap();
@@ -124,30 +124,8 @@ impl ChooseIngredient {
 
         world.ecs.add_component_to_entity(
             self.owner_id,
-            TargetEntity::new(inventory.items_needed[0]));
+            Target::new(inventory.items_needed[0]));
 
-        SUCCESS
-    }
-}
-
-pub struct TargetIngredient {
-    owner_id: usize,
-}
-
-impl BehaviorTreeNode for TargetIngredient {
-    fn run(&mut self, world: &World) -> Status {
-        self.target_ingredient(world)
-    }
-}
-
-impl TargetIngredient {
-    pub fn new(owner_id: usize) -> Self {
-        Self { owner_id }
-    }
-
-    fn target_ingredient(&self, world: &World) -> Status {
-        let inventories = world.ecs.borrow_component_vec::<Inventory>();
-        let inventory = inventories.get(self.owner_id).unwrap().as_ref().unwrap();
         SUCCESS
     }
 }

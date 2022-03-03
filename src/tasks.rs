@@ -1,6 +1,6 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Recipe, Remove, TargetEntity, TargetMain, TargetPosition};
+use crate::components::{Food, Position, Recipe, Remove, Target, Destination};
 use crate::physics::{distance_between, Vect};
 use crate::World;
 
@@ -18,7 +18,7 @@ impl SetDestinationFromMainTarget {
     pub fn new(owner_id: usize) -> Self { Self { owner_id } }
 
     fn set_destination(&self, world: &World) -> Status {
-        world.ecs.add_component_to_entity(self.owner_id, TargetPosition::new(5.0, 5.0));
+        world.ecs.add_component_to_entity(self.owner_id, Destination::new(5.0, 5.0));
         SUCCESS
     }
 }
@@ -56,18 +56,18 @@ impl BehaviorTreeNode for DoUntilFailure {
     }
 }
 
-pub struct SetRecipeTask {
+pub struct SetRecipe {
     owner_id: usize,
     recipe: Recipe,
 }
 
-impl BehaviorTreeNode for SetRecipeTask {
+impl BehaviorTreeNode for SetRecipe {
     fn run(&mut self, world: &World) -> Status {
         self.set_recipe(world)
     }
 }
 
-impl SetRecipeTask {
+impl SetRecipe {
     pub fn new(owner_id: usize, recipe: Recipe) -> Self {
         Self { owner_id, recipe }
     }
@@ -92,17 +92,17 @@ impl DoNothingTask {
     }
 }
 
-pub struct FindFoodTask {
+pub struct FindFood {
     pub owner_id: usize,
 }
 
-impl BehaviorTreeNode for FindFoodTask {
+impl BehaviorTreeNode for FindFood {
     fn run(&mut self, world: &World) -> Status {
         self.find_food(world)
     }
 }
 
-impl FindFoodTask {
+impl FindFood {
     pub fn new(owner_id: usize) -> Self {
         Self { owner_id }
     }
@@ -136,29 +136,29 @@ impl FindFoodTask {
             return FAILURE;
         }
 
-        world.ecs.add_component_to_entity(self.owner_id, TargetEntity::new(target_entity_id as usize));
+        world.ecs.add_component_to_entity(self.owner_id, Target::new(target_entity_id as usize));
         SUCCESS
     }
 }
 
-pub struct EatTargetTask {
+pub struct EatTarget {
     owner_id: usize,
 }
 
-impl BehaviorTreeNode for EatTargetTask {
+impl BehaviorTreeNode for EatTarget {
     fn run(&mut self, world: &World) -> Status {
         self.eat(world)
     }
 }
 
-impl EatTargetTask {
+impl EatTarget {
     pub fn new(owner_id: usize) -> Self {
         Self { owner_id }
     }
 
     fn eat(&self, world: &World) -> Status {
         println!("eat food");
-        let targets = world.ecs.borrow_component_vec::<TargetEntity>();
+        let targets = world.ecs.borrow_component_vec::<Target>();
         let target_id = targets.get(self.owner_id).unwrap().as_ref().unwrap().target_id;
         world.ecs.add_component_to_entity::<Remove>(target_id, Remove { owner_id: target_id });
         SUCCESS

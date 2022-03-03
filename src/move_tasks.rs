@@ -1,39 +1,39 @@
 use crate::btree::{BehaviorTreeNode, Status};
-use crate::components::{Position, TargetEntity, TargetPosition};
+use crate::components::{Position, Target, Destination};
 use crate::physics::{Vect};
 use crate::{physics, World};
 use crate::btree::Status::{RUNNING, SUCCESS};
 use crate::constants::MOB_SPEED;
 
-pub struct MoveToPositionTask {
+pub struct MoveToDestination {
     owner_id: usize,
 }
 
-impl BehaviorTreeNode for MoveToPositionTask {
+impl BehaviorTreeNode for MoveToDestination {
     fn run(&mut self, world: &World) -> Status {
         self.move_to(world)
     }
 }
 
-impl MoveToPositionTask {
+impl MoveToDestination {
     pub fn new(owner_id: usize) -> Self {
         Self { owner_id }
     }
 
     fn move_to(&self, world: &World) -> Status {
-        let target_positions = world.ecs.borrow_component_vec::<TargetPosition>();
-        let target_pos = target_positions.get(self.owner_id).unwrap().as_ref().unwrap();
+        let destinations = world.ecs.borrow_component_vec::<Destination>();
+        let dest = destinations.get(self.owner_id).unwrap().as_ref().unwrap();
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
         let own_pos = positions.get_mut(self.owner_id).unwrap().as_mut().unwrap();
 
-        if physics::distance_between(&Vect::of(target_pos.x, target_pos.y), &Vect::of(own_pos.x, own_pos.y)) < 0.02 {
+        if physics::distance_between(&Vect::of(dest.x, dest.y), &Vect::of(own_pos.x, own_pos.y)) < 0.02 {
             return SUCCESS;
         }
 
         let velocity_vec = get_velocity_vec_to(
             &Vect::of(own_pos.x, own_pos.y),
-            &Vect::of(target_pos.x, target_pos.y),
+            &Vect::of(dest.x, dest.y),
             world.delta_time);
 
         own_pos.x += velocity_vec.x;
@@ -42,23 +42,23 @@ impl MoveToPositionTask {
     }
 }
 
-pub struct MoveCloseToTargetEntity {
+pub struct MoveCloseToTarget {
     owner_id: usize,
 }
 
-impl BehaviorTreeNode for MoveCloseToTargetEntity {
+impl BehaviorTreeNode for MoveCloseToTarget {
     fn run(&mut self, world: &World) -> Status {
         self.move_close(world)
     }
 }
 
-impl MoveCloseToTargetEntity {
+impl MoveCloseToTarget {
     pub fn new(owner_id: usize) -> Self {
         Self { owner_id }
     }
 
     fn move_close(&self, world: &World) -> Status {
-        let targets = world.ecs.borrow_component_vec::<TargetEntity>();
+        let targets = world.ecs.borrow_component_vec::<Target>();
         let target_id = targets.get(self.owner_id).unwrap().as_ref().unwrap().target_id;
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
