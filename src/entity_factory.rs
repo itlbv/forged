@@ -1,5 +1,5 @@
 use crate::components::{Behavior, Color, Food, Inventory, Name, Position, RenderShape};
-use crate::{behavior_factory, World};
+use crate::{behaviors, World};
 use crate::items::{Item, Stone, Wood};
 
 pub fn create_house(x: f32, y: f32, world: &World) {
@@ -35,7 +35,7 @@ pub fn create_food(x: f32, y: f32, world: &World) {
 pub fn create_mob(x: f32, y: f32, name: &str, world: &World) {
     let new_entity_id = world.ecs.create_entity();
 
-    let behavior = Behavior { behavior_tree: Box::new(behavior_factory::build_house_sequence(new_entity_id)) };
+    let behavior = Behavior { behavior_tree: Box::new(behaviors::build_house_sequence(new_entity_id)) };
 
     world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
     world.ecs.add_component_to_entity::<Name>(new_entity_id, Name { v: name.to_string() });

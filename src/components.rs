@@ -1,7 +1,7 @@
 use std::any::TypeId;
 use std::collections::{HashMap, HashSet};
 use crate::btree::BehaviorTreeNode;
-use crate::{behavior_factory, World};
+use crate::{behaviors, World};
 use crate::btree::Status::SUCCESS;
 
 pub struct Behavior {
@@ -11,7 +11,7 @@ pub struct Behavior {
 impl Behavior {
     pub fn run(&mut self, world: &World) {
         if self.behavior_tree.run(world) == SUCCESS {
-            self.behavior_tree = Box::new(behavior_factory::do_nothing());
+            self.behavior_tree = Box::new(behaviors::do_nothing());
         }
     }
 }

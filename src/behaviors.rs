@@ -1,5 +1,5 @@
 use crate::btree::Sequence;
-use crate::build_tasks::{BuildHouseTask, FindPlaceToBuildTask};
+use crate::build_tasks::{BuildHouseFoundation, FindPlaceToBuildTask};
 use crate::item_tasks::{ChooseIngredient, FindIngredients, PickUpTarget};
 use crate::move_tasks::{MoveCloseToTargetTask, MoveToPositionTask};
 use crate::recipes;
@@ -19,7 +19,7 @@ pub fn build_house_sequence(owner_id: usize) -> Sequence {
         Box::new(FindIngredients::new(owner_id)),
         Box::new(FindPlaceToBuildTask::new(owner_id)),
         Box::new(MoveToPositionTask::new(owner_id)),
-        Box::new(BuildHouseTask::new()),
+        Box::new(BuildHouseFoundation::new()),
         Box::new(collect_ingredients_sequence(owner_id)),
         // finish building
     ])

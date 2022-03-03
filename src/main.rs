@@ -11,7 +11,7 @@ mod physics;
 mod tasks;
 mod constants;
 mod world;
-mod behavior_factory;
+mod behaviors;
 mod entity_factory;
 mod recipes;
 mod items;

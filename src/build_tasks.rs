@@ -3,15 +3,15 @@ use crate::{entity_factory, World};
 use crate::btree::Status::SUCCESS;
 use crate::components::TargetPosition;
 
-pub struct BuildHouseTask {}
+pub struct BuildHouseFoundation {}
 
-impl BehaviorTreeNode for BuildHouseTask {
+impl BehaviorTreeNode for BuildHouseFoundation {
     fn run(&mut self, world: &World) -> Status {
         self.build(world)
     }
 }
 
-impl BuildHouseTask {
+impl BuildHouseFoundation {
     pub fn new() -> Self {
         Self {}
     }
