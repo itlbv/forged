@@ -1,8 +1,27 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Recipe, Remove, TargetEntity};
+use crate::components::{Food, Position, Recipe, Remove, TargetEntity, TargetMain, TargetPosition};
 use crate::physics::{distance_between, Vect};
 use crate::World;
+
+pub struct SetDestinationFromMainTarget {
+    pub owner_id: usize,
+}
+
+impl BehaviorTreeNode for SetDestinationFromMainTarget {
+    fn run(&mut self, world: &World) -> Status {
+        self.set_destination(world)
+    }
+}
+
+impl SetDestinationFromMainTarget {
+    pub fn new(owner_id: usize) -> Self { Self { owner_id } }
+
+    fn set_destination(&self, world: &World) -> Status {
+        world.ecs.add_component_to_entity(self.owner_id, TargetPosition::new(5.0, 5.0));
+        SUCCESS
+    }
+}
 
 pub struct DoUntilFailure {
     pub children: Vec<Box<dyn BehaviorTreeNode>>,
@@ -11,7 +30,7 @@ pub struct DoUntilFailure {
 
 impl DoUntilFailure {
     pub fn of(children: Vec<Box<dyn BehaviorTreeNode>>) -> Self {
-        Self { children, idx: -1, }
+        Self { children, idx: -1 }
     }
 }
 

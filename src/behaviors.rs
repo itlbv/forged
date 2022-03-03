@@ -3,7 +3,7 @@ use crate::build_tasks::{BuildHouseFoundation, FindPlaceToBuildTask};
 use crate::item_tasks::{ChooseIngredient, FindIngredients, PickUpTarget};
 use crate::move_tasks::{MoveCloseToTargetEntity, MoveToPositionTask};
 use crate::recipes;
-use crate::tasks::{DoNothingTask, DoUntilFailure, EatTargetTask, FindFoodTask, SetRecipeTask};
+use crate::tasks::{DoNothingTask, DoUntilFailure, EatTargetTask, FindFoodTask, SetDestinationFromMainTarget, SetRecipeTask};
 
 pub fn find_food_sequence(owner_id: usize) -> Sequence {
     Sequence::of(vec![
@@ -19,7 +19,7 @@ pub fn build_house(owner_id: usize) -> Sequence {
         Box::new(FindIngredients::new(owner_id)),
         Box::new(FindPlaceToBuildTask::new(owner_id)),
         Box::new(MoveToPositionTask::new(owner_id)),
-        Box::new(BuildHouseFoundation::new(owner_id)),
+        Box::new(BuildHouseFoundation::new(owner_id)), //sets main target
         Box::new(deliver_ingredients(owner_id)),
         // finish building
     ])
@@ -32,8 +32,8 @@ pub fn deliver_ingredients(owner_id: usize) -> Sequence {
                 Box::new(ChooseIngredient::new(owner_id)),
                 Box::new(MoveCloseToTargetEntity::new(owner_id)),
                 Box::new(PickUpTarget::new(owner_id)),
-                // set target position from main target
-                // move to position
+                Box::new(SetDestinationFromMainTarget::new(owner_id)),
+                Box::new(MoveToPositionTask::new(owner_id)),
                 // drop ingredient
             ])
         ),
