@@ -1,7 +1,36 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{Inventory, Recipe, Remove, TargetEntity};
+use crate::components::{Inventory, Recipe, Remove, Storage, TargetEntity, TargetMain};
 use crate::{util, World};
+
+pub struct DropItemToMainTargetStorage {
+    own_id: usize,
+}
+
+impl BehaviorTreeNode for DropItemToMainTargetStorage {
+    fn run(&mut self, world: &World) -> Status {
+        self.drop_item(world)
+    }
+}
+
+impl DropItemToMainTargetStorage {
+    pub fn new(owner_id: usize) -> Self { Self { own_id: owner_id } }
+
+    fn drop_item(&self, world: &World) -> Status {
+        let main_targets = world.ecs.borrow_component_vec::<TargetMain>();
+        let main_target_id = main_targets.get(self.own_id).unwrap().as_ref().unwrap().own_id;
+
+        let mut storages = world.ecs.borrow_component_vec_mut::<Storage>();
+        let mut storage = storages.get_mut(main_target_id).unwrap().as_mut().unwrap();
+
+        let mut inventories = world.ecs.borrow_component_vec_mut::<Inventory>();
+        let mut own_inventory = inventories.get_mut(self.own_id).unwrap().as_mut().unwrap();
+
+        storage.items.push(own_inventory.item_carried as usize);
+        own_inventory.item_carried = -1;
+        SUCCESS
+    }
+}
 
 pub struct PickUpTarget {
     owner_id: usize,

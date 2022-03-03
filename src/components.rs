@@ -76,12 +76,12 @@ impl TargetEntity {
 }
 
 pub struct TargetMain {
-    pub target_id: usize,
+    pub own_id: usize,
 }
 
 impl TargetMain {
     pub fn new(target_id: usize) -> Self {
-        Self { target_id }
+        Self { own_id: target_id }
     }
 }
 
