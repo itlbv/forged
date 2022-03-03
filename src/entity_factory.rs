@@ -6,6 +6,7 @@ pub fn create_house(x: f32, y: f32, world: &World) -> usize {
     let new_entity_id = world.ecs.create_entity();
     world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape { w: 5.0, h: 3.0, color: Color { r: 100, g: 100, b: 100 } }); // grey
+    world.ecs.add_component_to_entity::<Inventory>(new_entity_id, Inventory::new());
     new_entity_id
 }
 
