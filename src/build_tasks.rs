@@ -23,17 +23,17 @@ impl FinishBuilding {
     }
 }
 
-pub struct BuildHouseFoundation {
+pub struct BuildFoundation {
     owner_id: usize,
 }
 
-impl BehaviorTreeNode for BuildHouseFoundation {
+impl BehaviorTreeNode for BuildFoundation {
     fn run(&mut self, world: &World) -> Status {
         self.build(world)
     }
 }
 
-impl BuildHouseFoundation {
+impl BuildFoundation {
     pub fn new(owner_id: usize) -> Self {
         Self { owner_id }
     }
