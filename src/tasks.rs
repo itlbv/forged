@@ -49,7 +49,7 @@ impl BehaviorTreeNode for DoUntilFailure {
                     return RUNNING;
                 } else if status == FAILURE {
                     self.idx = -1;
-                    return FAILURE;
+                    return SUCCESS;
                 }
             }
         }
@@ -57,7 +57,7 @@ impl BehaviorTreeNode for DoUntilFailure {
 }
 
 pub struct SetRecipe {
-    owner_id: usize,
+    own_id: usize,
     recipe: Recipe,
 }
 
@@ -68,12 +68,12 @@ impl BehaviorTreeNode for SetRecipe {
 }
 
 impl SetRecipe {
-    pub fn new(owner_id: usize, recipe: Recipe) -> Self {
-        Self { owner_id, recipe }
+    pub fn new(own_id: usize, recipe: Recipe) -> Self {
+        Self { own_id, recipe }
     }
 
     fn set_recipe(&self, world: &World) -> Status {
-        world.ecs.add_component_to_entity(self.owner_id, self.recipe.clone());
+        world.ecs.add_component_to_entity(self.own_id, self.recipe.clone());
         SUCCESS
     }
 }
@@ -160,7 +160,7 @@ impl EatTarget {
         println!("eat food");
         let targets = world.ecs.borrow_component_vec::<Target>();
         let target_id = targets.get(self.owner_id).unwrap().as_ref().unwrap().target_id;
-        world.ecs.add_component_to_entity::<Remove>(target_id, Remove { owner_id: target_id });
+        world.ecs.add_component_to_entity::<Remove>(target_id, Remove::new(target_id));
         SUCCESS
     }
 }

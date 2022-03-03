@@ -52,7 +52,7 @@ impl PickUpTarget {
         let target_id = inventory.items_needed.remove(0);
         inventory.item_carried = target_id as i32;
 
-        world.ecs.add_component_to_entity(target_id, Remove { owner_id: target_id });
+        world.ecs.add_component_to_entity(target_id, Remove::new(target_id));
 
         SUCCESS
     }

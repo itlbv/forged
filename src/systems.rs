@@ -19,7 +19,7 @@ pub fn remove_entities(world: &mut World) {
         let removals = world.ecs.borrow_component_vec::<Remove>();
         let iter = removals.iter().filter_map(|removal| Some(removal.as_ref()?)).clone();
         for removal in iter {
-            entity_ids_to_remove.push(removal.owner_id);
+            entity_ids_to_remove.push(removal.own_id);
         }
     }
     for entity_id in entity_ids_to_remove {

@@ -1,4 +1,4 @@
-use crate::btree::Sequence;
+use crate::btree::{BehaviorTreeNode, Sequence};
 use crate::build_tasks::{BuildFoundation, FindPlaceToBuild, FinishBuilding};
 use crate::item_tasks::{ChooseIngredient, DropItemToMainTargetStorage, FindIngredients, PickUpTarget};
 use crate::move_tasks::{MoveCloseToTarget, MoveToDestination};
@@ -25,9 +25,9 @@ pub fn build_house(owner_id: usize) -> Sequence {
     ])
 }
 
-pub fn deliver_ingredients(owner_id: usize) -> Sequence {
-    Sequence::of(vec![
-        Box::new(
+pub fn deliver_ingredients(owner_id: usize) -> DoUntilFailure {
+    // Sequence::of(vec![
+    //     Box::new(
             DoUntilFailure::of(vec![
                 Box::new(ChooseIngredient::new(owner_id)),
                 Box::new(MoveCloseToTarget::new(owner_id)),
@@ -36,8 +36,8 @@ pub fn deliver_ingredients(owner_id: usize) -> Sequence {
                 Box::new(MoveToDestination::new(owner_id)),
                 Box::new(DropItemToMainTargetStorage::new(owner_id)),
             ])
-        ),
-    ])
+        // ),
+    // ])
 }
 
 pub fn do_nothing() -> DoNothingTask {

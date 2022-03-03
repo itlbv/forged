@@ -1,6 +1,5 @@
 use std::any::TypeId;
 use std::collections::HashMap;
-use sdl2::keyboard::Scancode::S;
 use crate::btree::BehaviorTreeNode;
 use crate::btree::Status::SUCCESS;
 use crate::{behaviors, World};
@@ -146,5 +145,9 @@ impl Color {
 pub struct Food {}
 
 pub struct Remove {
-    pub owner_id: usize,
+    pub own_id: usize,
+}
+
+impl Remove {
+    pub fn new(own_id: usize) -> Self { Self { own_id } }
 }
