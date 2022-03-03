@@ -30,6 +30,7 @@ pub fn collect_ingredients_sequence(owner_id: usize) -> Sequence {
         Box::new(
             DoUntilFailure::of(vec![
                 Box::new(ChooseIngredient::new(owner_id)),
+                Box::new(MoveCloseToTargetTask::new(owner_id)),
                 // move close to target
                 // pick up target
             ])

@@ -16,13 +16,18 @@ impl DoUntilFailure {
 
 impl BehaviorTreeNode for DoUntilFailure {
     fn run(&self, world: &World) -> Status {
-        for child in &self.children {
-            let status = child.run(world);
-            if status == FAILURE {
-                return FAILURE;
+        loop {
+            for child in &self.children {
+                let status = child.run(world);
+                if status == SUCCESS {
+                    continue;
+                } else if status == RUNNING {
+                    return RUNNING;
+                } else if status == FAILURE {
+                    return FAILURE;
+                }
             }
         }
-        RUNNING
     }
 }
 
@@ -78,7 +83,6 @@ impl FindFoodTask {
     }
 
     fn find_food(&self, world: &World) -> Status {
-        println!("find food");
         let foods = world.ecs.borrow_component_vec::<Food>();
         let positions = world.ecs.borrow_component_vec::<Position>();
 

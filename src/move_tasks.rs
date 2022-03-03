@@ -58,7 +58,6 @@ impl MoveCloseToTargetTask {
     }
 
     fn move_close(&self, world: &World) -> Status {
-        println!("move close to");
         let targets = world.ecs.borrow_component_vec::<TargetEntity>();
         let target_id = targets.get(self.owner_id).unwrap().as_ref().unwrap().target_id;
 

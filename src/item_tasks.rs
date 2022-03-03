@@ -64,7 +64,6 @@ impl ChooseIngredient {
         let inventory = inventories.get(self.owner_id).unwrap().as_ref().unwrap();
 
         if inventory.items_needed.len() == 0 {
-            println!("Items needed are empty!");
             return FAILURE;
         }
 
