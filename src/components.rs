@@ -19,7 +19,6 @@ impl Behavior {
 pub struct Inventory {
     pub item_carried: i32,
     pub items_needed: Vec<usize>,
-    pub items_storage: Vec<usize>
 }
 
 impl Inventory {
@@ -27,7 +26,6 @@ impl Inventory {
         Self {
             item_carried: -1,
             items_needed: Vec::new(),
-            items_storage: Vec::new(),
         }
     }
 }
