@@ -3,6 +3,26 @@ use crate::{entity_factory, World};
 use crate::btree::Status::SUCCESS;
 use crate::components::{TargetMain, TargetPosition};
 
+pub struct FinishBuilding {
+    own_id: usize,
+}
+
+impl BehaviorTreeNode for FinishBuilding {
+    fn run(&mut self, world: &World) -> Status {
+        self.finish_building(world)
+    }
+}
+
+impl FinishBuilding {
+    pub fn new(own_id: usize) -> Self {
+        Self { own_id }
+    }
+
+    fn finish_building(&self, _world: &World) -> Status {
+        SUCCESS
+    }
+}
+
 pub struct BuildHouseFoundation {
     owner_id: usize,
 }
