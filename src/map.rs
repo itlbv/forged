@@ -1,18 +1,6 @@
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::util_structs::Color;
 
-pub struct MapNode {
-    pub x: i32,
-    pub y: i32,
-    pub color: Color,
-}
-
-impl MapNode {
-    fn new(x: i32, y: i32, color: Color) -> Self {
-        Self { x, y, color }
-    }
-}
-
 pub struct Map {
     pub nodes: Vec<MapNode>,
 }
@@ -28,9 +16,28 @@ impl Map {
         let mut map_nodes = vec![];
         for y in 0..MAP_HEIGHT {
             for x in 00..MAP_WIDTH {
-                map_nodes.push(MapNode { x, y, color: Color { r: 85, g: 125, b: 70 } });
+                map_nodes.push(MapNode::new(x, y, true, Color::new(85, 125, 70, 255)));
             }
         }
         map_nodes
+    }
+}
+
+pub struct MapNode {
+    pub x: i32,
+    pub y: i32,
+    pub passable: bool,
+    pub occupied: bool,
+    pub color: Color,
+}
+
+impl MapNode {
+    fn new(x: i32, y: i32, passable: bool, color: Color) -> Self {
+        Self {
+            x,
+            y,
+            passable,
+            occupied: false,
+            color }
     }
 }

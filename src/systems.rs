@@ -41,7 +41,7 @@ pub fn render_entities(world: &mut World) {
         let y = Renderer::world_to_screen(pos.y);
         let w = Renderer::world_to_screen(shape.w);
         let h = Renderer::world_to_screen(shape.h);
-        world.renderer.render_rect(x - w / 2, y - h / 2, w, h, shape.color.r, shape.color.g, shape.color.b);
+        world.renderer.render_rect(x - w / 2, y - h / 2, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
         world.renderer.render_dot(x, y); //render true position
     }
 }
@@ -56,7 +56,7 @@ pub fn render_map(world: &mut World) {
             y,
             node_size,
             node_size,
-            map_node.color.r, map_node.color.g, map_node.color.b);
+            map_node.color.r, map_node.color.g, map_node.color.b, map_node.color.a);
         world.renderer.render_dot(x, y); // true position
     }
 

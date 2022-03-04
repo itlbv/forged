@@ -13,6 +13,6 @@ pub fn house() -> Recipe {
                 RenderShape::new(
                     2.0,
                     3.0,
-                    Color::new(100, 100, 100))
+                    Color::new(100, 100, 100, 255))
     )
 }

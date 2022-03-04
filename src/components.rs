@@ -129,7 +129,7 @@ impl Clone for RenderShape {
         Self {
             w: self.w,
             h: self.h,
-            color: Color::new(self.color.r, self.color.g, self.color.b),
+            color: Color::new(self.color.r, self.color.g, self.color.b, self.color.a),
         }
     }
 }

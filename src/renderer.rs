@@ -3,6 +3,8 @@ extern crate sdl2;
 use self::sdl2::render::WindowCanvas;
 use sdl2::pixels::Color;
 use sdl2::rect::Point;
+use sdl2::render::BlendMode;
+use sdl2::render::BlendMode::Blend;
 use self::sdl2::rect::Rect;
 
 const DEFAULT_CLEAR_FRAME_COLOR: Color = Color::RGB(50, 50, 50);
@@ -25,8 +27,8 @@ impl Renderer {
         self.sdl_canvas.present();
     }
 
-    pub fn render_rect(&mut self, x: i32, y: i32, w: i32, h: i32, r: u8, g: u8, b: u8) {
-        self.sdl_canvas.set_draw_color(Color::RGB(r, g, b));
+    pub fn render_rect(&mut self, x: i32, y: i32, w: i32, h: i32, r: u8, g: u8, b: u8, a: u8) {
+        self.sdl_canvas.set_draw_color(Color::RGBA(r, g, b, a));
         self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
     }
 
