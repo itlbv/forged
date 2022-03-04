@@ -1,1 +1,1 @@
-pub fn sort_entities_by_proximity(owner_entity: usize, mut entities: &Vec<usize>) {}
+pub fn sort_entities_by_proximity(_owner_entity: usize, mut _entities: &Vec<usize>) {}

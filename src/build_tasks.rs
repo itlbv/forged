@@ -88,6 +88,10 @@ impl ClaimLand {
     }
 
     fn find_place(&self, world: &World) -> Status {
+        let mut map_nodes = world.map.borrow_nodes_mut();
+        let map_node = map_nodes.borrow_node_mut(0, 0);
+        map_node.walkable = false;
+
         world.ecs.add_component_to_entity(self.owner_id, Destination::new(5.5, 7.5));
         SUCCESS
     }

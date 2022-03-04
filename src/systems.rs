@@ -47,7 +47,7 @@ pub fn render_entities(world: &mut World) {
 }
 
 pub fn render_map(world: &mut World) {
-    for map_node in &world.map.nodes {
+    for map_node in world.map.borrow_nodes().iterator() {
         let x = Renderer::world_to_screen(map_node.x as f32);
         let y = Renderer::world_to_screen(map_node.y as f32);
         let node_size = Renderer::world_to_screen(MAP_NODE_SIZE);
