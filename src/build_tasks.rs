@@ -1,4 +1,5 @@
-use crate::{entity_factory, main, World};
+use std::borrow::BorrowMut;
+use crate::{entity_factory, main, util, World};
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::SUCCESS;
 use crate::components::{MainTarget, Destination, Recipe, Remove, Position};
@@ -73,7 +74,7 @@ impl BuildFoundation {
 }
 
 pub struct ClaimLand {
-    pub owner_id: usize,
+    pub own_id: usize,
 }
 
 impl BehaviorTreeNode for ClaimLand {
@@ -83,16 +84,28 @@ impl BehaviorTreeNode for ClaimLand {
 }
 
 impl ClaimLand {
-    pub fn new(owner_id: usize) -> Self {
-        Self { owner_id }
+    pub fn new(own_id: usize) -> Self {
+        Self { own_id }
     }
 
     fn find_place(&self, world: &World) -> Status {
-        let mut map_nodes = world.map.borrow_nodes_mut();
-        let map_node = map_nodes.borrow_node_mut(0, 0);
-        map_node.walkable = false;
+        let recipes = world.ecs.borrow_component_vec::<Recipe>();
+        let recipe = recipes.get(self.own_id).unwrap().as_ref().unwrap();
+        let render_shape = &recipe.render_shape;
 
-        world.ecs.add_component_to_entity(self.owner_id, Destination::new(5.5, 7.5));
+        let positions = world.ecs.borrow_component_vec::<Position>();
+        let own_pos = positions.get(self.own_id).unwrap().as_ref().unwrap();
+
+        let (x, y) = util::find_free_tiles(
+            own_pos.x as i32,
+            own_pos.y as i32,
+            render_shape.w as i32,
+            render_shape.h as i32,
+            1,
+            &world.map,
+        );
+
+        world.ecs.add_component_to_entity(self.own_id, Destination::new(x as f32 + 0.5, y as f32 + 0.5));
         SUCCESS
     }
 }

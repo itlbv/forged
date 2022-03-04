@@ -48,12 +48,14 @@ pub fn create_stone(x: f32, y: f32, world: &World) {
     world.ecs.add_component_to_entity::<Stone>(new_entity_id, Stone {});
 }
 
-pub fn create_food(x: f32, y: f32, world: &World) {
+pub fn create_food(x: i32, y: i32, world: &World) {
     let new_entity_id = world.ecs.create_entity();
-    world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
+    world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x as f32 + 0.5, y as f32 + 0.5, new_entity_id));
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new(0.3, 0.3, Color::new(90, 170, 0, 255))); // red
     world.ecs.add_component_to_entity::<Item>(new_entity_id, Item {});
     world.ecs.add_component_to_entity::<Food>(new_entity_id, Food {});
+
+    world.map.set_node_occupied(x, y, true);
 }
 
 pub fn create_mob(x: f32, y: f32, name: &str, world: &World) {

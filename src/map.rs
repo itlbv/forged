@@ -4,69 +4,64 @@ use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::util_structs::Color;
 
 pub struct Map {
-    nodes: Box<RefCell<dyn MapNodesVec>>,
+    tiles: Box<RefCell<dyn MapTilesVec>>,
 }
 
 impl Map {
     pub fn new() -> Self {
         Self {
-            nodes: Map::create_map(),
+            tiles: Map::create_map(),
         }
     }
 
-    fn create_map() -> Box<RefCell<dyn MapNodesVec>> {
-        let map_nodes = RefCell::new(vec![]);
+    fn create_map() -> Box<RefCell<dyn MapTilesVec>> {
+        let map_tiles = RefCell::new(vec![]);
         for y in 0..MAP_HEIGHT {
             for x in 00..MAP_WIDTH {
-                map_nodes.borrow_mut().push(MapNode::new(x, y, true, Color::new(85, 125, 70, 255)));
+                map_tiles.borrow_mut().push(MapTile::new(x, y, true, Color::new(85, 125, 70, 255)));
             }
         }
-        Box::new(map_nodes)
+        Box::new(map_tiles)
     }
 
-    pub fn set_node_walkability(&self, x: i32, y: i32, walkable: bool) {
-        let node = self.borrow_nodes().borrow_node(0, 0);
+    pub fn set_node_occupied(&self, x: i32, y: i32, occupied: bool) {
+        let mut tiles = self.borrow_tiles_mut();
+        let mut tile = tiles.borrow_node_mut(x, y);
+        tile.occupied = occupied;
     }
 
-    // fn borrow_node(&self, x: i32, y: i32) -> &MapNode {
-    //     let nodes = self.borrow_nodes();
-    //     nodes.borrow_node(x, y)
-    // }
-
-    pub fn borrow_nodes(&self) -> Ref<dyn MapNodesVec> {
-        self.nodes.borrow()
+    pub fn borrow_tiles(&self) -> Ref<dyn MapTilesVec> {
+        self.tiles.borrow()
     }
 
-    pub fn borrow_nodes_mut(&self) -> RefMut<dyn MapNodesVec> {
-        self.nodes.borrow_mut()
+    pub fn borrow_tiles_mut(&self) -> RefMut<dyn MapTilesVec> {
+        self.tiles.borrow_mut()
     }
 }
 
-pub trait MapNodesVec {
-    fn borrow_node(&self, x: i32, y: i32) -> &MapNode;
-    fn borrow_node_mut(&mut self, x: i32, y: i32) -> &mut MapNode;
-    fn iterator(&self) -> Iter<MapNode>;
+pub trait MapTilesVec {
+    fn borrow_node(&self, x: i32, y: i32) -> &MapTile;
+    fn borrow_node_mut(&mut self, x: i32, y: i32) -> &mut MapTile;
+    fn iterator(&self) -> Iter<MapTile>;
 }
 
-impl MapNodesVec for Vec<MapNode> {
-    fn borrow_node(&self, x: i32, y: i32) -> &MapNode {
-        let value = self.get(0);
-        value.unwrap()
+impl MapTilesVec for Vec<MapTile> {
+    fn borrow_node(&self, x: i32, y: i32) -> &MapTile {
+        self.get((y * MAP_WIDTH + x) as usize).unwrap()
     }
 
-    fn borrow_node_mut(&mut self, x: i32, y: i32) -> &mut MapNode {
-        let value = self.get_mut(0);
-        value.unwrap()
+    fn borrow_node_mut(&mut self, x: i32, y: i32) -> &mut MapTile {
+        self.get_mut((y * MAP_WIDTH + x) as usize).unwrap()
     }
 
-    fn iterator(&self) -> Iter<MapNode> {
+    fn iterator(&self) -> Iter<MapTile> {
         let i = self.iter();
         return self.iter();
     }
 }
 
 #[derive(Debug)]
-pub struct MapNode {
+pub struct MapTile {
     pub x: i32,
     pub y: i32,
     pub walkable: bool,
@@ -74,7 +69,7 @@ pub struct MapNode {
     pub color: Color,
 }
 
-impl MapNode {
+impl MapTile {
     fn new(x: i32, y: i32, walkable: bool, color: Color) -> Self {
         Self {
             x,
