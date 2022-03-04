@@ -1,7 +1,8 @@
 use std::any::TypeId;
 use std::collections::HashMap;
-use crate::components::{Color, Recipe, RenderShape};
+use crate::components::{Recipe, RenderShape};
 use crate::items::{Stone, Wood};
+use crate::util_structs::Color;
 
 pub fn house() -> Recipe {
     let mut ingredients_type_ids = HashMap::new();

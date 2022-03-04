@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use crate::btree::BehaviorTreeNode;
 use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::{behaviors, World};
+use crate::util_structs::Color;
 
 pub struct Behavior {
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
@@ -131,16 +132,6 @@ impl Clone for RenderShape {
             color: Color::new(self.color.r, self.color.g, self.color.b),
         }
     }
-}
-
-pub struct Color {
-    pub r: u8,
-    pub g: u8,
-    pub b: u8,
-}
-
-impl Color {
-    pub fn new(r: u8, g: u8, b: u8) -> Self { Self { r, g, b } }
 }
 
 pub struct Food {}

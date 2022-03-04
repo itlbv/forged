@@ -1,6 +1,7 @@
-use crate::components::{Behavior, Color, Food, Inventory, Name, Position, Recipe, RenderShape, Storage};
-use crate::{behaviors, recipes, World};
+use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, RenderShape, Storage};
+use crate::{behaviors, World};
 use crate::items::{Item, Stone, Wood};
+use crate::util_structs::Color;
 
 pub fn foundation(x: f32, y: f32, recipe: Recipe, world: &World) -> usize {
     let new_entity_id = world.ecs.create_entity();
