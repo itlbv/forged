@@ -1,7 +1,7 @@
 use std::any::TypeId;
 use std::collections::HashMap;
 use crate::btree::BehaviorTreeNode;
-use crate::btree::Status::SUCCESS;
+use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::{behaviors, World};
 
 pub struct Behavior {
@@ -10,7 +10,8 @@ pub struct Behavior {
 
 impl Behavior {
     pub fn run(&mut self, world: &World) {
-        if self.behavior_tree.run(world) == SUCCESS {
+        let status = self.behavior_tree.run(world);
+        if status == SUCCESS || status == FAILURE {
             self.behavior_tree = Box::new(behaviors::do_nothing());
         }
     }
