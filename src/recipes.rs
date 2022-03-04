@@ -10,7 +10,7 @@ pub fn house() -> Recipe {
 
     Recipe::new(ingredients_type_ids,
                 RenderShape::new(
-                    5.0,
+                    2.0,
                     3.0,
                     Color::new(100, 100, 100))
     )

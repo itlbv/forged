@@ -19,7 +19,6 @@ impl FinishBuilding {
     }
 
     fn finish_building(&self, world: &World) -> Status {
-        // get foundation from main target
         let main_targets = world.ecs.borrow_component_vec::<MainTarget>();
         let own_main_target = main_targets.get(self.own_id).unwrap().as_ref().unwrap();
         let foundation_id = own_main_target.own_id;
@@ -73,17 +72,17 @@ impl BuildFoundation {
     }
 }
 
-pub struct FindPlaceToBuild {
+pub struct ClaimLand {
     pub owner_id: usize,
 }
 
-impl BehaviorTreeNode for FindPlaceToBuild {
+impl BehaviorTreeNode for ClaimLand {
     fn run(&mut self, world: &World) -> Status {
         self.find_place(world)
     }
 }
 
-impl FindPlaceToBuild {
+impl ClaimLand {
     pub fn new(owner_id: usize) -> Self {
         Self { owner_id }
     }

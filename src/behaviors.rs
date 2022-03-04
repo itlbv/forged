@@ -1,5 +1,5 @@
 use crate::btree::{BehaviorTreeNode, Sequence};
-use crate::build_tasks::{BuildFoundation, FindPlaceToBuild, FinishBuilding};
+use crate::build_tasks::{BuildFoundation, ClaimLand, FinishBuilding};
 use crate::item_tasks::{ChooseIngredient, DropItemToMainTargetStorage, FindIngredients, PickUpTarget};
 use crate::move_tasks::{MoveCloseToTarget, MoveToDestination};
 use crate::tasks::{DoNothingTask, DoUntilFailure, EatTarget, FindFood, SetDestinationFromMainTarget, SetRecipe};
@@ -17,7 +17,7 @@ pub fn build_house(owner_id: usize) -> Sequence {
     Sequence::of(vec![
         Box::new(SetRecipe::new(owner_id, recipes::house())),
         Box::new(FindIngredients::new(owner_id)),
-        Box::new(FindPlaceToBuild::new(owner_id)),
+        Box::new(ClaimLand::new(owner_id)),
         Box::new(MoveToDestination::new(owner_id)),
         Box::new(BuildFoundation::new(owner_id)), //sets main target
         Box::new(deliver_ingredients(owner_id)),
@@ -26,18 +26,14 @@ pub fn build_house(owner_id: usize) -> Sequence {
 }
 
 pub fn deliver_ingredients(owner_id: usize) -> DoUntilFailure {
-    // Sequence::of(vec![
-    //     Box::new(
-            DoUntilFailure::of(vec![
-                Box::new(ChooseIngredient::new(owner_id)),
-                Box::new(MoveCloseToTarget::new(owner_id)),
-                Box::new(PickUpTarget::new(owner_id)),
-                Box::new(SetDestinationFromMainTarget::new(owner_id)),
-                Box::new(MoveToDestination::new(owner_id)),
-                Box::new(DropItemToMainTargetStorage::new(owner_id)),
-            ])
-        // ),
-    // ])
+    DoUntilFailure::of(vec![
+        Box::new(ChooseIngredient::new(owner_id)),
+        Box::new(MoveCloseToTarget::new(owner_id)),
+        Box::new(PickUpTarget::new(owner_id)),
+        Box::new(SetDestinationFromMainTarget::new(owner_id)),
+        Box::new(MoveToDestination::new(owner_id)),
+        Box::new(DropItemToMainTargetStorage::new(owner_id)),
+    ])
 }
 
 pub fn do_nothing() -> DoNothingTask {
