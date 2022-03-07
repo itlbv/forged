@@ -46,7 +46,7 @@ impl World {
 
         entity_factory::create_food(5, 8, self);
         entity_factory::create_food(4, 1, self);
-        entity_factory::create_food(2, 4, self);
+        entity_factory::create_food(2, 5, self);
         entity_factory::create_food(9, 6, self);
         entity_factory::create_food(6, 6, self);
         entity_factory::create_food(5, 7, self);
