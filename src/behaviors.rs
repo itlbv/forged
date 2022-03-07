@@ -16,8 +16,14 @@ pub fn find_food(owner_id: usize) -> Sequence {
 pub fn test_building(owner_id: usize) -> Sequence {
     Sequence::of(vec![
         Box::new(SetRecipe::new(owner_id, recipes::house())),
-        Box::new(ClaimTiles::new(owner_id)),
-        Box::new(BuildFoundation::new(owner_id)), //sets main target
+        Box::new(
+            DoUntilFailure::of(vec![
+                Box::new(ClaimTiles::new(owner_id))
+            ])),
+        // Box::new(ClaimTiles::new(owner_id)),
+        // Box::new(ClaimTiles::new(owner_id)),],
+        // Box::new(MoveToDestination::new(owner_id)),
+        // Box::new(BuildFoundation::new(owner_id)), //sets main target
 
     ])
 }

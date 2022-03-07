@@ -114,8 +114,10 @@ impl ClaimTiles {
             log::warn("Can't find place to build.", self.own_id);
             return FAILURE;
         }
-
         log::debug(format!("Found place to build: {}, {}", x, y), self.own_id);
+
+        util::claim_tiles(x, y, render_shape.w as i32, render_shape.h as i32, &world.map);
+        log::debug(format!("Claiming tiles: {} + {}, {} + {}", x, render_shape.w, y, render_shape.h), self.own_id);
 
         world.ecs.add_component_to_entity(self.own_id, Destination::new(x as f32 + 0.5, y as f32 + 0.5));
         SUCCESS

@@ -1,7 +1,19 @@
+use std::borrow::BorrowMut;
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::map::Map;
 
 pub fn sort_entities_by_proximity(_owner_entity: usize, mut _entities: &Vec<usize>) {}
+
+pub fn claim_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, map: &Map) {
+    let mut map_tiles = map.borrow_tiles_mut();
+    for y in 0..h {
+        for x in 0..w {
+            let mut tile = map_tiles.borrow_tile_mut(start_tile_x + x, start_tile_y + y);
+            tile.occupied = true;
+            tile.walkable = false;
+        }
+    }
+}
 
 pub fn find_free_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, margin: usize, map: &Map) -> (i32, i32) {
     println!("{}, {}", w, h);

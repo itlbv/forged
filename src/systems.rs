@@ -1,6 +1,7 @@
 use crate::components::{Behavior, Position, Remove, RenderShape};
 use crate::{Renderer, World};
 use crate::constants::{MAP_HEIGHT, MAP_NODE_SIZE, MAP_WIDTH};
+use crate::util_structs::Color;
 
 pub fn behavior(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
@@ -50,16 +51,25 @@ pub fn render_entities(world: &mut World) {
 }
 
 pub fn render_map(world: &mut World) {
-    for map_node in world.map.borrow_tiles().iterator() {
-        let x = Renderer::world_to_screen(map_node.x as f32);
-        let y = Renderer::world_to_screen(map_node.y as f32);
+    for tile in world.map.borrow_tiles().iterator() {
+        let x = Renderer::world_to_screen(tile.x as f32);
+        let y = Renderer::world_to_screen(tile.y as f32);
         let node_size = Renderer::world_to_screen(MAP_NODE_SIZE);
+
+        let mut color: Color;
+        if tile.occupied {
+            color = Color::new(10, 10, 10, 255);
+        } else {
+            color = Color::new(tile.color.r, tile.color.g, tile.color.b, tile.color.a);
+        };
+
         world.renderer.render_rect(
             x,
             y,
             node_size,
             node_size,
-            map_node.color.r, map_node.color.g, map_node.color.b, map_node.color.a);
+            color.r, color.g, color.b, color.a);
+        // tile.color.r, tile.color.g, tile.color.b, tile.color.a);
         world.renderer.render_dot(x, y); // true position
     }
 
