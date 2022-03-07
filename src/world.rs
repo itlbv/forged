@@ -51,17 +51,17 @@ impl World {
         entity_factory::create_food(6, 6, self);
         entity_factory::create_food(5, 7, self);
 
-        entity_factory::create_tree(3.5, 4.5, self);
-        entity_factory::create_tree(7.5, 1.5, self);
-        entity_factory::create_tree(8.5, 2.5, self);
-        entity_factory::create_tree(1.5, 3.5, self);
-        entity_factory::create_tree(3.5, 2.5, self);
-        entity_factory::create_tree(5.5, 3.5, self);
-        entity_factory::create_tree(6.5, 2.5, self);
+        entity_factory::create_tree(3, 4, self);
+        entity_factory::create_tree(7, 1, self);
+        entity_factory::create_tree(8, 2, self);
+        entity_factory::create_tree(1, 3, self);
+        entity_factory::create_tree(3, 2, self);
+        entity_factory::create_tree(5, 3, self);
+        entity_factory::create_tree(6, 2, self);
 
-        entity_factory::create_stone(13.5, 6.5, self);
-        entity_factory::create_stone(14.5, 9.5, self);
-        entity_factory::create_stone(12.5, 7.5, self);
+        entity_factory::create_stone(13, 6, self);
+        entity_factory::create_stone(14, 9, self);
+        entity_factory::create_stone(12, 7, self);
     }
 
     pub fn tick(&mut self, _delta_time: f32) {
