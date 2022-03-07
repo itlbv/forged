@@ -1,6 +1,7 @@
 use std::cell::{Ref, RefCell, RefMut};
 use std::slice::Iter;
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
+use crate::log;
 use crate::util_structs::Color;
 
 pub struct Map {
@@ -26,7 +27,7 @@ impl Map {
 
     pub fn set_node_occupied(&self, x: i32, y: i32, occupied: bool) {
         let mut tiles = self.borrow_tiles_mut();
-        let mut tile = tiles.borrow_node_mut(x, y);
+        let mut tile = tiles.borrow_tile_mut(x, y);
         tile.occupied = occupied;
     }
 
@@ -40,17 +41,20 @@ impl Map {
 }
 
 pub trait MapTilesVec {
-    fn borrow_node(&self, x: i32, y: i32) -> &MapTile;
-    fn borrow_node_mut(&mut self, x: i32, y: i32) -> &mut MapTile;
+    fn borrow_tile(&self, x: i32, y: i32) -> &MapTile;
+    fn borrow_tile_mut(&mut self, x: i32, y: i32) -> &mut MapTile;
     fn iterator(&self) -> Iter<MapTile>;
 }
 
 impl MapTilesVec for Vec<MapTile> {
-    fn borrow_node(&self, x: i32, y: i32) -> &MapTile {
+    fn borrow_tile(&self, x: i32, y: i32) -> &MapTile {
+        if x < 0 || y < 0 || x >= MAP_WIDTH || y >= MAP_HEIGHT {
+            panic!("Accessing map tiles outside of bounds!");
+        }
         self.get((y * MAP_WIDTH + x) as usize).unwrap()
     }
 
-    fn borrow_node_mut(&mut self, x: i32, y: i32) -> &mut MapTile {
+    fn borrow_tile_mut(&mut self, x: i32, y: i32) -> &mut MapTile {
         self.get_mut((y * MAP_WIDTH + x) as usize).unwrap()
     }
 

@@ -10,7 +10,7 @@ pub fn house() -> Recipe {
     // ingredients_type_ids.insert(TypeId::of::<Stone>(), 1);
 
     Recipe::new(ingredients_type_ids,
-                RenderShape::new(
+                RenderShape::new_without_offset(
                     2.0,
                     3.0,
                     Color::new(100, 100, 100, 255))

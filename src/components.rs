@@ -115,12 +115,18 @@ pub struct Name {
 pub struct RenderShape {
     pub w: f32,
     pub h: f32,
+    pub offset_x: f32,
+    pub offset_y: f32,
     pub color: Color,
 }
 
 impl RenderShape {
-    pub fn new(w: f32, h: f32, color: Color) -> Self {
-        Self { w, h, color }
+    pub fn new_with_standard_offset(w: f32, h: f32, color: Color) -> Self {
+        Self { w, h, offset_x: - w / 2.0, offset_y: - h / 2.0, color }
+    }
+
+    pub fn new_without_offset(w: f32, h: f32, color: Color) -> Self {
+        Self { w, h, offset_x: 0.0, offset_y: 0.0, color }
     }
 }
 
@@ -129,6 +135,8 @@ impl Clone for RenderShape {
         Self {
             w: self.w,
             h: self.h,
+            offset_x: self.offset_x,
+            offset_y: self.offset_y,
             color: Color::new(self.color.r, self.color.g, self.color.b, self.color.a),
         }
     }

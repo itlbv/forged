@@ -37,12 +37,15 @@ pub fn render_entities(world: &mut World) {
     );
 
     for (shape, pos) in iter {
-        let x = Renderer::world_to_screen(pos.x);
-        let y = Renderer::world_to_screen(pos.y);
+        let x = Renderer::world_to_screen(pos.x + shape.offset_x);
+        let y = Renderer::world_to_screen(pos.y + shape.offset_y);
         let w = Renderer::world_to_screen(shape.w);
         let h = Renderer::world_to_screen(shape.h);
-        world.renderer.render_rect(x - w / 2, y - h / 2, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
-        world.renderer.render_dot(x, y); //render true position
+        //world.renderer.render_rect(x - w / 2, y - h / 2, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
+        world.renderer.render_rect(x, y, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
+        let true_pos_x = Renderer::world_to_screen(pos.x);
+        let true_pos_y = Renderer::world_to_screen(pos.y);
+        world.renderer.render_dot(true_pos_x, true_pos_y); // true position
     }
 }
 

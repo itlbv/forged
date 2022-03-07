@@ -1,7 +1,7 @@
 use std::borrow::BorrowMut;
-use crate::{entity_factory, main, util, World};
+use crate::{entity_factory, log, main, util, World};
 use crate::btree::{BehaviorTreeNode, Status};
-use crate::btree::Status::SUCCESS;
+use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::components::{MainTarget, Destination, Recipe, Remove, Position};
 
 pub struct FinishBuilding {
@@ -66,24 +66,29 @@ impl BuildFoundation {
             let recipes = world.ecs.borrow_component_vec::<Recipe>();
             recipe = recipes.get(self.own_id).unwrap().as_ref().unwrap().clone();
         }
-        let foundation_id = entity_factory::foundation(5.5, 5.5, recipe, world);
+
+        let destinations = world.ecs.borrow_component_vec::<Destination>();
+        let own_dest = destinations.get(self.own_id).unwrap().as_ref().unwrap();
+
+        log::debug(format!("Building foundation: {}, {}", own_dest.x, own_dest.y - 1.0), self.own_id);
+        let foundation_id = entity_factory::foundation(own_dest.x, own_dest.y - 1 as f32, recipe, world);
 
         world.ecs.add_component_to_entity(self.own_id, MainTarget::new(foundation_id));
         SUCCESS
     }
 }
 
-pub struct ClaimLand {
+pub struct ClaimTiles {
     pub own_id: usize,
 }
 
-impl BehaviorTreeNode for ClaimLand {
+impl BehaviorTreeNode for ClaimTiles {
     fn run(&mut self, world: &World) -> Status {
         self.find_place(world)
     }
 }
 
-impl ClaimLand {
+impl ClaimTiles {
     pub fn new(own_id: usize) -> Self {
         Self { own_id }
     }
@@ -104,6 +109,13 @@ impl ClaimLand {
             1,
             &world.map,
         );
+
+        if x < 0 || y < 0 {
+            log::warn("Can't find place to build.", self.own_id);
+            return FAILURE;
+        }
+
+        log::debug(format!("Found place to build: {}, {}", x, y), self.own_id);
 
         world.ecs.add_component_to_entity(self.own_id, Destination::new(x as f32 + 0.5, y as f32 + 0.5));
         SUCCESS

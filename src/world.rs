@@ -64,8 +64,8 @@ impl World {
         entity_factory::create_stone(12.5, 7.5, self);
     }
 
-    pub fn tick(&mut self, delta_time: f32) {
-        self.delta_time = delta_time;
+    pub fn tick(&mut self, _delta_time: f32) {
+        self.delta_time = 0.016; // fixed framerate for debugging
 
         systems::behavior(self);
         systems::remove_entities(self);

@@ -1,6 +1,6 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Recipe, Remove, Target, Destination};
+use crate::components::{Food, Position, Recipe, Remove, Target, Destination, MainTarget};
 use crate::physics::{distance_between, Vect};
 use crate::World;
 

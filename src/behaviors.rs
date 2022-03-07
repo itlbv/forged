@@ -1,5 +1,5 @@
 use crate::btree::Sequence;
-use crate::build_tasks::{BuildFoundation, ClaimLand, FinishBuilding};
+use crate::build_tasks::{BuildFoundation, ClaimTiles, FinishBuilding};
 use crate::item_tasks::{ChooseIngredient, DropItemToMainTargetStorage, FindIngredients, PickUpTarget};
 use crate::move_tasks::{MoveCloseToTarget, MoveToDestination};
 use crate::tasks::{DoNothingTask, DoUntilFailure, EatTarget, FindFood, SetDestinationFromMainTarget, SetRecipe};
@@ -13,11 +13,20 @@ pub fn find_food(owner_id: usize) -> Sequence {
     ])
 }
 
+pub fn test_building(owner_id: usize) -> Sequence {
+    Sequence::of(vec![
+        Box::new(SetRecipe::new(owner_id, recipes::house())),
+        Box::new(ClaimTiles::new(owner_id)),
+        Box::new(BuildFoundation::new(owner_id)), //sets main target
+
+    ])
+}
+
 pub fn build_house(owner_id: usize) -> Sequence {
     Sequence::of(vec![
         Box::new(SetRecipe::new(owner_id, recipes::house())),
         Box::new(FindIngredients::new(owner_id)),
-        Box::new(ClaimLand::new(owner_id)),
+        Box::new(ClaimTiles::new(owner_id)),
         Box::new(MoveToDestination::new(owner_id)),
         Box::new(BuildFoundation::new(owner_id)), //sets main target
         Box::new(deliver_ingredients(owner_id)),

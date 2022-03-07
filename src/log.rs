@@ -1,11 +1,11 @@
-const LOG_LEVEL: u8 = WARN;
+const LOG_LEVEL: u8 = DEBUG;
 
 const DEBUG: u8 = 0;
 const INFO: u8 = 1;
 const WARN: u8 = 2;
 const ERROR: u8 = 3;
 
-pub fn debug(message: &str, entity_id: usize) {
+pub fn debug(message: String, entity_id: usize) {
     if LOG_LEVEL > 0 { return; }
     println!("INFO - [{}] - {}", entity_id, message)
 }
