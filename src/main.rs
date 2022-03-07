@@ -20,6 +20,7 @@ mod item_tasks;
 mod build_tasks;
 mod util;
 mod util_structs;
+mod log;
 
 use std::time::{Duration, Instant};
 use sdl2::render::BlendMode::Blend;
