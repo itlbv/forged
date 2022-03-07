@@ -32,6 +32,22 @@ impl Inventory {
     }
 }
 
+pub struct Building {
+    pub usable: bool,
+    pub entry_x: f32,
+    pub entry_y: f32,
+}
+
+impl Building {
+    pub fn new() -> Self {
+        Self {
+            usable: false,
+            entry_x: 0.0,
+            entry_y: 0.0,
+        }
+    }
+}
+
 pub struct Storage {
     pub items: Vec<usize>,
 }

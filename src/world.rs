@@ -1,6 +1,6 @@
 use crate::map::Map;
 use crate::{entity_factory, InputHandler, Renderer, systems};
-use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination};
+use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
 
@@ -41,6 +41,7 @@ impl World {
         self.ecs.register_component::<Inventory>();
         self.ecs.register_component::<Storage>();
         self.ecs.register_component::<Recipe>();
+        self.ecs.register_component::<Building>();
 
         entity_factory::create_mob(1.5, 1.5, "Alice", self);
 
