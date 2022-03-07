@@ -16,8 +16,7 @@ pub fn claim_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, map: &M
 }
 
 pub fn find_free_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, margin: i32, map: &Map) -> (i32, i32) {
-    println!("{}, {}", w, h);
-    for i in 1..=5 {
+    for i in 1..=50 {
         // node (-x, -y..y)
         // node (x, -y..y)
         for y in 0 - i..=i {
@@ -43,8 +42,8 @@ fn is_tile_suitable_for_building(start_tile_x: i32, start_tile_y: i32, w: i32, h
 
     if start_tile_with_margin_x < 0
         || start_tile_with_margin_y < 0
-        || start_tile_with_margin_x >= MAP_WIDTH
-        || start_tile_with_margin_y >= MAP_HEIGHT {
+        || start_tile_with_margin_x + w_with_margin > MAP_WIDTH
+        || start_tile_with_margin_y + h_with_margin > MAP_HEIGHT {
         return false;
     }
 
