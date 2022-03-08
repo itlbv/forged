@@ -78,32 +78,38 @@ impl BuildFoundation {
     }
 }
 
-pub struct ClaimTiles {
+pub struct FindTilesAndPlaceInvisibleBuilding {
     pub own_id: usize,
 }
 
-impl BehaviorTreeNode for ClaimTiles {
+impl BehaviorTreeNode for FindTilesAndPlaceInvisibleBuilding {
     fn run(&mut self, world: &World) -> Status {
-        self.find_place(world)
+        self.find_tiles(world)
     }
 }
 
-impl ClaimTiles {
+impl FindTilesAndPlaceInvisibleBuilding {
     pub fn new(own_id: usize) -> Self {
         Self { own_id }
     }
 
-    fn find_place(&self, world: &World) -> Status {
+    fn find_tiles(&self, world: &World) -> Status {
         let recipes = world.ecs.borrow_component_vec::<Recipe>();
         let recipe = recipes.get(self.own_id).unwrap().as_ref().unwrap();
         let render_shape = &recipe.render_shape;
 
-        let positions = world.ecs.borrow_component_vec::<Position>();
-        let own_pos = positions.get(self.own_id).unwrap().as_ref().unwrap();
+        let mut own_x: f32;
+        let mut own_y: f32;
+        {
+            let positions = world.ecs.borrow_component_vec::<Position>();
+            let own_pos = positions.get(self.own_id).unwrap().as_ref().unwrap();
+            own_x = own_pos.x;
+            own_y = own_pos.y;
+        }
 
         let (x, y) = util::find_free_tiles(
-            own_pos.x as i32,
-            own_pos.y as i32,
+            own_x as i32,
+            own_y as i32,
             render_shape.w as i32,
             render_shape.h as i32,
             1,
@@ -114,12 +120,12 @@ impl ClaimTiles {
             log::warn("Can't find place to build.", self.own_id);
             return FAILURE;
         }
-        log::debug(format!("Found place to build: {}, {}", x, y), self.own_id);
 
         util::claim_tiles(x, y, render_shape.w as i32, render_shape.h as i32, &world.map);
-        log::debug(format!("Claiming tiles: {} + {}, {} + {}", x, render_shape.w, y, render_shape.h), self.own_id);
+        let (house_id, house_entry_x, house_entry_y) = entity_factory::house(x as f32, y as f32, recipe.clone(), world);
 
-        world.ecs.add_component_to_entity(self.own_id, Destination::new(x as f32 + 0.5, y as f32 + 0.5));
+        world.ecs.add_component_to_entity(self.own_id, Destination::new(house_entry_x, house_entry_y));
+        world.ecs.add_component_to_entity(self.own_id, MainTarget::new(house_id));
         SUCCESS
     }
 }

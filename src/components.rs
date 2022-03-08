@@ -39,11 +39,11 @@ pub struct Building {
 }
 
 impl Building {
-    pub fn new() -> Self {
+    pub fn new(entry_x: f32, entry_y: f32) -> Self {
         Self {
             usable: false,
-            entry_x: 0.0,
-            entry_y: 0.0,
+            entry_x,
+            entry_y,
         }
     }
 }
