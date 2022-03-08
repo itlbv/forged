@@ -2,7 +2,7 @@ use std::borrow::BorrowMut;
 use crate::{entity_factory, log, main, util, World};
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{MainTarget, Destination, Recipe, Remove, Position, RenderShape};
+use crate::components::{MainTarget, Destination, Recipe, Remove, Position, RenderShape, Building};
 
 pub struct FinishBuilding {
     own_id: usize,
@@ -22,25 +22,16 @@ impl FinishBuilding {
     fn finish_building(&self, world: &World) -> Status {
         let main_targets = world.ecs.borrow_component_vec::<MainTarget>();
         let own_main_target = main_targets.get(self.own_id).unwrap().as_ref().unwrap();
-        let foundation_id = own_main_target.own_id;
+        let building_id = own_main_target.own_id;
 
-        let foundation_x;
-        let foundation_y;
-        {
-            let positions = world.ecs.borrow_component_vec::<Position>();
-            let foundation_pos = positions.get(foundation_id).unwrap().as_ref().unwrap();
-            foundation_x = foundation_pos.x;
-            foundation_y = foundation_pos.y;
-        }
+        let mut buildings = world.ecs.borrow_component_vec_mut::<Building>();
+        let mut building = buildings.get_mut(building_id).unwrap().as_mut().unwrap();
+        building.usable = true;
 
         let recipes = world.ecs.borrow_component_vec::<Recipe>();
-        let recipe = recipes.get(foundation_id).unwrap().as_ref().unwrap();
+        let recipe = recipes.get(self.own_id).unwrap().as_ref().unwrap();
 
-        // create house entity
-        entity_factory::house(foundation_x, foundation_y, recipe.clone(), world);
-
-        // remove foundation entity
-        world.ecs.add_component_to_entity(foundation_id, Remove::new(foundation_id));
+        world.ecs.add_component_to_entity(building_id, RenderShape::from_recipe(recipe));
         SUCCESS
     }
 }

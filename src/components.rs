@@ -1,5 +1,6 @@
 use std::any::TypeId;
 use std::collections::HashMap;
+use sdl2::libc::clock_t;
 use crate::btree::BehaviorTreeNode;
 use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::{behaviors, World};
@@ -143,6 +144,21 @@ impl RenderShape {
 
     pub fn new_without_offset(w: f32, h: f32, color: Color) -> Self {
         Self { w, h, offset_x: 0.0, offset_y: 0.0, color }
+    }
+
+    pub fn from_recipe(recipe: &Recipe) -> Self {
+        Self {
+            w: recipe.render_shape.w,
+            h: recipe.render_shape.h,
+            offset_x: 0.0,
+            offset_y: 0.0,
+            color: Color::new(
+                recipe.render_shape.color.r,
+                recipe.render_shape.color.g,
+                recipe.render_shape.color.b,
+                recipe.render_shape.color.a,
+            )
+        }
     }
 
     pub fn set_transparent(&mut self) {
