@@ -1,11 +1,11 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Recipe, Remove, Target, Destination, MainTarget};
+use crate::components::{Food, Position, Recipe, Remove, Target, Destination, MainTarget, Building};
 use crate::physics::{distance_between, Vect};
 use crate::World;
 
 pub struct SetDestinationFromMainTarget {
-    pub owner_id: usize,
+    pub own_id: usize,
 }
 
 impl BehaviorTreeNode for SetDestinationFromMainTarget {
@@ -15,10 +15,16 @@ impl BehaviorTreeNode for SetDestinationFromMainTarget {
 }
 
 impl SetDestinationFromMainTarget {
-    pub fn new(owner_id: usize) -> Self { Self { owner_id } }
+    pub fn new(own_id: usize) -> Self { Self { own_id } }
 
     fn set_destination(&self, world: &World) -> Status {
-        world.ecs.add_component_to_entity(self.owner_id, Destination::new(5.5, 7.5));
+        let main_targets = world.ecs.borrow_component_vec::<MainTarget>();
+        let main_target = main_targets.get(self.own_id).unwrap().as_ref().unwrap();
+
+        let buildings = world.ecs.borrow_component_vec::<Building>();
+        let building = buildings.get(main_target.own_id).unwrap().as_ref().unwrap();
+
+        world.ecs.add_component_to_entity(self.own_id, Destination::new(building.entry_x, building.entry_y));
         SUCCESS
     }
 }

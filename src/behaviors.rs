@@ -30,11 +30,8 @@ pub fn build_house(owner_id: usize) -> Sequence {
         Box::new(FindTilesAndPlaceInvisibleBuilding::new(owner_id)), //sets main target
         Box::new(MoveToDestination::new(owner_id)),
         Box::new(MakeBuildingTransparent::new(owner_id)),
-        // make building transparent
-        // deliver ingredients
+        Box::new(deliver_ingredients(owner_id)),
         // make building usable
-        // Box::new(BuildFoundation::new(owner_id)),
-        // Box::new(deliver_ingredients(owner_id)),
         // Box::new(FinishBuilding::new(owner_id)),
     ])
 }
