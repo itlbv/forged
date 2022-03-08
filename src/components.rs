@@ -1,6 +1,5 @@
 use std::any::TypeId;
 use std::collections::HashMap;
-use sdl2::libc::clock_t;
 use crate::btree::BehaviorTreeNode;
 use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::{behaviors, World};
@@ -163,10 +162,6 @@ impl RenderShape {
 
     pub fn set_transparent(&mut self) {
         self.color.a = 140;
-    }
-
-    pub fn set_opaque(&mut self) {
-        self.color.a = 255;
     }
 }
 

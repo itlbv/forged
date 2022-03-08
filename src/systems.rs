@@ -56,7 +56,7 @@ pub fn render_map(world: &mut World) {
         let y = Renderer::world_to_screen(tile.y as f32);
         let node_size = Renderer::world_to_screen(MAP_NODE_SIZE);
 
-        let mut color: Color;
+        let color: Color;
         if tile.occupied {
             color = Color::new(10, 10, 10, 255);
         } else {

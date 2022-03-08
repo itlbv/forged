@@ -1,4 +1,3 @@
-use std::borrow::BorrowMut;
 use crate::{entity_factory, log, main, util, World};
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
@@ -87,8 +86,8 @@ impl FindTilesAndPlaceInvisibleBuilding {
         let recipe = recipes.get(self.own_id).unwrap().as_ref().unwrap();
         let render_shape = &recipe.render_shape;
 
-        let mut own_x: f32;
-        let mut own_y: f32;
+        let own_x: f32;
+        let own_y: f32;
         {
             let positions = world.ecs.borrow_component_vec::<Position>();
             let own_pos = positions.get(self.own_id).unwrap().as_ref().unwrap();

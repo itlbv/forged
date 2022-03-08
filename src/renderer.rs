@@ -3,8 +3,6 @@ extern crate sdl2;
 use self::sdl2::render::WindowCanvas;
 use sdl2::pixels::Color;
 use sdl2::rect::Point;
-use sdl2::render::BlendMode;
-use sdl2::render::BlendMode::Blend;
 use self::sdl2::rect::Rect;
 
 const DEFAULT_CLEAR_FRAME_COLOR: Color = Color::RGB(50, 50, 50);

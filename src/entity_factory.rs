@@ -3,23 +3,6 @@ use crate::{behaviors, World};
 use crate::items::{Item, Stone, Wood};
 use crate::util_structs::Color;
 
-pub fn foundation(x: f32, y: f32, recipe: Recipe, world: &World) -> usize {
-    let new_entity_id = world.ecs.create_entity();
-    world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
-
-    let r_shape = &recipe.render_shape;
-    world.ecs.add_component_to_entity::<RenderShape>(new_entity_id,
-                                                     RenderShape::new_without_offset(
-                                                         r_shape.w,
-                                                         r_shape.h,
-                                                         Color::new(140, 140, 140, 120))); // light grey
-
-    world.ecs.add_component_to_entity::<Recipe>(new_entity_id, recipe);
-    world.ecs.add_component_to_entity::<Storage>(new_entity_id, Storage::new());
-
-    new_entity_id
-}
-
 pub fn house(x: f32, y: f32, recipe: Recipe, world: &World) -> (usize, f32, f32) {
     let new_entity_id = world.ecs.create_entity();
     world.ecs.add_component_to_entity(new_entity_id, Position::of(x, y, new_entity_id));

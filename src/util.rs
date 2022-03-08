@@ -1,4 +1,3 @@
-use std::borrow::BorrowMut;
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::map::Map;
 

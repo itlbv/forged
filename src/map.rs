@@ -1,7 +1,6 @@
 use std::cell::{Ref, RefCell, RefMut};
 use std::slice::Iter;
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
-use crate::log;
 use crate::util_structs::Color;
 
 pub struct Map {
@@ -59,7 +58,6 @@ impl MapTilesVec for Vec<MapTile> {
     }
 
     fn iterator(&self) -> Iter<MapTile> {
-        let i = self.iter();
         return self.iter();
     }
 }
