@@ -1,5 +1,5 @@
 use crate::btree::Sequence;
-use crate::build_tasks::{BuildFoundation, FindTilesAndPlaceInvisibleBuilding, FinishBuilding};
+use crate::build_tasks::{MakeBuildingTransparent, FindTilesAndPlaceInvisibleBuilding, FinishBuilding};
 use crate::item_tasks::{ChooseIngredient, DropItemToMainTargetStorage, FindIngredients, PickUpTarget};
 use crate::move_tasks::{MoveCloseToTarget, MoveToDestination};
 use crate::tasks::{DoNothingTask, DoUntilFailure, EatTarget, FindFood, SetDestinationFromMainTarget, SetRecipe};
@@ -20,11 +20,6 @@ pub fn test_building(owner_id: usize) -> Sequence {
             DoUntilFailure::of(vec![
                 Box::new(FindTilesAndPlaceInvisibleBuilding::new(owner_id))
             ])),
-        // Box::new(ClaimTiles::new(owner_id)),
-        // Box::new(ClaimTiles::new(owner_id)),],
-        // Box::new(MoveToDestination::new(owner_id)),
-        // Box::new(BuildFoundation::new(owner_id)), //sets main target
-
     ])
 }
 
@@ -34,6 +29,7 @@ pub fn build_house(owner_id: usize) -> Sequence {
         Box::new(FindIngredients::new(owner_id)),
         Box::new(FindTilesAndPlaceInvisibleBuilding::new(owner_id)), //sets main target
         Box::new(MoveToDestination::new(owner_id)),
+        Box::new(MakeBuildingTransparent::new(owner_id)),
         // make building transparent
         // deliver ingredients
         // make building usable

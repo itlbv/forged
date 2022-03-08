@@ -2,7 +2,7 @@ use std::borrow::BorrowMut;
 use crate::{entity_factory, log, main, util, World};
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{MainTarget, Destination, Recipe, Remove, Position};
+use crate::components::{MainTarget, Destination, Recipe, Remove, Position, RenderShape};
 
 pub struct FinishBuilding {
     own_id: usize,
@@ -45,35 +45,33 @@ impl FinishBuilding {
     }
 }
 
-pub struct BuildFoundation {
+pub struct MakeBuildingTransparent {
     own_id: usize,
 }
 
-impl BehaviorTreeNode for BuildFoundation {
+impl BehaviorTreeNode for MakeBuildingTransparent {
     fn run(&mut self, world: &World) -> Status {
-        self.build(world)
+        self.make_transparent(world)
     }
 }
 
-impl BuildFoundation {
+impl MakeBuildingTransparent {
     pub fn new(own_id: usize) -> Self {
         Self { own_id }
     }
 
-    fn build(&self, world: &World) -> Status {
-        let recipe;
+    fn make_transparent(&self, world: &World) -> Status {
+        let mut recipe;
         {
             let recipes = world.ecs.borrow_component_vec::<Recipe>();
             recipe = recipes.get(self.own_id).unwrap().as_ref().unwrap().clone();
         }
 
-        let destinations = world.ecs.borrow_component_vec::<Destination>();
-        let own_dest = destinations.get(self.own_id).unwrap().as_ref().unwrap();
+        let main_targets = world.ecs.borrow_component_vec::<MainTarget>();
+        let main_target = main_targets.get(self.own_id).unwrap().as_ref().unwrap();
 
-        log::debug(format!("Building foundation: {}, {}", own_dest.x, own_dest.y - 1.0), self.own_id);
-        let foundation_id = entity_factory::foundation(own_dest.x, own_dest.y - 1 as f32, recipe, world);
-
-        world.ecs.add_component_to_entity(self.own_id, MainTarget::new(foundation_id));
+        recipe.render_shape.set_transparent();
+        world.ecs.add_component_to_entity(main_target.own_id, recipe.render_shape);
         SUCCESS
     }
 }

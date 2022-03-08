@@ -144,6 +144,14 @@ impl RenderShape {
     pub fn new_without_offset(w: f32, h: f32, color: Color) -> Self {
         Self { w, h, offset_x: 0.0, offset_y: 0.0, color }
     }
+
+    pub fn set_transparent(&mut self) {
+        self.color.a = 140;
+    }
+
+    pub fn set_opaque(&mut self) {
+        self.color.a = 255;
+    }
 }
 
 impl Clone for RenderShape {
