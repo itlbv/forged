@@ -1,6 +1,6 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{Inventory, Recipe, Remove, Storage, Target, MainTarget};
+use crate::components::{Inventory, Recipe, Remove, Storage, Target, MainTarget, Position};
 use crate::{util, World};
 
 pub struct DropItemToMainTargetStorage {
@@ -33,7 +33,7 @@ impl DropItemToMainTargetStorage {
 }
 
 pub struct PickUpTarget {
-    owner_id: usize,
+    own_id: usize,
 }
 
 impl BehaviorTreeNode for PickUpTarget {
@@ -43,16 +43,20 @@ impl BehaviorTreeNode for PickUpTarget {
 }
 
 impl PickUpTarget {
-    pub fn new(owner_id: usize) -> Self { Self { owner_id } }
+    pub fn new(own_id: usize) -> Self { Self { own_id } }
 
     fn pick_up(&mut self, world: &World) -> Status {
         let mut inventories = world.ecs.borrow_component_vec_mut::<Inventory>();
-        let mut inventory = inventories.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+        let mut inventory = inventories.get_mut(self.own_id).unwrap().as_mut().unwrap();
 
         let target_id = inventory.items_needed.remove(0);
         inventory.item_carried = target_id as i32;
 
         world.ecs.add_component_to_entity(target_id, Remove::new(target_id));
+
+        let positions = world.ecs.borrow_component_vec::<Position>();
+        let item_position = positions.get(target_id).unwrap().as_ref().unwrap();
+        world.map.set_tile_occupied(item_position.x as i32, item_position.y as i32, false);
 
         SUCCESS
     }

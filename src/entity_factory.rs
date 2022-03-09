@@ -20,7 +20,7 @@ pub fn create_tree(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<Item>(new_entity_id, Item {});
     world.ecs.add_component_to_entity::<Wood>(new_entity_id, Wood {});
 
-    world.map.set_node_occupied(x, y, true);
+    world.map.set_tile_occupied(x, y, true);
 }
 
 pub fn create_stone(x: i32, y: i32, world: &World) {
@@ -30,7 +30,7 @@ pub fn create_stone(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<Item>(new_entity_id, Item {});
     world.ecs.add_component_to_entity::<Stone>(new_entity_id, Stone {});
 
-    world.map.set_node_occupied(x, y, true);
+    world.map.set_tile_occupied(x, y, true);
 }
 
 pub fn create_food(x: i32, y: i32, world: &World) {
@@ -40,7 +40,7 @@ pub fn create_food(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<Item>(new_entity_id, Item {});
     world.ecs.add_component_to_entity::<Food>(new_entity_id, Food {});
 
-    world.map.set_node_occupied(x, y, true);
+    world.map.set_tile_occupied(x, y, true);
 }
 
 pub fn create_mob(x: f32, y: f32, name: &str, world: &World) {

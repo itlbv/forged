@@ -24,7 +24,7 @@ impl Map {
         Box::new(map_tiles)
     }
 
-    pub fn set_node_occupied(&self, x: i32, y: i32, occupied: bool) {
+    pub fn set_tile_occupied(&self, x: i32, y: i32, occupied: bool) {
         let mut tiles = self.borrow_tiles_mut();
         let mut tile = tiles.borrow_tile_mut(x, y);
         tile.occupied = occupied;
