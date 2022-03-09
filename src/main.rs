@@ -23,22 +23,13 @@ mod util_structs;
 mod log;
 
 use std::time::{Duration, Instant};
-use sdl2::render::BlendMode::Blend;
 use crate::input_handler::InputHandler;
 use crate::renderer::Renderer;
 use crate::world::World;
 
 fn main() {
     let sdl_context = sdl2::init().unwrap();
-    let video_subsystem = sdl_context.video().unwrap();
-    let window = video_subsystem.window("Forged", 800, 600)
-        .position_centered()
-        .build()
-        .unwrap();
-
-    let mut sdl_canvas = window.into_canvas().build().unwrap();
-    sdl_canvas.set_blend_mode(Blend);
-    let renderer = Renderer::new(sdl_canvas);
+    let renderer = Renderer::new(&sdl_context);
 
     let sdl_events = sdl_context.event_pump().unwrap();
     let input_handler = InputHandler { sdl_events };

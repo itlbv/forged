@@ -3,6 +3,9 @@ extern crate sdl2;
 use self::sdl2::render::WindowCanvas;
 use sdl2::pixels::Color;
 use sdl2::rect::Point;
+use sdl2::render::BlendMode::Blend;
+use sdl2::Sdl;
+use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use self::sdl2::rect::Rect;
 
 const DEFAULT_CLEAR_FRAME_COLOR: Color = Color::RGB(50, 50, 50);
@@ -12,7 +15,15 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn new(sdl_canvas: WindowCanvas) -> Self {
+    pub fn new(sdl: &Sdl) -> Self {
+        let video_subsystem = sdl.video().unwrap();
+        let window = video_subsystem.window("Forged", WINDOW_WIDTH, WINDOW_HEIGHT)
+            .position_centered()
+            .build().unwrap();
+
+        let mut sdl_canvas = window.into_canvas()
+            .build().unwrap();
+        sdl_canvas.set_blend_mode(Blend);
         Self { sdl_canvas }
     }
 

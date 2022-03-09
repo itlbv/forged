@@ -1,3 +1,6 @@
+pub const WINDOW_WIDTH: u32 = 800;
+pub const WINDOW_HEIGHT: u32 = 600;
+
 pub const MAP_WIDTH: i32 = 15;
 pub const MAP_HEIGHT: i32 = 10;
 pub const MAP_NODE_SIZE: f32 = 1.0;
