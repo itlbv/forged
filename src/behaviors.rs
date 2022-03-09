@@ -5,7 +5,7 @@ use crate::move_tasks::{MoveCloseToTarget, MoveToDestination};
 use crate::tasks::{DoNothingTask, DoUntilFailure, EatTarget, FindFood, SetDestinationFromMainTarget, SetRecipe};
 use crate::recipes;
 
-pub fn find_food(owner_id: usize) -> Sequence {
+pub fn _find_food(owner_id: usize) -> Sequence {
     Sequence::of(vec![
         Box::new(FindFood::new(owner_id)),
         Box::new(MoveCloseToTarget::new(owner_id)),
@@ -13,7 +13,7 @@ pub fn find_food(owner_id: usize) -> Sequence {
     ])
 }
 
-pub fn test_building(owner_id: usize) -> Sequence {
+pub fn _test_building(owner_id: usize) -> Sequence {
     Sequence::of(vec![
         Box::new(SetRecipe::new(owner_id, recipes::house())),
         Box::new(

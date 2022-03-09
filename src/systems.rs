@@ -1,5 +1,6 @@
 use crate::components::{Behavior, Position, Remove, RenderShape};
-use crate::{Renderer, World};
+use crate::{behaviors, Renderer, World};
+use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::constants::{MAP_HEIGHT, MAP_NODE_SIZE, MAP_WIDTH};
 use crate::util_structs::Color;
 
@@ -9,8 +10,15 @@ pub fn behavior(world: &World) {
         let b = behavior.as_mut();
         match b {
             None => { continue; }
-            Some(_) => { b.unwrap().run(world) }
+            Some(_) => { run_behavior_tree(b.unwrap(), world) }
         };
+    }
+}
+
+fn run_behavior_tree(behavior: &mut Behavior, world: &World) {
+    let status = behavior.behavior_tree.run(world);
+    if status == SUCCESS || status == FAILURE {
+        behavior.behavior_tree = Box::new(behaviors::do_nothing());
     }
 }
 

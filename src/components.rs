@@ -1,21 +1,10 @@
 use std::any::TypeId;
 use std::collections::HashMap;
 use crate::btree::BehaviorTreeNode;
-use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::{behaviors, World};
 use crate::util_structs::Color;
 
 pub struct Behavior {
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
-}
-
-impl Behavior {
-    pub fn run(&mut self, world: &World) {
-        let status = self.behavior_tree.run(world);
-        if status == SUCCESS || status == FAILURE {
-            self.behavior_tree = Box::new(behaviors::do_nothing());
-        }
-    }
 }
 
 pub struct Inventory {

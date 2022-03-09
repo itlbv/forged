@@ -1,7 +1,7 @@
-use crate::{entity_factory, log, main, util, World};
+use crate::{entity_factory, log, util, World};
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{MainTarget, Destination, Recipe, Remove, Position, RenderShape, Building};
+use crate::components::{MainTarget, Destination, Recipe, Position, RenderShape, Building};
 
 pub struct FinishBuilding {
     own_id: usize,
