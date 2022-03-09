@@ -30,9 +30,7 @@ use crate::world::World;
 fn main() {
     let sdl_context = sdl2::init().unwrap();
     let renderer = Renderer::new(&sdl_context);
-
-    let sdl_events = sdl_context.event_pump().unwrap();
-    let input_handler = InputHandler { sdl_events };
+    let input_handler = InputHandler::new(&sdl_context);
 
     let mut world = World::new(renderer, input_handler);
     world.setup();
