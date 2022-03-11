@@ -57,7 +57,9 @@ impl Renderer {
                           sprite_x: i32, sprite_y: i32, sprite_w: u32, sprite_h: u32,
                           pos_x: i32, pos_y: i32, w: u32, h: u32,
     ) {
-        self.sdl_canvas.copy(texture, Rect::new(sprite_x, sprite_y, sprite_w, sprite_h), Rect::new(pos_x, pos_y, w, h));
+        self.sdl_canvas.copy(texture,
+                             Rect::new(sprite_x, sprite_y, sprite_w, sprite_h),
+                             Rect::new(pos_x, pos_y, w, h));
     }
 
     pub fn world_to_screen(world: f32) -> i32 {

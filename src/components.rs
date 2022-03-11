@@ -13,6 +13,10 @@ pub struct Texture {
     pub sprite_y: i32,
     pub sprite_w: u32,
     pub sprite_h: u32,
+    pub offset_x: u32,
+    pub offset_y: u32,
+    pub object_w_in_tiles: u32,
+    pub object_h_in_tiles: u32,
 }
 
 impl Texture {
@@ -20,13 +24,22 @@ impl Texture {
                sprite_x: i32,
                sprite_y: i32,
                sprite_w: u32,
-               sprite_h: u32) -> Self {
+               sprite_h: u32,
+               offset_x: u32,
+               offset_y: u32,
+               object_w_in_tiles: u32,
+               object_h_in_tiles: u32,
+    ) -> Self {
         Self {
             sprite_id,
             sprite_x,
             sprite_y,
             sprite_w,
             sprite_h,
+            offset_x,
+            offset_y,
+            object_w_in_tiles,
+            object_h_in_tiles,
         }
     }
 }
