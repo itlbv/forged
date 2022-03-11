@@ -3,7 +3,7 @@ use sdl2::render::TextureCreator;
 use sdl2::video::WindowContext;
 use crate::map::Map;
 use crate::{entity_factory, InputHandler, Renderer, systems};
-use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building};
+use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
 use crate::resources::AssetManager;
@@ -33,6 +33,7 @@ impl<'assets> World<'assets> {
 
     pub fn setup(&mut self) {
         self.assets.load_texture("map_tileset", Path::new("assets/map/CL_MainLev.png"));
+        self.assets.load_texture("crops", Path::new("assets/CL_Crops_Mining.png"));
 
         self.ecs.register_component::<Position>();
         self.ecs.register_component::<Name>();
@@ -50,6 +51,7 @@ impl<'assets> World<'assets> {
         self.ecs.register_component::<Storage>();
         self.ecs.register_component::<Recipe>();
         self.ecs.register_component::<Building>();
+        self.ecs.register_component::<Texture>();
 
         entity_factory::create_mob(1.5, 1.5, "Alice", self);
 
@@ -80,7 +82,8 @@ impl<'assets> World<'assets> {
         systems::remove_entities(self);
 
         self.renderer.clear_frame();
-        systems::render_map(self);
+        // systems::render_map(self);
+        systems::render_textures(self);
         systems::render_entities(self);
         self.renderer.present_frame();
 

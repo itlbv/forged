@@ -7,6 +7,30 @@ pub struct Behavior {
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
 }
 
+pub struct Texture {
+    pub sprite_id: String,
+    pub sprite_x: i32,
+    pub sprite_y: i32,
+    pub sprite_w: u32,
+    pub sprite_h: u32,
+}
+
+impl Texture {
+    pub fn new(sprite_id: String,
+               sprite_x: i32,
+               sprite_y: i32,
+               sprite_w: u32,
+               sprite_h: u32) -> Self {
+        Self {
+            sprite_id,
+            sprite_x,
+            sprite_y,
+            sprite_w,
+            sprite_h,
+        }
+    }
+}
+
 pub struct Inventory {
     pub item_carried: i32,
     pub items_needed: Vec<usize>,
@@ -127,7 +151,7 @@ pub struct RenderShape {
 
 impl RenderShape {
     pub fn new_with_standard_offset(w: f32, h: f32, color: Color) -> Self {
-        Self { w, h, offset_x: - w / 2.0, offset_y: - h / 2.0, color }
+        Self { w, h, offset_x: -w / 2.0, offset_y: -h / 2.0, color }
     }
 
     pub fn new_without_offset(w: f32, h: f32, color: Color) -> Self {
@@ -145,7 +169,7 @@ impl RenderShape {
                 recipe.render_shape.color.g,
                 recipe.render_shape.color.b,
                 recipe.render_shape.color.a,
-            )
+            ),
         }
     }
 

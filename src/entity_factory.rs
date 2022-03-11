@@ -1,4 +1,4 @@
-use crate::components::{Behavior, Building, Food, Inventory, Name, Position, Recipe, RenderShape, Storage};
+use crate::components::{Behavior, Building, Food, Inventory, Name, Position, Recipe, RenderShape, Storage, Texture};
 use crate::{behaviors, World};
 use crate::items::{Item, Stone, Wood};
 use crate::util_structs::Color;
@@ -19,6 +19,7 @@ pub fn create_tree(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.25, 0.25, Color::new(100, 90, 5, 255))); // brown
     world.ecs.add_component_to_entity::<Item>(new_entity_id, Item {});
     world.ecs.add_component_to_entity::<Wood>(new_entity_id, Wood {});
+    world.ecs.add_component_to_entity::<Texture>(new_entity_id, Texture::new(String::from("crops"), 576, 640, 96,128));
 
     world.map.set_tile_occupied(x, y, true);
 }

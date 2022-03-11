@@ -1,4 +1,4 @@
-use crate::components::{Behavior, Position, Remove, RenderShape};
+use crate::components::{Behavior, Position, Remove, RenderShape, Texture};
 use crate::{behaviors, Renderer, World};
 use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::constants::{MAP_HEIGHT, MAP_TILE_SIZE, MAP_TILE_SIZE_PXL, MAP_WIDTH};
@@ -33,6 +33,31 @@ pub fn remove_entities(world: &mut World) {
     }
     for entity_id in entity_ids_to_remove {
         world.ecs.remove_entity(entity_id);
+    }
+}
+
+pub fn render_textures(world: &mut World) {
+    let textures = world.ecs.borrow_component_vec::<Texture>();
+    let positions = world.ecs.borrow_component_vec::<Position>();
+
+    let zip = textures.iter().zip(positions.iter());
+    let iter = zip.filter_map(
+        |(texture, pos)| Some((texture.as_ref()?, pos.as_ref()?))
+    );
+
+    for (texture_comp, pos) in iter {
+        let texture = world.assets.borrow_texture(texture_comp.sprite_id.as_str());
+        world.renderer.render_texture(
+            texture,
+            texture_comp.sprite_x,
+            texture_comp.sprite_y,
+            texture_comp.sprite_w,
+            texture_comp.sprite_h,
+            Renderer::world_to_screen(pos.x) - 75,
+            Renderer::world_to_screen(pos.y) - 170,
+            150,
+            200,
+        );
     }
 }
 
