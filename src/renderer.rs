@@ -4,6 +4,7 @@ use self::sdl2::render::WindowCanvas;
 use sdl2::pixels::Color;
 use sdl2::rect::Point;
 use sdl2::render::BlendMode::Blend;
+use sdl2::render::Texture;
 use sdl2::Sdl;
 use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use self::sdl2::rect::Rect;
@@ -11,7 +12,7 @@ use self::sdl2::rect::Rect;
 const DEFAULT_CLEAR_FRAME_COLOR: Color = Color::RGB(50, 50, 50);
 
 pub struct Renderer {
-    sdl_canvas: WindowCanvas,
+    pub sdl_canvas: WindowCanvas,
 }
 
 impl Renderer {
@@ -49,6 +50,10 @@ impl Renderer {
     pub fn render_dot(&mut self, x: i32, y: i32) {
         self.sdl_canvas.set_draw_color(Color::RGB(255, 255, 255)); //white
         self.sdl_canvas.draw_point(Point::new(x, y));
+    }
+
+    pub fn render_texture(&mut self, texture: &Texture) {
+        self.sdl_canvas.copy(texture, Rect::new(0, 0, 32, 32), Rect::new(0, 0, 32, 32));
     }
 
     pub fn world_to_screen(world: f32) -> i32 {

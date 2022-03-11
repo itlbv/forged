@@ -21,6 +21,7 @@ mod build_tasks;
 mod util;
 mod util_structs;
 mod log;
+mod resources;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
@@ -31,8 +32,9 @@ fn main() {
     let sdl_context = sdl2::init().unwrap();
     let renderer = Renderer::new(&sdl_context);
     let input_handler = InputHandler::new(&sdl_context);
+    let texture_creator = renderer.sdl_canvas.texture_creator();
 
-    let mut world = World::new(renderer, input_handler);
+    let mut world = World::new(renderer, input_handler, &texture_creator);
     world.setup();
 
     let mut instant = Instant::now();
