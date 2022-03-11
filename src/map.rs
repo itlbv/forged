@@ -69,6 +69,10 @@ pub struct MapTile {
     pub walkable: bool,
     pub occupied: bool,
     pub color: Color,
+    pub tileset_x: i32,
+    pub tileset_y: i32,
+    pub tileset_w: u32,
+    pub tileset_h: u32,
 }
 
 impl MapTile {
@@ -79,6 +83,10 @@ impl MapTile {
             walkable,
             occupied: false,
             color,
+            tileset_x: 32,
+            tileset_y: 32,
+            tileset_w: 50,
+            tileset_h: 50,
         }
     }
 }

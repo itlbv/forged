@@ -6,20 +6,20 @@ use crate::{entity_factory, InputHandler, Renderer, systems};
 use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
-use crate::resources::ResourceManager;
+use crate::resources::AssetManager;
 
-pub struct World<'l> {
+pub struct World<'assets> {
     pub quit: bool,
     pub delta_time: f32,
     pub map: Map,
     pub renderer: Renderer,
     input_handler: InputHandler,
     pub ecs: Ecs,
-    resource_manager: ResourceManager<'l>,
+    pub assets: AssetManager<'assets>,
 }
 
-impl<'l> World<'l> {
-    pub fn new(renderer: Renderer, input_handler: InputHandler, texture_creator: &'l TextureCreator<WindowContext>) -> Self {
+impl<'assets> World<'assets> {
+    pub fn new(renderer: Renderer, input_handler: InputHandler, texture_creator: &'assets TextureCreator<WindowContext>) -> Self {
         Self {
             delta_time: 0.0,
             quit: false,
@@ -27,12 +27,12 @@ impl<'l> World<'l> {
             renderer,
             input_handler,
             ecs: Ecs::new(),
-            resource_manager: ResourceManager::new(texture_creator),
+            assets: AssetManager::new(texture_creator),
         }
     }
 
     pub fn setup(&mut self) {
-        self.resource_manager.load_texture(Path::new("assets/map/CL_MainLev.png"));
+        self.assets.load_texture("map_tileset", Path::new("assets/map/CL_MainLev.png"));
 
         self.ecs.register_component::<Position>();
         self.ecs.register_component::<Name>();
@@ -82,9 +82,6 @@ impl<'l> World<'l> {
         self.renderer.clear_frame();
         systems::render_map(self);
         systems::render_entities(self);
-
-        self.renderer.render_texture(self.resource_manager.textures.get(&*String::from("1")).unwrap());
-
         self.renderer.present_frame();
 
         self.quit = self.input_handler.update();

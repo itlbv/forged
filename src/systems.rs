@@ -1,7 +1,7 @@
 use crate::components::{Behavior, Position, Remove, RenderShape};
 use crate::{behaviors, Renderer, World};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::constants::{MAP_HEIGHT, MAP_NODE_SIZE, MAP_WIDTH};
+use crate::constants::{MAP_HEIGHT, MAP_TILE_SIZE, MAP_TILE_SIZE_PXL, MAP_WIDTH};
 use crate::util_structs::Color;
 
 pub fn behavior(world: &World) {
@@ -62,7 +62,7 @@ pub fn render_map(world: &mut World) {
     for tile in world.map.borrow_tiles().iterator() {
         let x = Renderer::world_to_screen(tile.x as f32);
         let y = Renderer::world_to_screen(tile.y as f32);
-        let node_size = Renderer::world_to_screen(MAP_NODE_SIZE);
+        let tile_size = Renderer::world_to_screen(MAP_TILE_SIZE);
 
         let color: Color;
         if tile.occupied {
@@ -74,26 +74,31 @@ pub fn render_map(world: &mut World) {
         world.renderer.render_rect(
             x,
             y,
-            node_size,
-            node_size,
+            tile_size,
+            tile_size,
             color.r, color.g, color.b, color.a);
         // tile.color.r, tile.color.g, tile.color.b, tile.color.a);
         world.renderer.render_dot(x, y); // true position
+
+        world.renderer.render_texture(
+            world.assets.borrow_texture("map_tileset"),
+            tile.tileset_x, tile.tileset_y, tile.tileset_w, tile.tileset_h,
+            x, y, MAP_TILE_SIZE_PXL, MAP_TILE_SIZE_PXL);
     }
 
     for x in 0..=MAP_WIDTH { // vertical lines
-        let x_1: i32 = 50 * x * MAP_NODE_SIZE as i32;
+        let x_1: i32 = 50 * x * MAP_TILE_SIZE as i32;
         let y_1: i32 = 0;
         let x_2: i32 = x_1;
-        let y_2: i32 = 50 * MAP_HEIGHT * MAP_NODE_SIZE as i32;
-        world.renderer.render_line(x_1, y_1, x_2, y_2);
+        let y_2: i32 = 50 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
+        // world.renderer.render_line(x_1, y_1, x_2, y_2);
     }
 
     for y in 0..=MAP_HEIGHT { // horizontal lines
         let x_1: i32 = 0;
-        let y_1: i32 = 50 * y * MAP_NODE_SIZE as i32;
-        let x_2: i32 = 50 * MAP_WIDTH * MAP_NODE_SIZE as i32;
+        let y_1: i32 = 50 * y * MAP_TILE_SIZE as i32;
+        let x_2: i32 = 50 * MAP_WIDTH * MAP_TILE_SIZE as i32;
         let y_2: i32 = y_1;
-        world.renderer.render_line(x_1, y_1, x_2, y_2);
+        // world.renderer.render_line(x_1, y_1, x_2, y_2);
     }
 }
