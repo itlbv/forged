@@ -9,37 +9,37 @@ pub struct Behavior {
 
 pub struct Texture {
     pub sprite_id: String,
-    pub sprite_x: i32,
-    pub sprite_y: i32,
+    pub sprite_in_tileset_x: i32,
+    pub sprite_in_tileset_y: i32,
     pub sprite_w: u32,
     pub sprite_h: u32,
-    pub offset_x: u32,
-    pub offset_y: u32,
-    pub object_w_in_tiles: u32,
-    pub object_h_in_tiles: u32,
+    pub render_offset_x: u32,
+    pub render_offset_y: u32,
+    pub object_w_tiles: u32,
+    pub object_h_tiles: u32,
 }
 
 impl Texture {
     pub fn new(sprite_id: String,
-               sprite_x: i32,
-               sprite_y: i32,
+               sprite_in_tileset_x: i32,
+               sprite_in_tileset_y: i32,
                sprite_w: u32,
                sprite_h: u32,
-               offset_x: u32,
-               offset_y: u32,
-               object_w_in_tiles: u32,
-               object_h_in_tiles: u32,
+               render_offset_x: u32,
+               render_offset_y: u32,
+               object_w_tiles: u32,
+               object_h_tiles: u32,
     ) -> Self {
         Self {
             sprite_id,
-            sprite_x,
-            sprite_y,
+            sprite_in_tileset_x,
+            sprite_in_tileset_y,
             sprite_w,
             sprite_h,
-            offset_x,
-            offset_y,
-            object_w_in_tiles,
-            object_h_in_tiles,
+            render_offset_x,
+            render_offset_y,
+            object_w_tiles,
+            object_h_tiles,
         }
     }
 }

@@ -49,14 +49,14 @@ pub fn render_textures(world: &mut World) {
         let texture = world.assets.borrow_texture(texture_comp.sprite_id.as_str());
         world.renderer.render_texture(
             texture,
-            texture_comp.sprite_x,
-            texture_comp.sprite_y,
+            texture_comp.sprite_in_tileset_x,
+            texture_comp.sprite_in_tileset_y,
             texture_comp.sprite_w,
             texture_comp.sprite_h,
-            Renderer::world_to_screen(pos.x) - texture_comp.offset_x as i32,
-            Renderer::world_to_screen(pos.y) - texture_comp.offset_y as i32,
-            texture_comp.object_w_in_tiles * 50,
-            texture_comp.object_h_in_tiles * 50,
+            Renderer::world_to_screen(pos.x) - texture_comp.render_offset_x as i32,
+            Renderer::world_to_screen(pos.y) - texture_comp.render_offset_y as i32,
+            texture_comp.object_w_tiles * 50,
+            texture_comp.object_h_tiles * 50,
         );
     }
 }
