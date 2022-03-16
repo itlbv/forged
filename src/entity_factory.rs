@@ -1,5 +1,5 @@
 use crate::components::{Behavior, Building, Food, Inventory, Name, Position, Recipe, RenderShape, Storage, Texture};
-use crate::{behaviors, World};
+use crate::{behaviors, textures, World};
 use crate::items::{Item, Stone, Wood};
 use crate::util_structs::Color;
 
@@ -19,17 +19,7 @@ pub fn create_tree(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.25, 0.25, Color::new(100, 90, 5, 255))); // brown
     world.ecs.add_component_to_entity::<Item>(new_entity_id, Item {});
     world.ecs.add_component_to_entity::<Wood>(new_entity_id, Wood {});
-    world.ecs.add_component_to_entity::<Texture>(new_entity_id,
-                                                 Texture::new(
-                                                     String::from("crops"),
-                                                     576,
-                                                     640,
-                                                     96,
-                                                     128,
-                                                     75,
-                                                     170,
-                                                     3,
-                                                     4));
+    world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::tree());
 
     world.map.set_tile_occupied(x, y, true);
 }
@@ -40,7 +30,7 @@ pub fn create_stone(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.25, 0.25, Color::new(130, 130, 130, 255))); // brown
     world.ecs.add_component_to_entity::<Item>(new_entity_id, Item {});
     world.ecs.add_component_to_entity::<Stone>(new_entity_id, Stone {});
-    world.ecs.add_component_to_entity::<Texture>(new_entity_id, Texture::new(String::from("crops"), 544, 993, 32, 32, 16, 16, 1, 1));
+    world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::stone());
 
     world.map.set_tile_occupied(x, y, true);
 }
@@ -51,6 +41,8 @@ pub fn create_food(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.3, 0.3, Color::new(90, 170, 0, 255))); // red
     world.ecs.add_component_to_entity::<Item>(new_entity_id, Item {});
     world.ecs.add_component_to_entity::<Food>(new_entity_id, Food {});
+    world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::food());
+
 
     world.map.set_tile_occupied(x, y, true);
 }

@@ -22,6 +22,7 @@ mod util;
 mod util_structs;
 mod log;
 mod resources;
+mod textures;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
