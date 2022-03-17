@@ -13,7 +13,7 @@ pub fn house(x: f32, y: f32, recipe: Recipe, world: &World) -> (usize, f32, f32)
     (new_entity_id, entry_x, entry_y)
 }
 
-pub fn create_tree(x: i32, y: i32, world: &World) {
+pub fn tree(x: i32, y: i32, world: &World) {
     let new_entity_id = world.ecs.create_entity();
     world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x as f32 + 0.5, y as f32 + 0.5, new_entity_id));
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.25, 0.25, Color::new(100, 90, 5, 255))); // brown
@@ -24,7 +24,7 @@ pub fn create_tree(x: i32, y: i32, world: &World) {
     world.map.set_tile_occupied(x, y, true);
 }
 
-pub fn create_stone(x: i32, y: i32, world: &World) {
+pub fn stone(x: i32, y: i32, world: &World) {
     let new_entity_id = world.ecs.create_entity();
     world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x as f32 + 0.5, y as f32 + 0.5, new_entity_id));
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.25, 0.25, Color::new(130, 130, 130, 255))); // brown
@@ -35,7 +35,7 @@ pub fn create_stone(x: i32, y: i32, world: &World) {
     world.map.set_tile_occupied(x, y, true);
 }
 
-pub fn create_food(x: i32, y: i32, world: &World) {
+pub fn food(x: i32, y: i32, world: &World) {
     let new_entity_id = world.ecs.create_entity();
     world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x as f32 + 0.5, y as f32 + 0.5, new_entity_id));
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.3, 0.3, Color::new(90, 170, 0, 255))); // red

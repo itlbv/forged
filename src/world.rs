@@ -56,24 +56,24 @@ impl<'assets> World<'assets> {
 
         entity_factory::human(1.5, 1.5, "Alice", self);
 
-        entity_factory::create_food(5, 8, self);
-        entity_factory::create_food(4, 1, self);
-        entity_factory::create_food(2, 5, self);
-        entity_factory::create_food(9, 6, self);
-        entity_factory::create_food(6, 6, self);
-        entity_factory::create_food(5, 7, self);
+        entity_factory::food(5, 8, self);
+        entity_factory::food(4, 1, self);
+        entity_factory::food(2, 5, self);
+        entity_factory::food(9, 6, self);
+        entity_factory::food(6, 6, self);
+        entity_factory::food(5, 7, self);
 
-        entity_factory::create_tree(3, 4, self);
-        entity_factory::create_tree(7, 1, self);
-        entity_factory::create_tree(8, 2, self);
-        entity_factory::create_tree(1, 3, self);
-        entity_factory::create_tree(3, 2, self);
-        entity_factory::create_tree(5, 3, self);
-        entity_factory::create_tree(6, 2, self);
+        entity_factory::tree(3, 4, self);
+        entity_factory::tree(7, 1, self);
+        entity_factory::tree(8, 2, self);
+        entity_factory::tree(1, 3, self);
+        entity_factory::tree(3, 2, self);
+        entity_factory::tree(5, 3, self);
+        entity_factory::tree(6, 2, self);
 
-        entity_factory::create_stone(13, 6, self);
-        entity_factory::create_stone(14, 9, self);
-        entity_factory::create_stone(12, 7, self);
+        entity_factory::stone(13, 6, self);
+        entity_factory::stone(14, 9, self);
+        entity_factory::stone(12, 7, self);
     }
 
     pub fn tick(&mut self, _delta_time: f32) {
