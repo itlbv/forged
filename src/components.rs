@@ -17,6 +17,7 @@ pub struct Texture {
     pub render_offset_y: u32,
     pub object_w_tiles: u32,
     pub object_h_tiles: u32,
+    pub scale: f32,
 }
 
 impl Texture {
@@ -29,6 +30,7 @@ impl Texture {
                render_offset_y: u32,
                object_w_tiles: u32,
                object_h_tiles: u32,
+               scale: f32,
     ) -> Self {
         Self {
             sprite_id,
@@ -40,6 +42,7 @@ impl Texture {
             render_offset_y,
             object_w_tiles,
             object_h_tiles,
+            scale,
         }
     }
 }

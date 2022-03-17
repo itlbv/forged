@@ -46,17 +46,17 @@ pub fn render_textures(world: &mut World) {
     );
 
     for (texture_comp, pos) in iter {
-        let texture = world.assets.borrow_texture(texture_comp.sprite_id.as_str());
+        let texture_sprite = world.assets.borrow_texture(texture_comp.sprite_id.as_str());
         world.renderer.render_texture(
-            texture,
+            texture_sprite,
             texture_comp.sprite_in_tileset_x,
             texture_comp.sprite_in_tileset_y,
             texture_comp.sprite_w,
             texture_comp.sprite_h,
             Renderer::world_to_screen(pos.x) - texture_comp.render_offset_x as i32,
             Renderer::world_to_screen(pos.y) - texture_comp.render_offset_y as i32,
-            texture_comp.object_w_tiles * 50,
-            texture_comp.object_h_tiles * 50,
+            (texture_comp.object_w_tiles as f32 * 50.0 * texture_comp.scale) as u32,
+            (texture_comp.object_h_tiles as f32 * 50.0 * texture_comp.scale) as u32,
         );
     }
 }

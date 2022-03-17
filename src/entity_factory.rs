@@ -47,7 +47,7 @@ pub fn create_food(x: i32, y: i32, world: &World) {
     world.map.set_tile_occupied(x, y, true);
 }
 
-pub fn create_mob(x: f32, y: f32, name: &str, world: &World) {
+pub fn human(x: f32, y: f32, name: &str, world: &World) {
     let new_entity_id = world.ecs.create_entity();
 
     let behavior = Behavior { behavior_tree: Box::new(behaviors::build_house(new_entity_id)) };
@@ -57,4 +57,5 @@ pub fn create_mob(x: f32, y: f32, name: &str, world: &World) {
     world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.49, 0.49, Color::new(0, 0, 150, 255))); // blue
     world.ecs.add_component_to_entity::<Behavior>(new_entity_id, behavior);
     world.ecs.add_component_to_entity::<Inventory>(new_entity_id, Inventory::new());
+    world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::human());
 }

@@ -11,6 +11,7 @@ pub fn tree() -> Texture {
         170,
         3,
         4,
+        1.0,
     )
 }
 
@@ -25,6 +26,7 @@ pub fn stone() -> Texture {
         26,
         1,
         1,
+        1.0,
     )
 }
 
@@ -39,5 +41,21 @@ pub fn food() -> Texture {
         36,
         1,
         1,
+        1.0,
+    )
+}
+
+pub fn human() -> Texture {
+    Texture::new(
+        String::from("villager_woman"),
+        0,
+        0,
+        32,
+        32,
+        75,
+        140,
+        1,
+        1,
+        3.0,
     )
 }

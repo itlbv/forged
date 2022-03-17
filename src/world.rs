@@ -34,6 +34,7 @@ impl<'assets> World<'assets> {
     pub fn setup(&mut self) {
         self.assets.load_texture("map_tileset", Path::new("assets/map/CL_MainLev.png"));
         self.assets.load_texture("crops", Path::new("assets/CL_Crops_Mining.png"));
+        self.assets.load_texture("villager_woman", Path::new("assets/MiniVillagerWoman.png"));
 
         self.ecs.register_component::<Position>();
         self.ecs.register_component::<Name>();
@@ -53,7 +54,7 @@ impl<'assets> World<'assets> {
         self.ecs.register_component::<Building>();
         self.ecs.register_component::<Texture>();
 
-        entity_factory::create_mob(1.5, 1.5, "Alice", self);
+        entity_factory::human(1.5, 1.5, "Alice", self);
 
         entity_factory::create_food(5, 8, self);
         entity_factory::create_food(4, 1, self);
