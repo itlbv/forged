@@ -65,8 +65,8 @@ pub fn render_textures(world: &mut World) {
             texture_comp.sprite_in_tileset_y,
             texture_comp.sprite_w,
             texture_comp.sprite_h,
-            Renderer::world_to_screen(pos.x, world.properties.zoom_factor) - texture_comp.render_offset_x as i32 + world.properties.camera_x,
-            Renderer::world_to_screen(pos.y, world.properties.zoom_factor) - texture_comp.render_offset_y as i32 + world.properties.camera_y,
+            Renderer::world_to_screen(pos.x, world.properties.zoom_factor) - (texture_comp.render_offset_x * world.properties.zoom_factor as u32 / 50) as i32 + world.properties.camera_x,
+            Renderer::world_to_screen(pos.y, world.properties.zoom_factor) - (texture_comp.render_offset_y * world.properties.zoom_factor as u32 / 50) as i32 + world.properties.camera_y,
             (texture_comp.object_w_tiles as f32 * world.properties.zoom_factor as f32 * texture_comp.scale) as u32,
             (texture_comp.object_h_tiles as f32 * world.properties.zoom_factor as f32 * texture_comp.scale) as u32,
         );
