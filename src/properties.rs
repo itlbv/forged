@@ -2,8 +2,8 @@ pub struct Properties {
     pub delta_time: f32,
     pub quit: bool,
 
-    pub viewport_x: i32,
-    pub viewport_y: i32,
+    pub camera_x: i32,
+    pub camera_y: i32,
     pub zoom_factor: u8,
 }
 
@@ -12,8 +12,8 @@ impl Properties {
         Self {
             delta_time: 0.0,
             quit: false,
-            viewport_x: 0,
-            viewport_y: 0,
+            camera_x: 0,
+            camera_y: 0,
             zoom_factor: 50,
         }
     }

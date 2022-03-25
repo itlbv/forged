@@ -20,10 +20,10 @@ impl InputHandler {
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     properties.quit = true;
                 }
-                Event::KeyDown { keycode: Some(Keycode::W), .. } => {properties.viewport_y += 20}
-                Event::KeyDown { keycode: Some(Keycode::S), .. } => {properties.viewport_y -= 20}
-                Event::KeyDown { keycode: Some(Keycode::A), .. } => {properties.viewport_x += 20}
-                Event::KeyDown { keycode: Some(Keycode::D), .. } => {properties.viewport_x -= 20}
+                Event::KeyDown { keycode: Some(Keycode::W), .. } => {properties.camera_y += 20}
+                Event::KeyDown { keycode: Some(Keycode::S), .. } => {properties.camera_y -= 20}
+                Event::KeyDown { keycode: Some(Keycode::A), .. } => {properties.camera_x += 20}
+                Event::KeyDown { keycode: Some(Keycode::D), .. } => {properties.camera_x -= 20}
                 Event::KeyDown { keycode: Some(Keycode::Z), .. } => {properties.zoom_factor -= 10}
                 Event::KeyDown { keycode: Some(Keycode::X), .. } => {properties.zoom_factor += 10}
                 _ => {}
