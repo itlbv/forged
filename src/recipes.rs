@@ -13,7 +13,7 @@ pub fn house() -> Recipe {
     Recipe::new(ingredients_type_ids,
                 RenderShape::new_without_offset(
                     4.0,
-                    7.0,
+                    6.0,
                     Color::new(100, 100, 100, 255)),
                 textures::house(),
     )

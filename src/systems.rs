@@ -127,7 +127,10 @@ pub fn render_map(world: &mut World) {
         let y_1: i32 = 0;
         let x_2: i32 = x_1;
         let y_2: i32 = 50 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
-        // world.renderer.render_line(x_1, y_1, x_2, y_2);
+        world.renderer.render_line(x_1 + world.properties.camera_x,
+                                   y_1 + world.properties.camera_y,
+                                   x_2 + world.properties.camera_x,
+                                   y_2 + world.properties.camera_y);
     }
 
     for y in 0..=MAP_HEIGHT { // horizontal lines
@@ -135,6 +138,9 @@ pub fn render_map(world: &mut World) {
         let y_1: i32 = 50 * y * MAP_TILE_SIZE as i32;
         let x_2: i32 = 50 * MAP_WIDTH * MAP_TILE_SIZE as i32;
         let y_2: i32 = y_1;
-        // world.renderer.render_line(x_1, y_1, x_2, y_2);
+        world.renderer.render_line(x_1 + world.properties.camera_x,
+                                   y_1 + world.properties.camera_y,
+                                   x_2 + world.properties.camera_x,
+                                   y_2 + world.properties.camera_y);
     }
 }
