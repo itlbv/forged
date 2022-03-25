@@ -2,6 +2,7 @@ use std::any::TypeId;
 use std::collections::HashMap;
 use crate::components::{Recipe, RenderShape};
 use crate::items::{Stone, Wood};
+use crate::textures;
 use crate::util_structs::Color;
 
 pub fn house() -> Recipe {
@@ -13,6 +14,7 @@ pub fn house() -> Recipe {
                 RenderShape::new_without_offset(
                     2.0,
                     3.0,
-                    Color::new(100, 100, 100, 255))
+                    Color::new(100, 100, 100, 255)),
+                textures::house(),
     )
 }

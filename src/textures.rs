@@ -59,3 +59,18 @@ pub fn human() -> Texture {
         3.0,
     )
 }
+
+pub fn house() -> Texture {
+    Texture::new(
+        String::from("houses"),
+        224,
+        0,
+        128,
+        260,
+        20,
+        195,
+        4,
+        7,
+        1.0,
+    )
+}

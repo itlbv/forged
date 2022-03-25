@@ -3,13 +3,14 @@ use crate::{behaviors, textures, World};
 use crate::items::{Item, Stone, Wood};
 use crate::util_structs::Color;
 
-pub fn house(x: f32, y: f32, recipe: Recipe, world: &World) -> (usize, f32, f32) {
+pub fn house_from_recipe(x: f32, y: f32, recipe: Recipe, world: &World) -> (usize, f32, f32) {
     let new_entity_id = world.ecs.create_entity();
     world.ecs.add_component_to_entity(new_entity_id, Position::of(x, y, new_entity_id));
     let entry_x = x + recipe.render_shape.w / 2.0;
     let entry_y = y + recipe.render_shape.h + 0.5;
     world.ecs.add_component_to_entity(new_entity_id, Building::new(entry_x, entry_y));
     world.ecs.add_component_to_entity(new_entity_id, Storage::new());
+    world.ecs.add_component_to_entity(new_entity_id, recipe.texture);
     (new_entity_id, entry_x, entry_y)
 }
 

@@ -47,6 +47,23 @@ impl Texture {
     }
 }
 
+impl Clone for Texture {
+    fn clone(&self) -> Self {
+        Self {
+            sprite_id: self.sprite_id.clone(),
+            sprite_in_tileset_x: self.sprite_in_tileset_x,
+            sprite_in_tileset_y: self.sprite_in_tileset_y,
+            sprite_w: self.sprite_w,
+            sprite_h: self.sprite_h,
+            render_offset_x: self.render_offset_x,
+            render_offset_y: self.render_offset_y,
+            object_w_tiles: self.object_w_tiles,
+            object_h_tiles: self.object_h_tiles,
+            scale: self.scale,
+        }
+    }
+}
+
 pub struct Inventory {
     pub item_carried: i32,
     pub items_needed: Vec<usize>,
@@ -90,13 +107,17 @@ impl Storage {
 pub struct Recipe {
     pub ingredients_type_ids: HashMap<TypeId, usize>,
     pub render_shape: RenderShape,
+    pub texture: Texture,
 }
 
 impl Recipe {
-    pub fn new(ingredients_type_ids: HashMap<TypeId, usize>, render_shape: RenderShape) -> Self {
+    pub fn new(ingredients_type_ids: HashMap<TypeId, usize>,
+               render_shape: RenderShape,
+               texture: Texture) -> Self {
         Self {
             ingredients_type_ids,
             render_shape,
+            texture,
         }
     }
 }
@@ -106,6 +127,7 @@ impl Clone for Recipe {
         Self {
             ingredients_type_ids: self.ingredients_type_ids.clone(),
             render_shape: self.render_shape.clone(),
+            texture: self.texture.clone(),
         }
     }
 }

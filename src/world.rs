@@ -35,6 +35,7 @@ impl<'assets> World<'assets> {
         self.assets.load_texture("map_tileset", Path::new("assets/map/CL_MainLev.png"));
         self.assets.load_texture("crops", Path::new("assets/CL_Crops_Mining.png"));
         self.assets.load_texture("villager_woman", Path::new("assets/MiniVillagerWoman.png"));
+        self.assets.load_texture("houses", Path::new("assets/houses.png"));
 
         self.ecs.register_component::<Position>();
         self.ecs.register_component::<Name>();
