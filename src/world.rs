@@ -2,7 +2,7 @@ use std::path::Path;
 use sdl2::render::TextureCreator;
 use sdl2::video::WindowContext;
 use crate::map::Map;
-use crate::{entity_factory, InputHandler, Renderer, systems};
+use crate::{entity_factory, InputHandler, properties, Properties, Renderer, systems};
 use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
@@ -77,18 +77,20 @@ impl<'assets> World<'assets> {
         entity_factory::stone(12, 7, self);
     }
 
-    pub fn tick(&mut self, _delta_time: f32) {
+    pub fn tick(&mut self, _delta_time: f32, properties: &mut Properties) {
         self.delta_time = 0.016; // fixed framerate for debugging
 
         systems::behavior(self);
         systems::remove_entities(self);
 
-        self.renderer.clear_frame();
+        self.renderer.start_frame(properties);
         // systems::render_map(self);
         systems::render_textures(self);
         systems::render_entities(self);
         self.renderer.present_frame();
 
-        self.quit = self.input_handler.update();
+        self.input_handler.update(properties);
+
+        self.quit = properties.quit;
     }
 }

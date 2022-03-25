@@ -7,12 +7,14 @@ use sdl2::render::BlendMode::Blend;
 use sdl2::render::Texture;
 use sdl2::Sdl;
 use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::Properties;
 use self::sdl2::rect::Rect;
 
 const DEFAULT_CLEAR_FRAME_COLOR: Color = Color::RGB(50, 50, 50);
 
 pub struct Renderer {
     pub sdl_canvas: WindowCanvas,
+    pub viewport: Rect,
 }
 
 impl Renderer {
@@ -26,10 +28,14 @@ impl Renderer {
             .present_vsync()
             .build().unwrap();
         sdl_canvas.set_blend_mode(Blend);
-        Self { sdl_canvas }
+        let viewport = Rect::new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        Self { sdl_canvas, viewport }
     }
 
-    pub fn clear_frame(&mut self) {
+    pub fn start_frame(&mut self, properties: &mut Properties) {
+        self.viewport.set_x(properties.viewport_x);
+        self.viewport.set_y(properties.viewport_y);
+        self.sdl_canvas.set_viewport(self.viewport);
         self.sdl_canvas.set_draw_color(DEFAULT_CLEAR_FRAME_COLOR);
         self.sdl_canvas.clear();
     }

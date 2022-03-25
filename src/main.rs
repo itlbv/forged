@@ -23,9 +23,11 @@ mod util_structs;
 mod log;
 mod resources;
 mod textures;
+mod properties;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
+use crate::properties::Properties;
 use crate::renderer::Renderer;
 use crate::world::World;
 
@@ -38,11 +40,13 @@ fn main() {
     let mut world = World::new(renderer, input_handler, &texture_creator);
     world.setup();
 
+    let mut properties = Properties { quit: false, viewport_x: 0, viewport_y: 0 };
+
     let mut instant = Instant::now();
     while !world.quit {
         let frame_time = Instant::now() - instant;
         if frame_time < Duration::from_millis(16) { continue; }
         instant = Instant::now();
-        world.tick(frame_time.as_millis() as f32 / 1000.0)
+        world.tick(frame_time.as_millis() as f32 / 1000.0, &mut properties)
     }
 }
