@@ -36,6 +36,10 @@ pub fn remove_entities(world: &mut World) {
     }
 }
 
+pub fn input(world: &mut World) {
+    world.input_handler.update(&mut world.properties);
+}
+
 pub fn render(world: &mut World) {
     world.renderer.start_frame(&world.properties);
     render_map(world);

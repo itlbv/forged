@@ -13,7 +13,7 @@ pub struct World<'assets> {
     pub delta_time: f32,
     pub map: Map,
     pub renderer: Renderer,
-    input_handler: InputHandler,
+    pub input_handler: InputHandler,
     pub ecs: Ecs,
     pub assets: AssetManager<'assets>,
 }
@@ -80,13 +80,9 @@ impl<'assets> World<'assets> {
     pub fn tick(&mut self, _delta_time: f32) {
         self.delta_time = 0.016; // fixed framerate for debugging
 
-        systems::behavior(self);
         systems::remove_entities(self);
-
+        systems::behavior(self);
+        systems::input(self);
         systems::render(self);
-
-        self.input_handler.update(&mut self.properties);
-
-        // self.quit = properties.quit;
     }
 }
