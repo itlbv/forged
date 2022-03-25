@@ -1,8 +1,10 @@
 pub struct Properties {
     pub delta_time: f32,
     pub quit: bool,
+
     pub viewport_x: i32,
     pub viewport_y: i32,
+    pub zoom_factor: u8,
 }
 
 impl Properties {
@@ -12,6 +14,7 @@ impl Properties {
             quit: false,
             viewport_x: 0,
             viewport_y: 0,
+            zoom_factor: 50,
         }
     }
 }

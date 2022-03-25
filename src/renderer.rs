@@ -68,7 +68,7 @@ impl Renderer {
                              Rect::new(pos_x, pos_y, w, h));
     }
 
-    pub fn world_to_screen(world: f32) -> i32 {
-        (world * 50.0) as i32
+    pub fn world_to_screen(world: f32, zoom_factor: u8) -> i32 {
+        (world * zoom_factor as f32) as i32
     }
 }
