@@ -34,7 +34,7 @@ impl MoveToDestination {
         let velocity_vec = get_velocity_vec_to(
             &Vect::of(own_pos.x, own_pos.y),
             &Vect::of(dest.x, dest.y),
-            world.delta_time);
+            world.properties.delta_time);
 
         own_pos.x += velocity_vec.x;
         own_pos.y += velocity_vec.y;
@@ -77,7 +77,7 @@ impl MoveCloseToTarget {
         let velocity_vec = get_velocity_vec_to(
             &Vect::of(own_pos.x, own_pos.y),
             &destination,
-            world.delta_time);
+            world.properties.delta_time);
 
         own_pos.x += velocity_vec.x;
         own_pos.y += velocity_vec.y;

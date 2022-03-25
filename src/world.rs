@@ -10,7 +10,6 @@ use crate::resources::AssetManager;
 
 pub struct World<'assets> {
     pub properties: Properties,
-    pub delta_time: f32,
     pub map: Map,
     pub renderer: Renderer,
     pub input_handler: InputHandler,
@@ -22,7 +21,6 @@ impl<'assets> World<'assets> {
     pub fn new(renderer: Renderer, input_handler: InputHandler, texture_creator: &'assets TextureCreator<WindowContext>) -> Self {
         Self {
             properties: Properties::new(),
-            delta_time: 0.0,
             map: Map::new(),
             renderer,
             input_handler,
@@ -78,7 +76,7 @@ impl<'assets> World<'assets> {
     }
 
     pub fn tick(&mut self, _delta_time: f32) {
-        self.delta_time = 0.016; // fixed framerate for debugging
+        self.properties.delta_time = 0.016; // fixed framerate for debugging
 
         systems::remove_entities(self);
         systems::behavior(self);
