@@ -32,7 +32,7 @@ impl Renderer {
         Self { sdl_canvas, viewport }
     }
 
-    pub fn start_frame(&mut self, properties: &mut Properties) {
+    pub fn start_frame(&mut self, properties: &Properties) {
         self.viewport.set_x(properties.viewport_x);
         self.viewport.set_y(properties.viewport_y);
         self.sdl_canvas.set_viewport(self.viewport);

@@ -9,7 +9,7 @@ use crate::items::{Item, Stone, Wood};
 use crate::resources::AssetManager;
 
 pub struct World<'assets> {
-    pub quit: bool,
+    pub properties: Properties,
     pub delta_time: f32,
     pub map: Map,
     pub renderer: Renderer,
@@ -21,8 +21,8 @@ pub struct World<'assets> {
 impl<'assets> World<'assets> {
     pub fn new(renderer: Renderer, input_handler: InputHandler, texture_creator: &'assets TextureCreator<WindowContext>) -> Self {
         Self {
+            properties: Properties::new(),
             delta_time: 0.0,
-            quit: false,
             map: Map::new(),
             renderer,
             input_handler,
@@ -77,20 +77,16 @@ impl<'assets> World<'assets> {
         entity_factory::stone(12, 7, self);
     }
 
-    pub fn tick(&mut self, _delta_time: f32, properties: &mut Properties) {
+    pub fn tick(&mut self, _delta_time: f32) {
         self.delta_time = 0.016; // fixed framerate for debugging
 
         systems::behavior(self);
         systems::remove_entities(self);
 
-        self.renderer.start_frame(properties);
-        // systems::render_map(self);
-        systems::render_textures(self);
-        systems::render_entities(self);
-        self.renderer.present_frame();
+        systems::render(self);
 
-        self.input_handler.update(properties);
+        self.input_handler.update(&mut self.properties);
 
-        self.quit = properties.quit;
+        // self.quit = properties.quit;
     }
 }

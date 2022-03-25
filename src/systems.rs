@@ -36,6 +36,14 @@ pub fn remove_entities(world: &mut World) {
     }
 }
 
+pub fn render(world: &mut World) {
+    world.renderer.start_frame(&world.properties);
+    render_map(world);
+    render_textures(world);
+    render_entities(world);
+    world.renderer.present_frame();
+}
+
 pub fn render_textures(world: &mut World) {
     let textures = world.ecs.borrow_component_vec::<Texture>();
     let positions = world.ecs.borrow_component_vec::<Position>();

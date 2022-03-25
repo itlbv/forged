@@ -40,13 +40,11 @@ fn main() {
     let mut world = World::new(renderer, input_handler, &texture_creator);
     world.setup();
 
-    let mut properties = Properties { quit: false, viewport_x: 0, viewport_y: 0 };
-
     let mut instant = Instant::now();
-    while !world.quit {
+    while !world.properties.quit {
         let frame_time = Instant::now() - instant;
         if frame_time < Duration::from_millis(16) { continue; }
         instant = Instant::now();
-        world.tick(frame_time.as_millis() as f32 / 1000.0, &mut properties)
+        world.tick(frame_time.as_millis() as f32 / 1000.0)
     }
 }
