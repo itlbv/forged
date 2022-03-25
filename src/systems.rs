@@ -123,10 +123,10 @@ pub fn render_map(world: &mut World) {
     }
 
     for x in 0..=MAP_WIDTH { // vertical lines
-        let x_1: i32 = 50 * x * MAP_TILE_SIZE as i32;
+        let x_1: i32 = world.properties.zoom_factor as i32 * x * MAP_TILE_SIZE as i32;
         let y_1: i32 = 0;
         let x_2: i32 = x_1;
-        let y_2: i32 = 50 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
+        let y_2: i32 = world.properties.zoom_factor as i32 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
         world.renderer.render_line(x_1 + world.properties.camera_x,
                                    y_1 + world.properties.camera_y,
                                    x_2 + world.properties.camera_x,
@@ -135,8 +135,8 @@ pub fn render_map(world: &mut World) {
 
     for y in 0..=MAP_HEIGHT { // horizontal lines
         let x_1: i32 = 0;
-        let y_1: i32 = 50 * y * MAP_TILE_SIZE as i32;
-        let x_2: i32 = 50 * MAP_WIDTH * MAP_TILE_SIZE as i32;
+        let y_1: i32 = world.properties.zoom_factor as i32 * y * MAP_TILE_SIZE as i32;
+        let x_2: i32 = world.properties.zoom_factor as i32 * MAP_WIDTH * MAP_TILE_SIZE as i32;
         let y_2: i32 = y_1;
         world.renderer.render_line(x_1 + world.properties.camera_x,
                                    y_1 + world.properties.camera_y,
