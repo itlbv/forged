@@ -24,8 +24,8 @@ impl InputHandler {
                 Event::KeyDown { keycode: Some(Keycode::S), .. } => {properties.camera_y -= 20}
                 Event::KeyDown { keycode: Some(Keycode::A), .. } => {properties.camera_x += 20}
                 Event::KeyDown { keycode: Some(Keycode::D), .. } => {properties.camera_x -= 20}
-                Event::KeyDown { keycode: Some(Keycode::Z), .. } => {properties.zoom_factor -= 10}
-                Event::KeyDown { keycode: Some(Keycode::X), .. } => {properties.zoom_factor += 10}
+                Event::KeyDown { keycode: Some(Keycode::Z), .. } => {properties.zoom_factor -= 5}
+                Event::KeyDown { keycode: Some(Keycode::X), .. } => {properties.zoom_factor += 5}
                 _ => {}
             }
         }
