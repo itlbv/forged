@@ -116,10 +116,10 @@ pub fn render_map(world: &mut World) {
             color.r, color.g, color.b, color.a);
         world.renderer.render_dot(x + world.properties.camera_x, y + world.properties.camera_y); // true position
 
-        world.renderer.render_texture(
-            world.assets.borrow_texture("map_tileset"),
-            tile.tileset_x, tile.tileset_y, tile.tileset_w, tile.tileset_h,
-            x + world.properties.camera_x, y + world.properties.camera_y, world.properties.zoom_factor as u32, world.properties.zoom_factor as u32);
+        // world.renderer.render_texture(
+        //     world.assets.borrow_texture("map_tileset"),
+        //     tile.tileset_x, tile.tileset_y, tile.tileset_w, tile.tileset_h,
+        //     x + world.properties.camera_x, y + world.properties.camera_y, world.properties.zoom_factor as u32, world.properties.zoom_factor as u32);
     }
 
     for x in 0..=MAP_WIDTH { // vertical lines
