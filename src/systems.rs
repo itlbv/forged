@@ -87,7 +87,6 @@ pub fn render_entities(world: &mut World) {
         let y = Renderer::world_to_screen(pos.y + shape.offset_y, world.properties.zoom_factor);
         let w = Renderer::world_to_screen(shape.w, world.properties.zoom_factor);
         let h = Renderer::world_to_screen(shape.h, world.properties.zoom_factor);
-        //world.renderer.render_rect(x - w / 2, y - h / 2, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
         world.renderer.render_rect(x + world.properties.camera_x, y + world.properties.camera_y, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
         let true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
         let true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
@@ -114,7 +113,6 @@ pub fn render_map(world: &mut World) {
             tile_size,
             tile_size,
             color.r, color.g, color.b, color.a);
-        world.renderer.render_dot(x + world.properties.camera_x, y + world.properties.camera_y); // true position
 
         // world.renderer.render_texture(
         //     world.assets.borrow_texture("map_tileset"),
@@ -122,25 +120,25 @@ pub fn render_map(world: &mut World) {
         //     x + world.properties.camera_x, y + world.properties.camera_y, world.properties.zoom_factor as u32, world.properties.zoom_factor as u32);
     }
 
-    for x in 0..=MAP_WIDTH { // vertical lines
-        let x_1: i32 = world.properties.zoom_factor as i32 * x * MAP_TILE_SIZE as i32;
-        let y_1: i32 = 0;
-        let x_2: i32 = x_1;
-        let y_2: i32 = world.properties.zoom_factor as i32 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
-        world.renderer.render_line(x_1 + world.properties.camera_x,
-                                   y_1 + world.properties.camera_y,
-                                   x_2 + world.properties.camera_x,
-                                   y_2 + world.properties.camera_y);
-    }
-
-    for y in 0..=MAP_HEIGHT { // horizontal lines
-        let x_1: i32 = 0;
-        let y_1: i32 = world.properties.zoom_factor as i32 * y * MAP_TILE_SIZE as i32;
-        let x_2: i32 = world.properties.zoom_factor as i32 * MAP_WIDTH * MAP_TILE_SIZE as i32;
-        let y_2: i32 = y_1;
-        world.renderer.render_line(x_1 + world.properties.camera_x,
-                                   y_1 + world.properties.camera_y,
-                                   x_2 + world.properties.camera_x,
-                                   y_2 + world.properties.camera_y);
-    }
+    // for x in 0..=MAP_WIDTH { // vertical lines
+    //     let x_1: i32 = world.properties.zoom_factor as i32 * x * MAP_TILE_SIZE as i32;
+    //     let y_1: i32 = 0;
+    //     let x_2: i32 = x_1;
+    //     let y_2: i32 = world.properties.zoom_factor as i32 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
+    //     world.renderer.render_line(x_1 + world.properties.camera_x,
+    //                                y_1 + world.properties.camera_y,
+    //                                x_2 + world.properties.camera_x,
+    //                                y_2 + world.properties.camera_y);
+    // }
+    //
+    // for y in 0..=MAP_HEIGHT { // horizontal lines
+    //     let x_1: i32 = 0;
+    //     let y_1: i32 = world.properties.zoom_factor as i32 * y * MAP_TILE_SIZE as i32;
+    //     let x_2: i32 = world.properties.zoom_factor as i32 * MAP_WIDTH * MAP_TILE_SIZE as i32;
+    //     let y_2: i32 = y_1;
+    //     world.renderer.render_line(x_1 + world.properties.camera_x,
+    //                                y_1 + world.properties.camera_y,
+    //                                x_2 + world.properties.camera_x,
+    //                                y_2 + world.properties.camera_y);
+    // }
 }

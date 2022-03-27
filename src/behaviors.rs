@@ -30,12 +30,12 @@ pub fn build_house(owner_id: usize) -> Sequence {
         Box::new(FindTilesAndPlaceInvisibleBuilding::new(owner_id)), //sets main target
         Box::new(MoveToDestination::new(owner_id)),
         Box::new(MakeBuildingTransparent::new(owner_id)),
-        Box::new(deliver_ingredients(owner_id)),
+        Box::new(collect_and_deliver_ingredients(owner_id)),
         Box::new(FinishBuilding::new(owner_id)),
     ])
 }
 
-pub fn deliver_ingredients(owner_id: usize) -> DoUntilFailure {
+pub fn collect_and_deliver_ingredients(owner_id: usize) -> DoUntilFailure {
     DoUntilFailure::of(vec![
         Box::new(ChooseIngredient::new(owner_id)),
         Box::new(MoveCloseToTarget::new(owner_id)),
