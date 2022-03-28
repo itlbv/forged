@@ -1,4 +1,6 @@
 pub struct Properties {
+    pub player_id: usize,
+
     pub delta_time: f32,
     pub quit: bool,
 
@@ -10,6 +12,7 @@ pub struct Properties {
 impl Properties {
     pub fn new() -> Self {
         Self {
+            player_id: 0,
             delta_time: 0.0,
             quit: false,
             camera_x: 0,

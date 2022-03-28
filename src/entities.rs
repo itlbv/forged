@@ -60,3 +60,13 @@ pub fn human(x: f32, y: f32, name: &str, world: &World) {
     world.ecs.add_component_to_entity::<Inventory>(new_entity_id, Inventory::new());
     world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::human());
 }
+
+pub fn player(x: f32, y: f32, world: &World) -> usize {
+    let new_entity_id = world.ecs.create_entity();
+
+    world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
+    world.ecs.add_component_to_entity::<RenderShape>(new_entity_id, RenderShape::new_with_standard_offset(0.49, 0.49, Color::new(0, 0, 150, 255))); // blue
+    world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::human());
+
+    new_entity_id
+}

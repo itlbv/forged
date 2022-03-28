@@ -53,6 +53,8 @@ impl<'assets> World<'assets> {
         self.ecs.register_component::<Building>();
         self.ecs.register_component::<Texture>();
 
+        self.properties.player_id = entities::player(12.5, 12.5, self);
+
         entities::human(1.5, 1.5, "Alice", self);
 
         entities::food(5, 8, self);
