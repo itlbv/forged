@@ -6,7 +6,7 @@ use crate::btree::Status::{RUNNING, SUCCESS};
 use crate::constants::MOB_SPEED;
 
 pub struct MoveToDestination {
-    owner_id: usize,
+    own_id: usize,
 }
 
 impl BehaviorTreeNode for MoveToDestination {
@@ -16,18 +16,21 @@ impl BehaviorTreeNode for MoveToDestination {
 }
 
 impl MoveToDestination {
-    pub fn new(owner_id: usize) -> Self {
-        Self { owner_id }
+    pub fn new(own_id: usize) -> Self {
+        Self { own_id }
     }
 
     fn move_to(&self, world: &World) -> Status {
         let destinations = world.ecs.borrow_component_vec::<Destination>();
-        let dest = destinations.get(self.owner_id).unwrap().as_ref().unwrap();
+        let dest = destinations.get(self.own_id).unwrap().as_ref().unwrap();
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
-        let own_pos = positions.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+        let own_pos = positions.get_mut(self.own_id).unwrap().as_mut().unwrap();
 
-        if physics::distance_between(&Vect::of(dest.x, dest.y), &Vect::of(own_pos.x, own_pos.y)) < 0.02 {
+        if physics::distance_between(
+            &Vect::of(dest.x, dest.y),
+            &Vect::of(own_pos.x, own_pos.y),
+        ) < 0.02 {
             return SUCCESS;
         }
 
@@ -43,7 +46,7 @@ impl MoveToDestination {
 }
 
 pub struct MoveCloseToTarget {
-    owner_id: usize,
+    own_id: usize,
 }
 
 impl BehaviorTreeNode for MoveCloseToTarget {
@@ -53,24 +56,28 @@ impl BehaviorTreeNode for MoveCloseToTarget {
 }
 
 impl MoveCloseToTarget {
-    pub fn new(owner_id: usize) -> Self {
-        Self { owner_id }
+    pub fn new(own_id: usize) -> Self {
+        Self { own_id }
     }
 
     fn move_close(&self, world: &World) -> Status {
         let targets = world.ecs.borrow_component_vec::<Target>();
-        let target_id = targets.get(self.owner_id).unwrap().as_ref().unwrap().target_id;
+        let target_id = targets.get(self.own_id).unwrap().as_ref().unwrap().target_id;
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
+        let target_pos = positions.get(target_id).unwrap().as_ref().unwrap();
 
         let destination = Vect::of(
-            positions.get(target_id).unwrap().as_ref().unwrap().x,
-            positions.get(target_id).unwrap().as_ref().unwrap().y,
+            target_pos.x,
+            target_pos.y,
         );
 
-        let own_pos = positions.get_mut(self.owner_id).unwrap().as_mut().unwrap();
+        let own_pos = positions.get_mut(self.own_id).unwrap().as_mut().unwrap();
 
-        if physics::distance_between(&destination, &Vect::of(own_pos.x, own_pos.y)) < 0.5 {
+        if physics::distance_between(
+            &destination,
+            &Vect::of(own_pos.x, own_pos.y),
+        ) < 0.5 {
             return SUCCESS;
         }
 
