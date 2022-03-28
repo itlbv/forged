@@ -1,4 +1,4 @@
-use crate::{entity_factory, log, util, World};
+use crate::{entities, log, util, World};
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::components::{MainTarget, Destination, Recipe, Position, RenderShape, Building};
@@ -110,7 +110,7 @@ impl FindTilesAndPlaceInvisibleBuilding {
         }
 
         util::claim_tiles(x, y, render_shape.w as i32, render_shape.h as i32, &world.map);
-        let (house_id, house_entry_x, house_entry_y) = entity_factory::house_from_recipe(x as f32, y as f32, recipe.clone(), world);
+        let (house_id, house_entry_x, house_entry_y) = entities::house_from_recipe(x as f32, y as f32, recipe.clone(), world);
 
         world.ecs.add_component_to_entity(self.own_id, Destination::new(house_entry_x, house_entry_y));
         world.ecs.add_component_to_entity(self.own_id, MainTarget::new(house_id));

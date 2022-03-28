@@ -12,7 +12,7 @@ mod tasks;
 mod constants;
 mod world;
 mod behaviors;
-mod entity_factory;
+mod entities;
 mod recipes;
 mod items;
 mod move_tasks;

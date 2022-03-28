@@ -2,7 +2,7 @@ use std::path::Path;
 use sdl2::render::TextureCreator;
 use sdl2::video::WindowContext;
 use crate::map::Map;
-use crate::{entity_factory, InputHandler, properties, Properties, Renderer, systems};
+use crate::{entities, InputHandler, properties, Properties, Renderer, systems};
 use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
@@ -53,26 +53,26 @@ impl<'assets> World<'assets> {
         self.ecs.register_component::<Building>();
         self.ecs.register_component::<Texture>();
 
-        entity_factory::human(1.5, 1.5, "Alice", self);
+        entities::human(1.5, 1.5, "Alice", self);
 
-        entity_factory::food(5, 8, self);
-        entity_factory::food(4, 1, self);
-        entity_factory::food(2, 5, self);
-        entity_factory::food(9, 6, self);
-        entity_factory::food(6, 6, self);
-        entity_factory::food(5, 7, self);
+        entities::food(5, 8, self);
+        entities::food(4, 1, self);
+        entities::food(2, 5, self);
+        entities::food(9, 6, self);
+        entities::food(6, 6, self);
+        entities::food(5, 7, self);
 
-        entity_factory::tree(3, 4, self);
-        entity_factory::tree(7, 1, self);
-        entity_factory::tree(8, 2, self);
-        entity_factory::tree(1, 3, self);
-        entity_factory::tree(3, 2, self);
-        entity_factory::tree(5, 3, self);
-        entity_factory::tree(6, 2, self);
+        entities::tree(3, 4, self);
+        entities::tree(7, 1, self);
+        entities::tree(8, 2, self);
+        entities::tree(1, 3, self);
+        entities::tree(3, 2, self);
+        entities::tree(5, 3, self);
+        entities::tree(6, 2, self);
 
-        entity_factory::stone(13, 6, self);
-        entity_factory::stone(14, 9, self);
-        entity_factory::stone(12, 7, self);
+        entities::stone(13, 6, self);
+        entities::stone(14, 9, self);
+        entities::stone(12, 7, self);
     }
 
     pub fn tick(&mut self, _delta_time: f32) {
