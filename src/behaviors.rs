@@ -13,6 +13,10 @@ pub fn _find_food(owner_id: usize) -> Sequence {
     ])
 }
 
+pub fn test_path(owner_id: usize) -> MoveToDestination {
+    MoveToDestination::new(owner_id)
+}
+
 pub fn _test_building(owner_id: usize) -> Sequence {
     Sequence::of(vec![
         Box::new(SetRecipe::new(owner_id, recipes::house())),

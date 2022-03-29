@@ -11,13 +11,17 @@ pub struct MoveToDestination {
 
 impl BehaviorTreeNode for MoveToDestination {
     fn run(&mut self, world: &World) -> Status {
-        self.move_to(world)
+        self.path(world)
     }
 }
 
 impl MoveToDestination {
     pub fn new(own_id: usize) -> Self {
         Self { own_id }
+    }
+
+    fn path(&self, world: &World) -> Status {
+        SUCCESS
     }
 
     fn move_to(&self, world: &World) -> Status {

@@ -51,7 +51,7 @@ pub fn food(x: i32, y: i32, world: &World) {
 pub fn human(x: f32, y: f32, name: &str, world: &World) {
     let new_entity_id = world.ecs.create_entity();
 
-    let behavior = Behavior { behavior_tree: Box::new(behaviors::build_house(new_entity_id)) };
+    let behavior = Behavior { behavior_tree: Box::new(behaviors::test_path(new_entity_id)) };
 
     world.ecs.add_component_to_entity::<Position>(new_entity_id, Position::of(x, y, new_entity_id));
     world.ecs.add_component_to_entity::<Name>(new_entity_id, Name { v: name.to_string() });

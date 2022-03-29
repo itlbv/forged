@@ -56,7 +56,7 @@ impl<'assets> World<'assets> {
         self.properties.player_id = entities::player(12.5, 12.5, self);
 
         entities::human(1.5, 1.5, "Alice", self);
-
+        /*
         entities::food(5, 8, self);
         entities::food(4, 1, self);
         entities::food(2, 5, self);
@@ -75,6 +75,7 @@ impl<'assets> World<'assets> {
         entities::stone(13, 6, self);
         entities::stone(14, 9, self);
         entities::stone(12, 7, self);
+        */
     }
 
     pub fn tick(&mut self, _delta_time: f32) {
