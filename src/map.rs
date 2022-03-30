@@ -42,6 +42,14 @@ impl Map {
 pub trait MapTilesVec {
     fn borrow_tile(&self, x: i32, y: i32) -> &MapTile;
     fn borrow_tile_mut(&mut self, x: i32, y: i32) -> &mut MapTile;
+    fn borrow_orthogonal_neighbours(&self, tile: &MapTile) -> Vec<&MapTile> {
+        let mut vec = vec![];
+        if tile.x - 1 > 0 { vec.push(self.borrow_tile(tile.x - 1, tile.y)); }
+        if tile.y - 1 > 0 { vec.push(self.borrow_tile(tile.x, tile.y - 1)); }
+        if tile.x + 1 < MAP_WIDTH { vec.push(self.borrow_tile(tile.x + 1, tile.y)); }
+        if tile.y + 1 < MAP_HEIGHT { vec.push(self.borrow_tile(tile.x, tile.y + 1)); }
+        vec
+    }
     fn iterator(&self) -> Iter<MapTile>;
 }
 
@@ -62,7 +70,7 @@ impl MapTilesVec for Vec<MapTile> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Eq, PartialEq, Hash)]
 pub struct MapTile {
     pub x: i32,
     pub y: i32,

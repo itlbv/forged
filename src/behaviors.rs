@@ -13,20 +13,6 @@ pub fn _find_food(owner_id: usize) -> Sequence {
     ])
 }
 
-pub fn test_path(owner_id: usize) -> MoveToDestination {
-    MoveToDestination::new(owner_id)
-}
-
-pub fn _test_building(owner_id: usize) -> Sequence {
-    Sequence::of(vec![
-        Box::new(SetRecipe::new(owner_id, recipes::house())),
-        Box::new(
-            DoUntilFailure::of(vec![
-                Box::new(FindTilesAndPlaceInvisibleBuilding::new(owner_id))
-            ])),
-    ])
-}
-
 pub fn build_house(owner_id: usize) -> Sequence {
     Sequence::of(vec![
         Box::new(SetRecipe::new(owner_id, recipes::house())),
@@ -52,4 +38,18 @@ pub fn collect_and_deliver_ingredients(owner_id: usize) -> DoUntilFailure {
 
 pub fn do_nothing() -> DoNothingTask {
     DoNothingTask {}
+}
+
+pub fn test_path(owner_id: usize) -> MoveToDestination {
+    MoveToDestination::new(owner_id)
+}
+
+pub fn _test_building(owner_id: usize) -> Sequence {
+    Sequence::of(vec![
+        Box::new(SetRecipe::new(owner_id, recipes::house())),
+        Box::new(
+            DoUntilFailure::of(vec![
+                Box::new(FindTilesAndPlaceInvisibleBuilding::new(owner_id))
+            ])),
+    ])
 }

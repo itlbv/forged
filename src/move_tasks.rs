@@ -1,9 +1,13 @@
+use std::collections::HashMap;
+use std::env::current_exe;
 use crate::btree::{BehaviorTreeNode, Status};
-use crate::components::{Position, Target, Destination};
+use crate::components::{Position, Target, Destination, RenderShape};
 use crate::physics::{Vect};
 use crate::{physics, World};
 use crate::btree::Status::{RUNNING, SUCCESS};
 use crate::constants::MOB_SPEED;
+use crate::map::MapTile;
+use crate::util_structs::Color;
 
 pub struct MoveToDestination {
     own_id: usize,
@@ -21,6 +25,45 @@ impl MoveToDestination {
     }
 
     fn path(&self, world: &World) -> Status {
+        let map_tiles = world.map.borrow_tiles();
+        let start_tile = map_tiles.borrow_tile(1, 1);
+        let dest_tile = map_tiles.borrow_tile(15, 15);
+
+        let mut frontier = vec![start_tile];
+        let mut came_from: HashMap<&MapTile, Option<&MapTile>> = Default::default();
+        came_from.insert(start_tile, None);
+        while !frontier.is_empty() {
+            let current_tile = frontier.remove(0);
+
+            if current_tile == dest_tile { break; }
+
+            let neighbours = map_tiles.borrow_orthogonal_neighbours(current_tile);
+            for i in 0..neighbours.len() {
+                if !came_from.contains_key(neighbours[i]) {
+                    frontier.push(neighbours[i]);
+                    came_from.insert(neighbours[i], Some(current_tile));
+                }
+            }
+        }
+
+        let mut current_tile = dest_tile;
+        let mut path = vec![];
+        while current_tile != start_tile {
+            path.push(current_tile);
+            current_tile = came_from.get(current_tile).unwrap().unwrap();
+        }
+
+        // println!("draw path");
+        // for i in 0..path.len() {
+        //     let path_node_id = world.ecs.create_entity();
+        //     world.ecs.add_component_to_entity::<Position>(path_node_id,
+        //                                                   Position::of(path[i].x as f32 + 0.5, path[i].y as f32 + 0.5, path_node_id));
+        //     world.ecs.add_component_to_entity::<RenderShape>(path_node_id,
+        //                                                      RenderShape::new_with_standard_offset(
+        //                                                          0.4, 0.4,
+        //                                                          Color::new(50, 50, 50, 255)));
+        // }
+
         SUCCESS
     }
 
