@@ -22,7 +22,7 @@ pub fn tree(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<Wood>(new_entity_id, Wood {});
     world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::tree());
 
-    world.map.set_tile_occupied(x, y, true);
+    world.map.set_tile_passable(x, y, true);
 }
 
 pub fn stone(x: i32, y: i32, world: &World) {
@@ -33,7 +33,7 @@ pub fn stone(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<Stone>(new_entity_id, Stone {});
     world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::stone());
 
-    world.map.set_tile_occupied(x, y, true);
+    world.map.set_tile_passable(x, y, true);
 }
 
 pub fn food(x: i32, y: i32, world: &World) {
@@ -45,7 +45,7 @@ pub fn food(x: i32, y: i32, world: &World) {
     world.ecs.add_component_to_entity::<Texture>(new_entity_id, textures::food());
 
 
-    world.map.set_tile_occupied(x, y, true);
+    world.map.set_tile_passable(x, y, true);
 }
 
 pub fn human(x: f32, y: f32, name: &str, world: &World) {

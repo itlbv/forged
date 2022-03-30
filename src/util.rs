@@ -8,8 +8,7 @@ pub fn claim_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, map: &M
     for y in 0..h {
         for x in 0..w {
             let mut tile = map_tiles.borrow_tile_mut(start_tile_x + x, start_tile_y + y);
-            tile.occupied = true;
-            tile.walkable = false;
+            tile.passable = false;
         }
     }
 }
@@ -58,7 +57,7 @@ fn is_tile_suitable_for_building(start_tile_x: i32, start_tile_y: i32, w: i32, h
             }
 
             let tile = map_tiles.borrow_tile(new_x, new_y);
-            if !tile.walkable || tile.occupied {
+            if !tile.passable {
                 return false;
             }
         }

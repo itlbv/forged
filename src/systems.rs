@@ -101,7 +101,7 @@ pub fn render_map(world: &mut World) {
         let tile_size = Renderer::world_to_screen(MAP_TILE_SIZE, world.properties.zoom_factor);
 
         let color: Color;
-        if tile.occupied {
+        if !tile.passable {
             color = Color::new(10, 10, 10, 255);
         } else {
             color = Color::new(tile.color.r, tile.color.g, tile.color.b, tile.color.a);

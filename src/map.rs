@@ -24,10 +24,10 @@ impl Map {
         Box::new(map_tiles)
     }
 
-    pub fn set_tile_occupied(&self, x: i32, y: i32, occupied: bool) {
+    pub fn set_tile_passable(&self, x: i32, y: i32, passable: bool) {
         let mut tiles = self.borrow_tiles_mut();
         let mut tile = tiles.borrow_tile_mut(x, y);
-        tile.occupied = occupied;
+        tile.passable = passable;
     }
 
     pub fn borrow_tiles(&self) -> Ref<dyn MapTilesVec> {
@@ -74,8 +74,7 @@ impl MapTilesVec for Vec<MapTile> {
 pub struct MapTile {
     pub x: i32,
     pub y: i32,
-    pub walkable: bool,
-    pub occupied: bool,
+    pub passable: bool,
     pub color: Color,
     pub tileset_x: i32,
     pub tileset_y: i32,
@@ -84,12 +83,11 @@ pub struct MapTile {
 }
 
 impl MapTile {
-    fn new(x: i32, y: i32, walkable: bool, color: Color) -> Self {
+    fn new(x: i32, y: i32, passable: bool, color: Color) -> Self {
         Self {
             x,
             y,
-            walkable,
-            occupied: false,
+            passable,
             color,
             tileset_x: 32,
             tileset_y: 32,
