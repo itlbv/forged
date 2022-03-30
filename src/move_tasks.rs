@@ -39,6 +39,7 @@ impl MoveToDestination {
 
             let neighbours = map_tiles.borrow_orthogonal_neighbours(current_tile);
             for i in 0..neighbours.len() {
+                if !neighbours[i].passable { break; }
                 if !came_from.contains_key(neighbours[i]) {
                     frontier.push(neighbours[i]);
                     came_from.insert(neighbours[i], Some(current_tile));
