@@ -1,10 +1,19 @@
 use std::any::TypeId;
 use std::collections::HashMap;
+use crate::behaviors;
 use crate::btree::BehaviorTreeNode;
 use crate::util_structs::Color;
 
 pub struct Behavior {
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
+}
+
+impl Behavior {
+    pub fn new_with_initial_behavior(behavior_tree: Box<dyn BehaviorTreeNode>) -> Self {
+        Self {
+            behavior_tree,
+        }
+    }
 }
 
 pub struct Texture {
