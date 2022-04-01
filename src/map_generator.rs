@@ -8,9 +8,10 @@ type NoiseArray = [[f32; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
 
 pub fn place_trees(world: &World) {
     let white_noise = white_noise();
-    let smooth_noise = smooth_noise(&white_noise, 1);
+    let smooth_noise = add_smooth_noise(&white_noise, 1);
+    let perlin_noise = add_perlin_noise(&white_noise);
 
-    render_noise(&smooth_noise, world);
+    render_noise(&perlin_noise, world);
 }
 
 fn white_noise() -> NoiseArray {
@@ -23,36 +24,86 @@ fn white_noise() -> NoiseArray {
     noise
 }
 
-fn smooth_noise(noise: &NoiseArray, octave: usize) -> NoiseArray {
+fn add_smooth_noise(base_noise: &NoiseArray, octave: usize) -> NoiseArray {
     let mut smooth_noise = [[0.0; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
 
     let sample_period = 1 << octave;
     let sample_frequency = 1.0 / sample_period as f32;
 
-    for y in 0..noise[0].len() {
+    let height = base_noise[0].len();
+    let width = base_noise.len();
+
+    for y in 0..height {
         //calculate the horizontal sampling indices
         let sample_y_0 = (y / sample_period) * sample_period;
-        let sample_y_1 = (sample_y_0 + sample_period) / noise[0].len();
+        let sample_y_1 = (sample_y_0 + sample_period) / height;
         let horizontal_blend = (y - sample_y_0) as f32 * sample_frequency;
 
-        for x in 0..noise.len() {
+        for x in 0..width {
             //calculate the vertical sampling indices
             let sample_x_0 = (x / sample_period) * sample_period;
-            let sample_x_1 = (sample_x_0 + sample_period) / noise.len();
+            let sample_x_1 = (sample_x_0 + sample_period) / width;
             let vertical_blend = (x - sample_x_0) as f32 * sample_frequency;
 
             //blend the top two corners
-            let top = interpolate(noise[sample_x_0][sample_y_0],
-                                  noise[sample_x_1][sample_y_0], horizontal_blend);
+            let top = interpolate(base_noise[sample_x_0][sample_y_0],
+                                  base_noise[sample_x_1][sample_y_0], horizontal_blend);
 
             //blend the bottom two corners
-            let bottom = interpolate(noise[sample_x_0][sample_y_1],
-                                     noise[sample_x_1][sample_y_1], horizontal_blend);
+            let bottom = interpolate(base_noise[sample_x_0][sample_y_1],
+                                     base_noise[sample_x_1][sample_y_1], horizontal_blend);
             //final blend
             smooth_noise[x][y] = interpolate(top, bottom, vertical_blend);
         }
     }
     smooth_noise
+}
+
+
+fn add_perlin_noise(base_noise: &NoiseArray) -> NoiseArray {
+    const OCTAVE_COUNT: usize = 8;
+    let persistence = 0.5;
+
+    //generate smooth noises
+    let mut smooth_noises = [[[0.0; 160]; 200]; OCTAVE_COUNT];
+    for i in 0..OCTAVE_COUNT {
+        smooth_noises[i] = add_smooth_noise(base_noise, i);
+    }
+
+    // float[][] perlinNoise = GetEmptyArray<float>(width, height); //an array of floats initialised to 0
+    let mut perlin_noise = [[0.0; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
+
+    // float amplitude = 1.0f;
+    let mut amplitude = 1.0;
+    // float totalAmplitude = 0.0f;
+    let mut total_amplitude = 0.0;
+
+    let height = base_noise[0].len();
+    let width = base_noise.len();
+
+    //blend noise together
+    let mut octave = OCTAVE_COUNT - 1;
+    while octave >= 0 {
+        amplitude *= persistence;
+        total_amplitude += amplitude;
+
+        for y in 0..height {
+            for x in 0..width {
+                perlin_noise[x][y] += smooth_noises[octave][x][y] * amplitude;
+            }
+        }
+
+        octave -= 1;
+        if octave == 0 { break; }
+    }
+    //normalisation
+    for y in 0..height {
+        for x in 0..width {
+            perlin_noise[x][y] /= total_amplitude;
+        }
+    }
+
+    perlin_noise
 }
 
 fn interpolate(x0: f32, x1: f32, alpha: f32) -> f32 {
