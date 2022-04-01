@@ -49,7 +49,7 @@ pub fn input(world: &mut World) {
 
 pub fn render(world: &mut World) {
     world.renderer.start_frame(&world.properties);
-    render_map(world);
+    // render_map(world);
     // render_textures(world);
     render_entities(world);
     world.renderer.present_frame();
@@ -97,7 +97,7 @@ pub fn render_entities(world: &mut World) {
         world.renderer.render_rect(x + world.properties.camera_x, y + world.properties.camera_y, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
         let true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
         let true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
-        world.renderer.render_dot(true_pos_x + world.properties.camera_x, true_pos_y + world.properties.camera_y); // true position
+        // world.renderer.render_dot(true_pos_x + world.properties.camera_x, true_pos_y + world.properties.camera_y); // true position
     }
 }
 
@@ -126,7 +126,10 @@ pub fn render_map(world: &mut World) {
         //     tile.tileset_x, tile.tileset_y, tile.tileset_w, tile.tileset_h,
         //     x + world.properties.camera_x, y + world.properties.camera_y, world.properties.zoom_factor as u32, world.properties.zoom_factor as u32);
     }
+    // render_map_grid(world);
+}
 
+pub fn render_map_grid(world: &mut World) {
     for x in 0..=MAP_WIDTH { // vertical lines
         let x_1: i32 = world.properties.zoom_factor as i32 * x * MAP_TILE_SIZE as i32;
         let y_1: i32 = 0;

@@ -2,7 +2,7 @@ use std::path::Path;
 use sdl2::render::TextureCreator;
 use sdl2::video::WindowContext;
 use crate::map::Map;
-use crate::{entities, InputHandler, properties, Properties, recipes, Renderer, systems};
+use crate::{entities, InputHandler, map_generator, properties, Properties, recipes, Renderer, systems};
 use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
@@ -53,6 +53,9 @@ impl<'assets> World<'assets> {
         self.ecs.register_component::<Building>();
         self.ecs.register_component::<Texture>();
 
+        map_generator::place_trees(self);
+
+        /*
         self.properties.player_id = entities::player(12.5, 12.5, self);
 
         entities::human(1.5, 1.5, "Alice", self);
@@ -64,7 +67,6 @@ impl<'assets> World<'assets> {
         entities::food(6, 6, self);
         entities::food(5, 7, self);
 
-        /*
         entities::tree(3, 4, self);
         entities::tree(7, 1, self);
         entities::tree(8, 2, self);

@@ -25,6 +25,7 @@ mod resources;
 mod textures;
 mod properties;
 mod needs;
+mod map_generator;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
