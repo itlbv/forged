@@ -10,15 +10,22 @@ pub fn behavior(world: &World) {
         let b = behavior.as_mut();
         match b {
             None => { continue; }
-            Some(_) => { run_behavior_tree(b.unwrap(), world) }
-        };
-    }
-}
+            Some(_) => {
+                let behavior = b.unwrap();
+                let needs = &mut behavior.needs;
+                for need in needs.iter_mut() {
+                    need.evaluate();
+                }
 
-fn run_behavior_tree(behavior: &mut Behavior, world: &World) {
-    let status = behavior.behavior_tree.run(behavior.owner, world);
-    if status == SUCCESS || status == FAILURE {
-        behavior.behavior_tree = Box::new(behaviors::do_nothing());
+                let mut priority_need_idx = 0;
+                for i in 0..needs.len() {
+                    if needs[i].get_value() > needs[priority_need_idx].get_value() {
+                        priority_need_idx = i;
+                    }
+                }
+                needs[priority_need_idx].run_behavior(behavior.owner, world);
+            }
+        };
     }
 }
 

@@ -24,6 +24,7 @@ mod log;
 mod resources;
 mod textures;
 mod properties;
+mod needs;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;

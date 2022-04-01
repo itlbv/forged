@@ -2,25 +2,12 @@ use std::any::TypeId;
 use std::collections::HashMap;
 use crate::behaviors;
 use crate::btree::BehaviorTreeNode;
+use crate::needs::{Hunger, Need};
 use crate::util_structs::Color;
-
-pub struct Need {
-    pub active: bool,
-    pub behavior: Box<dyn BehaviorTreeNode>,
-}
-
-impl Need {
-    pub fn hunger() -> Self {
-        Self {
-            active: false,
-            behavior: Box::new(behaviors::find_food())
-        }
-    }
-}
 
 pub struct Behavior {
     pub owner: usize,
-    pub needs: Vec<Need>,
+    pub needs: Vec<Box<dyn Need>>,
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
 }
 
@@ -29,7 +16,9 @@ impl Behavior {
         Self {
             behavior_tree,
             owner,
-            needs: vec![],
+            needs: vec![
+                Box::new(Hunger::new()),
+            ],
         }
     }
 }
