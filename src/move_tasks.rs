@@ -16,13 +16,37 @@ pub struct MoveToDestination {
 
 impl BehaviorTreeNode for MoveToDestination {
     fn run(&mut self, world: &World) -> Status {
-        self.path(world)
+        self.move_to(world)
     }
 }
 
 impl MoveToDestination {
     pub fn new(own_id: usize) -> Self {
         Self { own_id, path_drawn: false }
+    }
+
+    fn move_to(&self, world: &World) -> Status {
+        let destinations = world.ecs.borrow_component_vec::<Destination>();
+        let dest = destinations.get(self.own_id).unwrap().as_ref().unwrap();
+
+        let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
+        let own_pos = positions.get_mut(self.own_id).unwrap().as_mut().unwrap();
+
+        if physics::distance_between(
+            &Vect::of(dest.x, dest.y),
+            &Vect::of(own_pos.x, own_pos.y),
+        ) < 0.02 {
+            return SUCCESS;
+        }
+
+        let velocity_vec = get_velocity_vec_to(
+            &Vect::of(own_pos.x, own_pos.y),
+            &Vect::of(dest.x, dest.y),
+            world.properties.delta_time);
+
+        own_pos.x += velocity_vec.x;
+        own_pos.y += velocity_vec.y;
+        RUNNING
     }
 
     fn path(&mut self, world: &World) -> Status {
@@ -70,30 +94,6 @@ impl MoveToDestination {
         // }
 
         SUCCESS
-    }
-
-    fn move_to(&self, world: &World) -> Status {
-        let destinations = world.ecs.borrow_component_vec::<Destination>();
-        let dest = destinations.get(self.own_id).unwrap().as_ref().unwrap();
-
-        let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
-        let own_pos = positions.get_mut(self.own_id).unwrap().as_mut().unwrap();
-
-        if physics::distance_between(
-            &Vect::of(dest.x, dest.y),
-            &Vect::of(own_pos.x, own_pos.y),
-        ) < 0.02 {
-            return SUCCESS;
-        }
-
-        let velocity_vec = get_velocity_vec_to(
-            &Vect::of(own_pos.x, own_pos.y),
-            &Vect::of(dest.x, dest.y),
-            world.properties.delta_time);
-
-        own_pos.x += velocity_vec.x;
-        own_pos.y += velocity_vec.y;
-        RUNNING
     }
 }
 

@@ -18,7 +18,6 @@ pub fn behavior(world: &World) {
 fn run_behavior_tree(behavior: &mut Behavior, world: &World) {
     let status = behavior.behavior_tree.run(world);
     if status == SUCCESS || status == FAILURE {
-        println!("btree finished, assign do_nothing()");
         behavior.behavior_tree = Box::new(behaviors::do_nothing());
     }
 }

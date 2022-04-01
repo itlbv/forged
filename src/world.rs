@@ -56,7 +56,7 @@ impl<'assets> World<'assets> {
         self.properties.player_id = entities::player(12.5, 12.5, self);
 
         entities::human(1.5, 1.5, "Alice", self);
-        /*
+
         entities::food(5, 8, self);
         entities::food(4, 1, self);
         entities::food(2, 5, self);
@@ -64,6 +64,7 @@ impl<'assets> World<'assets> {
         entities::food(6, 6, self);
         entities::food(5, 7, self);
 
+        /*
         entities::tree(3, 4, self);
         entities::tree(7, 1, self);
         entities::tree(8, 2, self);

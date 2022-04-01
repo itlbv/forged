@@ -37,12 +37,10 @@ pub fn collect_and_deliver_ingredients(owner_id: usize) -> DoUntilFailure {
 }
 
 pub fn do_nothing() -> DoNothingTask {
-    println!("behaviors::do_nothing()");
     DoNothingTask {}
 }
 
 pub fn test_path(owner_id: usize) -> MoveToDestination {
-    println!("behaviors::test_path()");
     MoveToDestination::new(owner_id)
 }
 
