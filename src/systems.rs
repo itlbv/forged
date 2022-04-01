@@ -18,6 +18,7 @@ pub fn behavior(world: &World) {
 fn run_behavior_tree(behavior: &mut Behavior, world: &World) {
     let status = behavior.behavior_tree.run(world);
     if status == SUCCESS || status == FAILURE {
+        println!("btree finished, assign do_nothing()");
         behavior.behavior_tree = Box::new(behaviors::do_nothing());
     }
 }
@@ -43,7 +44,7 @@ pub fn input(world: &mut World) {
 pub fn render(world: &mut World) {
     world.renderer.start_frame(&world.properties);
     render_map(world);
-    render_textures(world);
+    // render_textures(world);
     render_entities(world);
     world.renderer.present_frame();
 }
@@ -120,25 +121,25 @@ pub fn render_map(world: &mut World) {
         //     x + world.properties.camera_x, y + world.properties.camera_y, world.properties.zoom_factor as u32, world.properties.zoom_factor as u32);
     }
 
-    // for x in 0..=MAP_WIDTH { // vertical lines
-    //     let x_1: i32 = world.properties.zoom_factor as i32 * x * MAP_TILE_SIZE as i32;
-    //     let y_1: i32 = 0;
-    //     let x_2: i32 = x_1;
-    //     let y_2: i32 = world.properties.zoom_factor as i32 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
-    //     world.renderer.render_line(x_1 + world.properties.camera_x,
-    //                                y_1 + world.properties.camera_y,
-    //                                x_2 + world.properties.camera_x,
-    //                                y_2 + world.properties.camera_y);
-    // }
-    //
-    // for y in 0..=MAP_HEIGHT { // horizontal lines
-    //     let x_1: i32 = 0;
-    //     let y_1: i32 = world.properties.zoom_factor as i32 * y * MAP_TILE_SIZE as i32;
-    //     let x_2: i32 = world.properties.zoom_factor as i32 * MAP_WIDTH * MAP_TILE_SIZE as i32;
-    //     let y_2: i32 = y_1;
-    //     world.renderer.render_line(x_1 + world.properties.camera_x,
-    //                                y_1 + world.properties.camera_y,
-    //                                x_2 + world.properties.camera_x,
-    //                                y_2 + world.properties.camera_y);
-    // }
+    for x in 0..=MAP_WIDTH { // vertical lines
+        let x_1: i32 = world.properties.zoom_factor as i32 * x * MAP_TILE_SIZE as i32;
+        let y_1: i32 = 0;
+        let x_2: i32 = x_1;
+        let y_2: i32 = world.properties.zoom_factor as i32 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
+        world.renderer.render_line(x_1 + world.properties.camera_x,
+                                   y_1 + world.properties.camera_y,
+                                   x_2 + world.properties.camera_x,
+                                   y_2 + world.properties.camera_y);
+    }
+
+    for y in 0..=MAP_HEIGHT { // horizontal lines
+        let x_1: i32 = 0;
+        let y_1: i32 = world.properties.zoom_factor as i32 * y * MAP_TILE_SIZE as i32;
+        let x_2: i32 = world.properties.zoom_factor as i32 * MAP_WIDTH * MAP_TILE_SIZE as i32;
+        let y_2: i32 = y_1;
+        world.renderer.render_line(x_1 + world.properties.camera_x,
+                                   y_1 + world.properties.camera_y,
+                                   x_2 + world.properties.camera_x,
+                                   y_2 + world.properties.camera_y);
+    }
 }

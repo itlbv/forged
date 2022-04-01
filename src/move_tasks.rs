@@ -11,6 +11,7 @@ use crate::util_structs::Color;
 
 pub struct MoveToDestination {
     own_id: usize,
+    path_drawn: bool,
 }
 
 impl BehaviorTreeNode for MoveToDestination {
@@ -21,10 +22,13 @@ impl BehaviorTreeNode for MoveToDestination {
 
 impl MoveToDestination {
     pub fn new(own_id: usize) -> Self {
-        Self { own_id }
+        Self { own_id, path_drawn: false }
     }
 
-    fn path(&self, world: &World) -> Status {
+    fn path(&mut self, world: &World) -> Status {
+        world.map.set_tile_passable(5, 1, false);
+        world.map.set_tile_passable(9, 3, false);
+
         let map_tiles = world.map.borrow_tiles();
         let start_tile = map_tiles.borrow_tile(1, 1);
         let dest_tile = map_tiles.borrow_tile(15, 15);
