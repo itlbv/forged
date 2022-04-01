@@ -4,14 +4,32 @@ use crate::behaviors;
 use crate::btree::BehaviorTreeNode;
 use crate::util_structs::Color;
 
+struct Need {
+    pub active: bool,
+    pub behavior: Box<dyn BehaviorTreeNode>,
+}
+
+impl Need {
+    pub fn hunger() -> Self {
+        Self {
+            active: false,
+            behavior: Box::new(behaviors::find_food())
+        }
+    }
+}
+
 pub struct Behavior {
+    pub owner: usize,
+    pub needs: Vec<Need>,
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
 }
 
 impl Behavior {
-    pub fn new_with_initial_behavior(behavior_tree: Box<dyn BehaviorTreeNode>) -> Self {
+    pub fn new_with_initial_behavior(behavior_tree: Box<dyn BehaviorTreeNode>, owner: usize) -> Self {
         Self {
             behavior_tree,
+            owner,
+            needs: vec![],
         }
     }
 }
