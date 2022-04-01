@@ -7,18 +7,56 @@ use crate::World;
 type NoiseArray = [[f32; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
 
 pub fn place_trees(world: &World) {
-    let mut noise = [[0.0; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
-    add_white_noise(&mut noise);
-    render_noise(&noise, world);
+    let white_noise = white_noise();
+    let smooth_noise = smooth_noise(&white_noise, 1);
+
+    render_noise(&smooth_noise, world);
 }
 
-fn add_white_noise(noise: &mut NoiseArray) {
+fn white_noise() -> NoiseArray {
+    let mut noise = [[0.0; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
     for y in 0..noise[0].len() {
-        let noise_z = noise[0].len();
         for x in 0..noise.len() {
             noise[x][y] = (rand::random::<f32>() * 255.0).ceil();
         }
     }
+    noise
+}
+
+fn smooth_noise(noise: &NoiseArray, octave: usize) -> NoiseArray {
+    let mut smooth_noise = [[0.0; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
+
+    let sample_period = 1 << octave;
+    let sample_frequency = 1.0 / sample_period as f32;
+
+    for y in 0..noise[0].len() {
+        //calculate the horizontal sampling indices
+        let sample_y_0 = (y / sample_period) * sample_period;
+        let sample_y_1 = (sample_y_0 + sample_period) / noise[0].len();
+        let horizontal_blend = (y - sample_y_0) as f32 * sample_frequency;
+
+        for x in 0..noise.len() {
+            //calculate the vertical sampling indices
+            let sample_x_0 = (x / sample_period) * sample_period;
+            let sample_x_1 = (sample_x_0 + sample_period) / noise.len();
+            let vertical_blend = (x - sample_x_0) as f32 * sample_frequency;
+
+            //blend the top two corners
+            let top = interpolate(noise[sample_x_0][sample_y_0],
+                                  noise[sample_x_1][sample_y_0], horizontal_blend);
+
+            //blend the bottom two corners
+            let bottom = interpolate(noise[sample_x_0][sample_y_1],
+                                     noise[sample_x_1][sample_y_1], horizontal_blend);
+            //final blend
+            smooth_noise[x][y] = interpolate(top, bottom, vertical_blend);
+        }
+    }
+    smooth_noise
+}
+
+fn interpolate(x0: f32, x1: f32, alpha: f32) -> f32 {
+    x0 * (1.0 - alpha) + alpha * x1
 }
 
 fn render_noise(noise: &NoiseArray, world: &World) {
