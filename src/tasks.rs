@@ -133,7 +133,6 @@ impl FindFood {
         }
 
         if target_entity_id < 0 {
-            println!("No food found");
             return FAILURE;
         }
 
@@ -157,7 +156,6 @@ impl EatTarget {
     }
 
     fn eat(&self, owner: usize, world: &World) -> Status {
-        println!("eat food");
         let targets = world.ecs.borrow_component_vec::<Target>();
         let target_id = targets.get(owner).unwrap().as_ref().unwrap().target_id;
         world.ecs.add_component_to_entity::<Remove>(target_id, Remove::new(target_id));
