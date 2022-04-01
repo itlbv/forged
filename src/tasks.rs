@@ -4,27 +4,25 @@ use crate::components::{Food, Position, Recipe, Remove, Target, Destination, Mai
 use crate::physics::{distance_between, Vect};
 use crate::World;
 
-pub struct SetDestinationFromMainTarget {
-    pub own_id: usize,
-}
+pub struct SetDestinationFromMainTarget {}
 
 impl BehaviorTreeNode for SetDestinationFromMainTarget {
-    fn run(&mut self, world: &World) -> Status {
-        self.set_destination(world)
+    fn run(&mut self, owner: usize, world: &World) -> Status {
+        self.set_destination(owner, world)
     }
 }
 
 impl SetDestinationFromMainTarget {
-    pub fn new(own_id: usize) -> Self { Self { own_id } }
+    pub fn new() -> Self { Self {} }
 
-    fn set_destination(&self, world: &World) -> Status {
+    fn set_destination(&self, owner: usize, world: &World) -> Status {
         let main_targets = world.ecs.borrow_component_vec::<MainTarget>();
-        let main_target = main_targets.get(self.own_id).unwrap().as_ref().unwrap();
+        let main_target = main_targets.get(owner).unwrap().as_ref().unwrap();
 
         let buildings = world.ecs.borrow_component_vec::<Building>();
-        let building = buildings.get(main_target.own_id).unwrap().as_ref().unwrap();
+        let building = buildings.get(main_target.owner).unwrap().as_ref().unwrap();
 
-        world.ecs.add_component_to_entity(self.own_id, Destination::new(building.entry_x, building.entry_y));
+        world.ecs.add_component_to_entity(owner, Destination::new(building.entry_x, building.entry_y));
         SUCCESS
     }
 }
@@ -41,12 +39,12 @@ impl DoUntilFailure {
 }
 
 impl BehaviorTreeNode for DoUntilFailure {
-    fn run(&mut self, world: &World) -> Status {
+    fn run(&mut self, owner: usize, world: &World) -> Status {
         loop {
             for (i, child) in self.children.iter_mut().enumerate() {
                 if self.idx >= 0 && self.idx != i as i8 { continue; }
 
-                let status = child.run(world);
+                let status = child.run(owner, world);
                 if status == SUCCESS {
                     self.idx = -1;
                     continue;
@@ -63,23 +61,22 @@ impl BehaviorTreeNode for DoUntilFailure {
 }
 
 pub struct SetRecipe {
-    own_id: usize,
     recipe: Recipe,
 }
 
 impl BehaviorTreeNode for SetRecipe {
-    fn run(&mut self, world: &World) -> Status {
-        self.set_recipe(world)
+    fn run(&mut self, owner: usize, world: &World) -> Status {
+        self.set_recipe(owner, world)
     }
 }
 
 impl SetRecipe {
-    pub fn new(own_id: usize, recipe: Recipe) -> Self {
-        Self { own_id, recipe }
+    pub fn new(recipe: Recipe) -> Self {
+        Self { recipe }
     }
 
-    fn set_recipe(&self, world: &World) -> Status {
-        world.ecs.add_component_to_entity(self.own_id, self.recipe.clone());
+    fn set_recipe(&self, owner: usize, world: &World) -> Status {
+        world.ecs.add_component_to_entity(owner, self.recipe.clone());
         SUCCESS
     }
 }
@@ -87,7 +84,7 @@ impl SetRecipe {
 pub struct DoNothingTask {}
 
 impl BehaviorTreeNode for DoNothingTask {
-    fn run(&mut self, _: &World) -> Status {
+    fn run(&mut self, _: usize, _: &World) -> Status {
         SUCCESS
     }
 }
@@ -98,28 +95,26 @@ impl DoNothingTask {
     }
 }
 
-pub struct FindFood {
-    pub owner_id: usize,
-}
+pub struct FindFood {}
 
 impl BehaviorTreeNode for FindFood {
-    fn run(&mut self, world: &World) -> Status {
-        self.find_food(world)
+    fn run(&mut self, owner: usize, world: &World) -> Status {
+        self.find_food(owner, world)
     }
 }
 
 impl FindFood {
-    pub fn new(owner_id: usize) -> Self {
-        Self { owner_id }
+    pub fn new() -> Self {
+        Self {}
     }
 
-    fn find_food(&self, world: &World) -> Status {
+    fn find_food(&self, owner: usize, world: &World) -> Status {
         let foods = world.ecs.borrow_component_vec::<Food>();
         let positions = world.ecs.borrow_component_vec::<Position>();
 
         let own_pos_vect = Vect::of(
-            positions.get(self.owner_id).unwrap().as_ref().unwrap().x,
-            positions.get(self.owner_id).unwrap().as_ref().unwrap().y,
+            positions.get(owner).unwrap().as_ref().unwrap().x,
+            positions.get(owner).unwrap().as_ref().unwrap().y,
         );
 
         let zip = foods.iter().zip(positions.iter());
@@ -142,30 +137,29 @@ impl FindFood {
             return FAILURE;
         }
 
-        world.ecs.add_component_to_entity(self.owner_id, Target::new(target_entity_id as usize));
+        world.ecs.add_component_to_entity(owner, Target::new(target_entity_id as usize));
         SUCCESS
     }
 }
 
 pub struct EatTarget {
-    owner_id: usize,
 }
 
 impl BehaviorTreeNode for EatTarget {
-    fn run(&mut self, world: &World) -> Status {
-        self.eat(world)
+    fn run(&mut self, owner: usize, world: &World) -> Status {
+        self.eat(owner, world)
     }
 }
 
 impl EatTarget {
-    pub fn new(owner_id: usize) -> Self {
-        Self { owner_id }
+    pub fn new() -> Self {
+        Self {  }
     }
 
-    fn eat(&self, world: &World) -> Status {
+    fn eat(&self, owner: usize, world: &World) -> Status {
         println!("eat food");
         let targets = world.ecs.borrow_component_vec::<Target>();
-        let target_id = targets.get(self.owner_id).unwrap().as_ref().unwrap().target_id;
+        let target_id = targets.get(owner).unwrap().as_ref().unwrap().target_id;
         world.ecs.add_component_to_entity::<Remove>(target_id, Remove::new(target_id));
         SUCCESS
     }

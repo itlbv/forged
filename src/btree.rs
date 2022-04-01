@@ -9,7 +9,7 @@ pub enum Status {
 }
 
 pub trait BehaviorTreeNode {
-    fn run(&mut self, world: &World) -> Status;
+    fn run(&mut self, owner: usize, world: &World) -> Status;
 }
 
 pub struct Sequence {
@@ -27,11 +27,11 @@ impl Sequence {
 }
 
 impl BehaviorTreeNode for Sequence {
-    fn run(&mut self, world: &World) -> Status {
+    fn run(&mut self, owner: usize, world: &World) -> Status {
         for (i, child) in self.children.iter_mut().enumerate() {
             if self.idx >= 0 && self.idx != i as i8 { continue; }
 
-            let status = child.run(world);
+            let status = child.run(owner, world);
             if status == SUCCESS {
                 self.idx = -1;
                 continue;

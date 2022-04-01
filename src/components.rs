@@ -4,7 +4,7 @@ use crate::behaviors;
 use crate::btree::BehaviorTreeNode;
 use crate::util_structs::Color;
 
-struct Need {
+pub struct Need {
     pub active: bool,
     pub behavior: Box<dyn BehaviorTreeNode>,
 }
@@ -181,12 +181,12 @@ impl Target {
 }
 
 pub struct MainTarget {
-    pub own_id: usize,
+    pub owner: usize,
 }
 
 impl MainTarget {
     pub fn new(target_id: usize) -> Self {
-        Self { own_id: target_id }
+        Self { owner: target_id }
     }
 }
 

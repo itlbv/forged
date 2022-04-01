@@ -10,27 +10,25 @@ use crate::map::MapTile;
 use crate::util_structs::Color;
 
 pub struct MoveToDestination {
-    own_id: usize,
-    path_drawn: bool,
 }
 
 impl BehaviorTreeNode for MoveToDestination {
-    fn run(&mut self, world: &World) -> Status {
-        self.move_to(world)
+    fn run(&mut self, owner: usize, world: &World) -> Status {
+        self.move_to(owner, world)
     }
 }
 
 impl MoveToDestination {
-    pub fn new(own_id: usize) -> Self {
-        Self { own_id, path_drawn: false }
+    pub fn new() -> Self {
+        Self {  }
     }
 
-    fn move_to(&self, world: &World) -> Status {
+    fn move_to(&self, owner: usize, world: &World) -> Status {
         let destinations = world.ecs.borrow_component_vec::<Destination>();
-        let dest = destinations.get(self.own_id).unwrap().as_ref().unwrap();
+        let dest = destinations.get(owner).unwrap().as_ref().unwrap();
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
-        let own_pos = positions.get_mut(self.own_id).unwrap().as_mut().unwrap();
+        let own_pos = positions.get_mut(owner).unwrap().as_mut().unwrap();
 
         if physics::distance_between(
             &Vect::of(dest.x, dest.y),
@@ -98,23 +96,22 @@ impl MoveToDestination {
 }
 
 pub struct MoveCloseToTarget {
-    own_id: usize,
 }
 
 impl BehaviorTreeNode for MoveCloseToTarget {
-    fn run(&mut self, world: &World) -> Status {
-        self.move_close(world)
+    fn run(&mut self, owner: usize, world: &World) -> Status {
+        self.move_close(owner, world)
     }
 }
 
 impl MoveCloseToTarget {
-    pub fn new(own_id: usize) -> Self {
-        Self { own_id }
+    pub fn new() -> Self {
+        Self {  }
     }
 
-    fn move_close(&self, world: &World) -> Status {
+    fn move_close(&self, owner: usize, world: &World) -> Status {
         let targets = world.ecs.borrow_component_vec::<Target>();
-        let target_id = targets.get(self.own_id).unwrap().as_ref().unwrap().target_id;
+        let target_id = targets.get(owner).unwrap().as_ref().unwrap().target_id;
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
         let target_pos = positions.get(target_id).unwrap().as_ref().unwrap();
@@ -124,7 +121,7 @@ impl MoveCloseToTarget {
             target_pos.y,
         );
 
-        let own_pos = positions.get_mut(self.own_id).unwrap().as_mut().unwrap();
+        let own_pos = positions.get_mut(owner).unwrap().as_mut().unwrap();
 
         if physics::distance_between(
             &destination,

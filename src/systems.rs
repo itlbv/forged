@@ -16,7 +16,7 @@ pub fn behavior(world: &World) {
 }
 
 fn run_behavior_tree(behavior: &mut Behavior, world: &World) {
-    let status = behavior.behavior_tree.run(world);
+    let status = behavior.behavior_tree.run(behavior.owner, world);
     if status == SUCCESS || status == FAILURE {
         behavior.behavior_tree = Box::new(behaviors::do_nothing());
     }
