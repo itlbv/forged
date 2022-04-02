@@ -36,7 +36,7 @@ fn add_perlin_noise(base_noise: &NoiseArray) -> NoiseArray {
     let persistence = 0.8;
 
     //generate smooth noises
-    let mut smooth_noises = [[[0.0; 160]; 200]; OCTAVE_COUNT];
+    let mut smooth_noises = [[[0.0; MAP_HEIGHT as usize]; MAP_WIDTH as usize]; OCTAVE_COUNT];
     for i in 0..OCTAVE_COUNT {
         smooth_noises[i] = add_smooth_noise(base_noise, i);
     }
@@ -100,11 +100,13 @@ fn add_smooth_noise(base_noise: &NoiseArray, octave: usize) -> NoiseArray {
 
             //blend the top two corners
             let top = interpolate(base_noise[sample_x_0][sample_y_0],
-                                  base_noise[sample_x_1][sample_y_0], horizontal_blend);
+                                  base_noise[sample_x_1][sample_y_0],
+                                  horizontal_blend);
 
             //blend the bottom two corners
             let bottom = interpolate(base_noise[sample_x_0][sample_y_1],
-                                     base_noise[sample_x_1][sample_y_1], horizontal_blend);
+                                     base_noise[sample_x_1][sample_y_1],
+                                     horizontal_blend);
             //final blend
             smooth_noise[x][y] = interpolate(top, bottom, vertical_blend);
         }
