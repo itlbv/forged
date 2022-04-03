@@ -7,7 +7,7 @@ use rand_seeder::Seeder;
 use crate::components::{Position, RenderShape};
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::util_structs::Color;
-use crate::World;
+use crate::{entities, World};
 
 type NoiseArray = [[f32; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
 
@@ -21,7 +21,31 @@ pub fn place_trees(world: &World) {
         .set_y_bounds(-2.0, 2.0)
         .build();
 
-    render_noise_map(&noise_map, world);
+    plant_trees(&noise_map, world);
+    // render_noise_map(&noise_map, world);
+}
+
+fn plant_trees(noise_map: &NoiseMap, world: &World) {
+    let (width, height) = noise_map.size();
+    let mut min = 0.0;
+    let mut max = 0.0;
+    for y in 0..height {
+        for x in 0..width {
+            if noise_map.get_value(x, y) < min { min = noise_map.get_value(x, y);}
+            if noise_map.get_value(x, y) > max { max = noise_map.get_value(x, y);}
+        }
+    }
+    let median = min + ((max - min) / 2.0);
+    println!("{}, {}, {}", max, min, median);
+
+    for y in 0..height {
+        for x in 0..width {
+            if noise_map.get_value(x, y) > median {
+                entities::tree(x as i32, y as i32, world);
+
+            }
+        }
+    }
 }
 
 fn render_noise_map(noise_map: &NoiseMap, world: &World) {

@@ -49,9 +49,9 @@ pub fn input(world: &mut World) {
 
 pub fn render(world: &mut World) {
     world.renderer.start_frame(&world.properties);
-    // render_map(world);
-    // render_textures(world);
-    render_entities(world);
+    render_map(world);
+    render_textures(world);
+    // render_entities(world);
     world.renderer.present_frame();
 }
 
