@@ -1,4 +1,4 @@
-use noise::{Fbm, MultiFractal, OpenSimplex, Perlin, Seedable};
+use noise::{Fbm, MultiFractal, OpenSimplex, Perlin, Seedable, SuperSimplex};
 use noise::utils::{NoiseMap, NoiseMapBuilder, PlaneMapBuilder};
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
@@ -12,19 +12,19 @@ use crate::{entities, World};
 type NoiseArray = [[f32; MAP_HEIGHT as usize]; MAP_WIDTH as usize];
 
 pub fn place_trees(world: &World) {
-    let noise = Fbm::new()
-        .set_seed(0)
-        .set_octaves(16);
+    let noise = SuperSimplex::new();
+        // .set_seed(0)
+        // .set_octaves(16);
     let mut noise_map = PlaneMapBuilder::new(&noise)
         .set_size(MAP_WIDTH as usize, MAP_HEIGHT as usize)
-        .set_x_bounds(-2.0, 2.0)
-        .set_y_bounds(-2.0, 2.0)
+        .set_x_bounds(-10.0, 10.0)
+        .set_y_bounds(-10.0, 10.0)
         .build();
 
     normalize_noise_map(&mut noise_map);
 
-    plant_trees(&noise_map, world);
-    // render_noise_map(&noise_map, world);
+    // plant_trees(&noise_map, world);
+    render_noise_map(&noise_map, world);
 }
 
 fn normalize_noise_map(noise_map: &mut NoiseMap) {
@@ -38,12 +38,12 @@ fn normalize_noise_map(noise_map: &mut NoiseMap) {
             if noise_map.get_value(x, y) > max { max = noise_map.get_value(x, y);}
         }
     }
-    println!("{},{}, {}", min, max, max - min);
+    let factor = 1.0 / (max - min);
 
     for y in 0..height {
         for x in 0..width {
             let v = noise_map.get_value(x, y);
-            noise_map.set_value(x, y, v - min);
+            noise_map.set_value(x, y, (v - min) * factor);
         }
     }
 }
