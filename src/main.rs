@@ -18,7 +18,7 @@ mod items;
 mod move_tasks;
 mod item_tasks;
 mod build_tasks;
-mod util;
+mod map_util;
 mod util_structs;
 mod log;
 mod resources;

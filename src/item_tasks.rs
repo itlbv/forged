@@ -1,7 +1,7 @@
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
 use crate::components::{Inventory, Recipe, Remove, Storage, Target, MainTarget, Position};
-use crate::{util, World};
+use crate::{map_util, World};
 
 pub struct DropItemToMainTargetStorage {}
 
@@ -80,14 +80,14 @@ impl FindIngredients {
             let items_of_type = world.ecs.get_entities_by_type_id(ingr_type_id);
             if items_of_type.len() < *amount { return FAILURE; }
 
-            util::sort_entities_by_proximity(owner, &items_of_type);
+            map_util::sort_entities_by_proximity(owner, &items_of_type);
 
             for i in 0..*amount {
                 ingredients.push(items_of_type[i]);
             }
         }
         if ingredients.len() > 0 {
-            util::sort_entities_by_proximity(owner, &ingredients);
+            map_util::sort_entities_by_proximity(owner, &ingredients);
 
             let mut inventories = world.ecs.borrow_component_vec_mut::<Inventory>();
             let inventory = inventories.get_mut(owner).unwrap().as_mut().unwrap();
