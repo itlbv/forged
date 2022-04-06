@@ -39,18 +39,13 @@ impl Renderer {
         self.sdl_canvas.present();
     }
 
-    // pub fn render_rect(&mut self, x: i32, y: i32, w: i32, h: i32, r: u8, g: u8, b: u8, a: u8) {
-    //     self.sdl_canvas.set_draw_color(Color::RGBA(r, g, b, a));
-    //     self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
-    // }
-
-    pub fn render_rect_world(&mut self,
-                             x_world: f32, y_world: f32,
-                             w_world: f32, h_world: f32,
-                             r: u8, g: u8, b: u8, a: u8,
-                             camera: (i32, i32, usize),
+    pub fn render_rect(&mut self,
+                       x_world: f32, y_world: f32,
+                       w_world: f32, h_world: f32,
+                       color: (u8, u8, u8, u8),
+                       camera: (i32, i32, usize),
     ) {
-        self.sdl_canvas.set_draw_color(Color::RGBA(r, g, b, a));
+        self.sdl_canvas.set_draw_color(Color::RGBA(color.0, color.1, color.2, color.3));
 
         let x = Renderer::world_to_screen(x_world, camera.2) + camera.0;
         let y = Renderer::world_to_screen(y_world, camera.2) + camera.1;
@@ -59,13 +54,12 @@ impl Renderer {
 
 
         self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
-
     }
 
     pub fn render_line(&mut self, x_1: usize, y_1: usize, x_2: usize, y_2: usize) {
         self.sdl_canvas.draw_line(
             Point::new(x_1 as i32, y_1 as i32),
-            Point::new(x_2 as i32, y_2 as i32)
+            Point::new(x_2 as i32, y_2 as i32),
         );
     }
 

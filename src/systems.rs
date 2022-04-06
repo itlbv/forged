@@ -52,7 +52,7 @@ pub fn render(world: &mut World) {
     world.renderer.start_frame(&world.properties);
     render_map(world);
     render_textures(world);
-    // render_entities(world);
+    render_entities(world);
     world.renderer.present_frame();
 }
 
@@ -91,12 +91,12 @@ pub fn render_entities(world: &mut World) {
     );
 
     for (shape, pos) in iter {
-        world.renderer.render_rect_world(
+        world.renderer.render_rect(
             pos.x + shape.offset_x,
             pos.y + shape.offset_y,
             shape.w,
             shape.h,
-            shape.color.r, shape.color.g, shape.color.b, shape.color.a,
+            (shape.color.r, shape.color.g, shape.color.b, shape.color.a),
             (
                 world.properties.camera_x,
                 world.properties.camera_y,
@@ -117,10 +117,6 @@ pub fn render_entities(world: &mut World) {
 
 pub fn render_map(world: &mut World) {
     for tile in world.map.borrow_tiles().iterator() {
-        // let x = Renderer::world_to_screen(tile.x as f32, world.properties.zoom_factor);
-        // let y = Renderer::world_to_screen(tile.y as f32, world.properties.zoom_factor);
-        // let tile_size = Renderer::world_to_screen(MAP_TILE_SIZE, world.properties.zoom_factor);
-
         let color: Color;
         if !tile.passable {
             color = Color::new(10, 10, 10, 255);
@@ -128,19 +124,12 @@ pub fn render_map(world: &mut World) {
             color = Color::new(tile.color.r, tile.color.g, tile.color.b, tile.color.a);
         };
 
-        // world.renderer.render_rect(
-        //     x + world.properties.camera_x,
-        //     y + world.properties.camera_y,
-        //     tile_size,
-        //     tile_size,
-        //     color.r, color.g, color.b, color.a);
-
-        world.renderer.render_rect_world(
+        world.renderer.render_rect(
             tile.x as f32,
             tile.y as f32,
             MAP_TILE_SIZE,
             MAP_TILE_SIZE,
-            color.r, color.g, color.b, color.a,
+            (color.r, color.g, color.b, color.a),
             (
                 world.properties.camera_x,
                 world.properties.camera_y,
