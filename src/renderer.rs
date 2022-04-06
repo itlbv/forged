@@ -30,7 +30,7 @@ impl Renderer {
         Self { sdl_canvas }
     }
 
-    pub fn start_frame(&mut self, properties: &Properties) {
+    pub fn start_frame(&mut self, _properties: &Properties) {
         self.sdl_canvas.set_draw_color(DEFAULT_CLEAR_FRAME_COLOR);
         self.sdl_canvas.clear();
     }

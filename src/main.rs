@@ -28,6 +28,7 @@ mod needs;
 mod map_generator;
 mod noise_generator;
 mod path;
+mod util;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;

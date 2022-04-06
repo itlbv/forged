@@ -1,6 +1,6 @@
-use rand::prelude::*;
-use rand_chacha::ChaCha8Rng;
-use rand_seeder::Seeder;
+
+
+
 
 use crate::components::{Position, RenderShape};
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
@@ -9,7 +9,7 @@ use crate::{entities, noise_generator, path, World};
 use crate::noise_generator::Noise;
 
 pub fn place_trees(world: &World) {
-    let mut noise = noise_generator::fbm(MAP_WIDTH as usize, MAP_HEIGHT as usize, 4);
+    let noise = noise_generator::fbm(MAP_WIDTH as usize, MAP_HEIGHT as usize, 4);
     // plant_trees(&noise_map, world);
     render_noise(&noise, world);
     draw_river(&noise, world);

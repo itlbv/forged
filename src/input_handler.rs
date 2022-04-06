@@ -1,7 +1,7 @@
 use sdl2::event::Event;
 use sdl2::{EventPump, Sdl};
 use sdl2::keyboard::Keycode;
-use crate::{properties, Properties};
+use crate::{Properties};
 
 pub struct InputHandler {
     pub sdl_events: EventPump,

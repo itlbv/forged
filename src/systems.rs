@@ -1,6 +1,6 @@
 use crate::components::{Behavior, Position, Remove, RenderShape, Texture};
-use crate::{behaviors, Renderer, World};
-use crate::btree::Status::{FAILURE, SUCCESS};
+use crate::{Renderer, World};
+
 use crate::constants::{MAP_HEIGHT, MAP_TILE_SIZE, MAP_WIDTH};
 use crate::util_structs::Color;
 
@@ -95,8 +95,8 @@ pub fn render_entities(world: &mut World) {
         let w = Renderer::world_to_screen(shape.w, world.properties.zoom_factor);
         let h = Renderer::world_to_screen(shape.h, world.properties.zoom_factor);
         world.renderer.render_rect(x + world.properties.camera_x, y + world.properties.camera_y, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
-        let true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
-        let true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
+        let _true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
+        let _true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
         // world.renderer.render_dot(true_pos_x + world.properties.camera_x, true_pos_y + world.properties.camera_y); // true position
     }
 }

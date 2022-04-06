@@ -1,6 +1,6 @@
-use std::collections::{BinaryHeap, HashMap};
-use sdl2::libc::newlocale;
-use crate::main;
+use std::collections::{HashMap};
+
+
 use crate::noise_generator::Noise;
 
 pub fn dijkstra(map: &Noise, start: (usize, usize), finish: (usize, usize))

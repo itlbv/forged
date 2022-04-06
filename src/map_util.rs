@@ -13,7 +13,7 @@ pub fn claim_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, map: &M
     }
 }
 
-pub fn find_free_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, margin: i32, map: &Map) -> (i32, i32) {
+pub fn find_free_tiles(_start_tile_x: i32, _start_tile_y: i32, w: i32, h: i32, margin: i32, map: &Map) -> (i32, i32) {
     for i in 1..=50 {
         // node (-x, -y..y)
         // node (x, -y..y)

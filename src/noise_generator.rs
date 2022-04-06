@@ -1,4 +1,4 @@
-use noise::{Fbm, MultiFractal, Seedable, SuperSimplex};
+use noise::{Fbm, MultiFractal, Seedable};
 use noise::utils::{NoiseMap, NoiseMapBuilder, PlaneMapBuilder};
 
 pub type Noise = NoiseMap;
