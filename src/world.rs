@@ -2,7 +2,7 @@ use std::path::Path;
 use sdl2::render::TextureCreator;
 use sdl2::video::WindowContext;
 use crate::map::Map;
-use crate::{InputHandler, map_generator, Properties, Renderer, systems};
+use crate::{entities, InputHandler, map_generator, Properties, Renderer, systems};
 use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
@@ -53,10 +53,8 @@ impl<'assets> World<'assets> {
         self.ecs.register_component::<Building>();
         self.ecs.register_component::<Texture>();
 
-        map_generator::place_trees(self);
-
-        /*
-        self.properties.player_id = entities::player(12.5, 12.5, self);
+        // self.properties.player_id = entities::player(12.5, 12.5, self);
+        // map_generator::place_trees(self);
 
         entities::human(1.5, 1.5, "Alice", self);
 
@@ -78,7 +76,6 @@ impl<'assets> World<'assets> {
         entities::stone(13, 6, self);
         entities::stone(14, 9, self);
         entities::stone(12, 7, self);
-        */
     }
 
     pub fn tick(&mut self, _delta_time: f32) {

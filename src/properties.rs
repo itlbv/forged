@@ -17,7 +17,7 @@ impl Properties {
             quit: false,
             camera_x: 0,
             camera_y: 0,
-            zoom_factor: 5,
+            zoom_factor: 50,
         }
     }
 }
