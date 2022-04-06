@@ -5,7 +5,7 @@ use rand_seeder::Seeder;
 use crate::components::{Position, RenderShape};
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::util_structs::Color;
-use crate::{entities, noise_generator, pathfinding, World};
+use crate::{entities, noise_generator, path, World};
 use crate::noise_generator::Noise;
 
 pub fn place_trees(world: &World) {
@@ -18,13 +18,13 @@ pub fn place_trees(world: &World) {
 fn draw_river(noise_map: &Noise, world: &World) {
     let (start_x, start_y) = (100, 100);
     let (finish_x, finish_y) = (0, 0);
-    let path = pathfinding::dijkstra(noise_map, (start_x, start_y), (finish_x, finish_y));
+    let path = path::dijkstra(noise_map, (start_x, start_y), (finish_x, finish_y));
 
     for node in path {
         let id = world.ecs.create_entity();
         world.ecs.add_component_to_entity(id, Position::of(node.0 as f32, node.1 as f32, id));
         world.ecs.add_component_to_entity(id, RenderShape::new_without_offset(1.0, 1.0,
-                                                                              Color::new(0, 0, 40, 255)));
+                                                                              Color::new(200, 200, 0, 255)));
     }
 }
 

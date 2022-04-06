@@ -27,7 +27,7 @@ mod properties;
 mod needs;
 mod map_generator;
 mod noise_generator;
-mod pathfinding;
+mod path;
 
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
