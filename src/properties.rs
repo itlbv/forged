@@ -6,7 +6,7 @@ pub struct Properties {
 
     pub camera_x: i32,
     pub camera_y: i32,
-    pub zoom_factor: u8,
+    pub zoom_factor: usize,
 }
 
 impl Properties {

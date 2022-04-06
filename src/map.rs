@@ -24,7 +24,7 @@ impl Map {
         Box::new(map_tiles)
     }
 
-    pub fn set_tile_passable(&self, x: i32, y: i32, passable: bool) {
+    pub fn set_tile_passable(&self, x: usize, y: usize, passable: bool) {
         let mut tiles = self.borrow_tiles_mut();
         let mut tile = tiles.borrow_tile_mut(x, y);
         tile.passable = passable;
@@ -40,12 +40,12 @@ impl Map {
 }
 
 pub trait MapTilesVec {
-    fn borrow_tile(&self, x: i32, y: i32) -> &MapTile;
-    fn borrow_tile_mut(&mut self, x: i32, y: i32) -> &mut MapTile;
-    fn borrow_orthogonal_neighbours(&self, tile: &MapTile) -> Vec<&MapTile> {
+    fn borrow_tile(&self, x: usize, y: usize) -> &MapTile;
+    fn borrow_tile_mut(&mut self, x: usize, y: usize) -> &mut MapTile;
+    fn borrow_orthogonal_neighbors(&self, tile: &MapTile) -> Vec<&MapTile> {
         let mut vec = vec![];
-        if tile.x - 1 > 0 { vec.push(self.borrow_tile(tile.x - 1, tile.y)); }
-        if tile.y - 1 > 0 { vec.push(self.borrow_tile(tile.x, tile.y - 1)); }
+        if tile.x > 0 { vec.push(self.borrow_tile(tile.x - 1, tile.y)); }
+        if tile.y > 0 { vec.push(self.borrow_tile(tile.x, tile.y - 1)); }
         if tile.x + 1 < MAP_WIDTH { vec.push(self.borrow_tile(tile.x + 1, tile.y)); }
         if tile.y + 1 < MAP_HEIGHT { vec.push(self.borrow_tile(tile.x, tile.y + 1)); }
         vec
@@ -54,15 +54,18 @@ pub trait MapTilesVec {
 }
 
 impl MapTilesVec for Vec<MapTile> {
-    fn borrow_tile(&self, x: i32, y: i32) -> &MapTile {
+    fn borrow_tile(&self, x: usize, y: usize) -> &MapTile {
         if x < 0 || y < 0 || x >= MAP_WIDTH || y >= MAP_HEIGHT {
             panic!("Accessing map tiles outside of bounds!");
         }
-        self.get((y * MAP_WIDTH + x) as usize).unwrap()
+        self.get(y * MAP_WIDTH + x).unwrap()
     }
 
-    fn borrow_tile_mut(&mut self, x: i32, y: i32) -> &mut MapTile {
-        self.get_mut((y * MAP_WIDTH + x) as usize).unwrap()
+    fn borrow_tile_mut(&mut self, x: usize, y: usize) -> &mut MapTile {
+        if x < 0 || y < 0 || x >= MAP_WIDTH || y >= MAP_HEIGHT {
+            panic!("Accessing map tiles outside of bounds!");
+        }
+        self.get_mut(y * MAP_WIDTH + x).unwrap()
     }
 
     fn iterator(&self) -> Iter<MapTile> {
@@ -72,8 +75,8 @@ impl MapTilesVec for Vec<MapTile> {
 
 #[derive(Eq, PartialEq, Hash)]
 pub struct MapTile {
-    pub x: i32,
-    pub y: i32,
+    pub x: usize,
+    pub y: usize,
     pub passable: bool,
     pub color: Color,
     pub tileset_x: i32,
@@ -83,7 +86,7 @@ pub struct MapTile {
 }
 
 impl MapTile {
-    fn new(x: i32, y: i32, passable: bool, color: Color) -> Self {
+    fn new(x: usize, y: usize, passable: bool, color: Color) -> Self {
         Self {
             x,
             y,

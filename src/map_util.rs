@@ -3,7 +3,7 @@ use crate::map::Map;
 
 pub fn sort_entities_by_proximity(_owner_entity: usize, mut _entities: &Vec<usize>) {}
 
-pub fn claim_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, map: &Map) {
+pub fn claim_tiles(start_tile_x: usize, start_tile_y: usize, w: usize, h: usize, map: &Map) {
     let mut map_tiles = map.borrow_tiles_mut();
     for y in 0..h {
         for x in 0..w {
@@ -13,26 +13,33 @@ pub fn claim_tiles(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, map: &M
     }
 }
 
-pub fn find_free_tiles(_start_tile_x: i32, _start_tile_y: i32, w: i32, h: i32, margin: i32, map: &Map) -> (i32, i32) {
+pub fn find_free_tiles(start_x: usize, start_y: usize, w: usize, h: usize, margin: usize, map: &Map) -> Option<(usize, usize)> {
     for i in 1..=50 {
         // node (-x, -y..y)
         // node (x, -y..y)
         for y in 0 - i..=i {
-            if is_tile_suitable_for_building(i, y, w, h, margin, map) { return (i, y); }
-            if is_tile_suitable_for_building(-i, y, w, h, margin, map) { return (-i, y); }
+            if start_x + i < MAP_WIDTH - 1 {
+                if is_tile_suitable_for_building(start_x + i, y, w, h, margin, map) { return Some((start_x + i, y)); }
+            }
+            if i <= start_x {
+                if is_tile_suitable_for_building(start_x - i, y, w, h, margin, map) { return Some((start_x - i, y)); }
+            }
         }
         // node (-x..x, -y)
         // node (-x..x, y)
         for x in 0 - i..=i {
-            if is_tile_suitable_for_building(x, i, w, h, margin, map) { return (x, i); }
-            if is_tile_suitable_for_building(x, -i, w, h, margin, map) { return (x, -i); }
+            if start_y + i < MAP_HEIGHT - 1 {
+                if is_tile_suitable_for_building(x, start_y + i, w, h, margin, map) { return Some((x, start_y + i)); }
+            }
+            if i <= start_y {
+                if is_tile_suitable_for_building(x, start_y - i, w, h, margin, map) { return Some((x, start_y - i)); }
+            }
         }
     }
-
-    (-1, -1)
+    None
 }
 
-fn is_tile_suitable_for_building(start_tile_x: i32, start_tile_y: i32, w: i32, h: i32, margin: i32, map: &Map) -> bool {
+fn is_tile_suitable_for_building(start_tile_x: usize, start_tile_y: usize, w: usize, h: usize, margin: usize, map: &Map) -> bool {
     let start_tile_with_margin_x = start_tile_x - margin;
     let start_tile_with_margin_y = start_tile_y - margin;
     let w_with_margin = w + margin * 2;
@@ -62,7 +69,5 @@ fn is_tile_suitable_for_building(start_tile_x: i32, start_tile_y: i32, w: i32, h
             }
         }
     }
-
-    println!("start tile suitable: {}, {}", start_tile_x, start_tile_y);
     true
 }

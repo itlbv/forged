@@ -90,21 +90,22 @@ impl FindTilesAndPlaceInvisibleBuilding {
             own_y = own_pos.y;
         }
 
-        let (x, y) = map_util::find_free_tiles(
-            own_x as i32,
-            own_y as i32,
-            render_shape.w as i32,
-            render_shape.h as i32,
+        let build_pos = map_util::find_free_tiles(
+            own_x as usize,
+            own_y as usize,
+            render_shape.w as usize,
+            render_shape.h as usize,
             1,
             &world.map,
         );
 
-        if x < 0 || y < 0 {
+        if build_pos.is_none() {
             log::warn("Can't find place to build.", owner);
             return FAILURE;
         }
 
-        map_util::claim_tiles(x, y, render_shape.w as i32, render_shape.h as i32, &world.map);
+        let (x, y) = build_pos.unwrap();
+        map_util::claim_tiles(x, y, render_shape.w as usize, render_shape.h as usize, &world.map);
         let (house_id, house_entry_x, house_entry_y) = entities::house_from_recipe(x as f32, y as f32, recipe.clone(), world);
 
         world.ecs.add_component_to_entity(owner, Destination::new(house_entry_x, house_entry_y));

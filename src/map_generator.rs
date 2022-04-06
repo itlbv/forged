@@ -33,7 +33,7 @@ fn plant_trees(noise_map: &Noise, world: &World) {
     for y in 0..height {
         for x in 0..width {
             if noise_map.get_value(x, y) > 0.5 {
-                entities::tree(x as i32, y as i32, world);
+                entities::tree(x, y, world);
             }
         }
     }

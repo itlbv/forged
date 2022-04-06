@@ -63,7 +63,7 @@ impl MoveToDestination {
 
             if current_tile == dest_tile { break; }
 
-            let neighbours = map_tiles.borrow_orthogonal_neighbours(current_tile);
+            let neighbours = map_tiles.borrow_orthogonal_neighbors(current_tile);
             for i in 0..neighbours.len() {
                 if !neighbours[i].passable { break; }
                 if !came_from.contains_key(neighbours[i]) {

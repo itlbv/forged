@@ -1,3 +1,4 @@
+use std::detect::__is_feature_detected::sha;
 use crate::components::{Behavior, Position, Remove, RenderShape, Texture};
 use crate::{Renderer, World};
 
@@ -90,22 +91,35 @@ pub fn render_entities(world: &mut World) {
     );
 
     for (shape, pos) in iter {
-        let x = Renderer::world_to_screen(pos.x + shape.offset_x, world.properties.zoom_factor);
-        let y = Renderer::world_to_screen(pos.y + shape.offset_y, world.properties.zoom_factor);
-        let w = Renderer::world_to_screen(shape.w, world.properties.zoom_factor);
-        let h = Renderer::world_to_screen(shape.h, world.properties.zoom_factor);
-        world.renderer.render_rect(x + world.properties.camera_x, y + world.properties.camera_y, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
-        let _true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
-        let _true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
+        world.renderer.render_rect_world(
+            pos.x + shape.offset_x,
+            pos.y + shape.offset_y,
+            shape.w,
+            shape.h,
+            shape.color.r, shape.color.g, shape.color.b, shape.color.a,
+            (
+                world.properties.camera_x,
+                world.properties.camera_y,
+                world.properties.zoom_factor,
+                )
+        );
+
+        // let x = Renderer::world_to_screen(pos.x + shape.offset_x, world.properties.zoom_factor);
+        // let y = Renderer::world_to_screen(pos.y + shape.offset_y, world.properties.zoom_factor);
+        // let w = Renderer::world_to_screen(shape.w, world.properties.zoom_factor);
+        // let h = Renderer::world_to_screen(shape.h, world.properties.zoom_factor);
+        // world.renderer.render_rect(x + world.properties.camera_x, y + world.properties.camera_y, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
+        // let _true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
+        // let _true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
         // world.renderer.render_dot(true_pos_x + world.properties.camera_x, true_pos_y + world.properties.camera_y); // true position
     }
 }
 
 pub fn render_map(world: &mut World) {
     for tile in world.map.borrow_tiles().iterator() {
-        let x = Renderer::world_to_screen(tile.x as f32, world.properties.zoom_factor);
-        let y = Renderer::world_to_screen(tile.y as f32, world.properties.zoom_factor);
-        let tile_size = Renderer::world_to_screen(MAP_TILE_SIZE, world.properties.zoom_factor);
+        // let x = Renderer::world_to_screen(tile.x as f32, world.properties.zoom_factor);
+        // let y = Renderer::world_to_screen(tile.y as f32, world.properties.zoom_factor);
+        // let tile_size = Renderer::world_to_screen(MAP_TILE_SIZE, world.properties.zoom_factor);
 
         let color: Color;
         if !tile.passable {
@@ -114,12 +128,25 @@ pub fn render_map(world: &mut World) {
             color = Color::new(tile.color.r, tile.color.g, tile.color.b, tile.color.a);
         };
 
-        world.renderer.render_rect(
-            x + world.properties.camera_x,
-            y + world.properties.camera_y,
-            tile_size,
-            tile_size,
-            color.r, color.g, color.b, color.a);
+        // world.renderer.render_rect(
+        //     x + world.properties.camera_x,
+        //     y + world.properties.camera_y,
+        //     tile_size,
+        //     tile_size,
+        //     color.r, color.g, color.b, color.a);
+
+        world.renderer.render_rect_world(
+            tile.x as f32,
+            tile.y as f32,
+            MAP_TILE_SIZE,
+            MAP_TILE_SIZE,
+            color.r, color.g, color.b, color.a,
+            (
+                world.properties.camera_x,
+                world.properties.camera_y,
+                world.properties.zoom_factor,
+            ),
+        );
 
         // world.renderer.render_texture(
         //     world.assets.borrow_texture("map_tileset"),
@@ -131,24 +158,26 @@ pub fn render_map(world: &mut World) {
 
 pub fn render_map_grid(world: &mut World) {
     for x in 0..=MAP_WIDTH { // vertical lines
-        let x_1: i32 = world.properties.zoom_factor as i32 * x * MAP_TILE_SIZE as i32;
-        let y_1: i32 = 0;
-        let x_2: i32 = x_1;
-        let y_2: i32 = world.properties.zoom_factor as i32 * MAP_HEIGHT * MAP_TILE_SIZE as i32;
-        world.renderer.render_line(x_1 + world.properties.camera_x,
-                                   y_1 + world.properties.camera_y,
-                                   x_2 + world.properties.camera_x,
-                                   y_2 + world.properties.camera_y);
+        let x_1: usize = world.properties.zoom_factor * x * MAP_TILE_SIZE as usize;
+        let y_1: usize = 0;
+        let x_2: usize = x_1;
+        let y_2: usize = world.properties.zoom_factor * MAP_HEIGHT * MAP_TILE_SIZE as usize;
+        world.renderer.render_line(x_1 + world.properties.camera_x as usize,
+                                   y_1 + world.properties.camera_y as usize,
+                                   x_2 + world.properties.camera_x as usize,
+                                   y_2 + world.properties.camera_y as usize
+        );
     }
 
     for y in 0..=MAP_HEIGHT { // horizontal lines
-        let x_1: i32 = 0;
-        let y_1: i32 = world.properties.zoom_factor as i32 * y * MAP_TILE_SIZE as i32;
-        let x_2: i32 = world.properties.zoom_factor as i32 * MAP_WIDTH * MAP_TILE_SIZE as i32;
-        let y_2: i32 = y_1;
-        world.renderer.render_line(x_1 + world.properties.camera_x,
-                                   y_1 + world.properties.camera_y,
-                                   x_2 + world.properties.camera_x,
-                                   y_2 + world.properties.camera_y);
+        let x_1: usize = 0;
+        let y_1: usize = world.properties.zoom_factor * y * MAP_TILE_SIZE as usize;
+        let x_2: usize = world.properties.zoom_factor * MAP_WIDTH * MAP_TILE_SIZE as usize;
+        let y_2: usize = y_1;
+        world.renderer.render_line(x_1 + world.properties.camera_x as usize,
+                                   y_1 + world.properties.camera_y as usize,
+                                   x_2 + world.properties.camera_x as usize,
+                                   y_2 + world.properties.camera_y as usize
+        );
     }
 }

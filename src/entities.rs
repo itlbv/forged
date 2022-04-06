@@ -14,7 +14,7 @@ pub fn house_from_recipe(x: f32, y: f32, recipe: Recipe, world: &World) -> (usiz
     (id, entry_x, entry_y)
 }
 
-pub fn tree(x: i32, y: i32, world: &World) {
+pub fn tree(x: usize, y: usize, world: &World) {
     let id = world.ecs.create_entity();
     world.ecs.add_component_to_entity(id, Position::of(x as f32 + 0.5, y as f32 + 0.5, id));
     world.ecs.add_component_to_entity(id, RenderShape::new_with_standard_offset(0.25, 0.25,
@@ -26,7 +26,7 @@ pub fn tree(x: i32, y: i32, world: &World) {
     world.map.set_tile_passable(x, y, true);
 }
 
-pub fn stone(x: i32, y: i32, world: &World) {
+pub fn stone(x: usize, y: usize, world: &World) {
     let id = world.ecs.create_entity();
     world.ecs.add_component_to_entity(id, Position::of(x as f32 + 0.5, y as f32 + 0.5, id));
     world.ecs.add_component_to_entity(id, RenderShape::new_with_standard_offset(0.25, 0.25,
@@ -38,7 +38,7 @@ pub fn stone(x: i32, y: i32, world: &World) {
     world.map.set_tile_passable(x, y, true);
 }
 
-pub fn food(x: i32, y: i32, world: &World) {
+pub fn food(x: usize, y: usize, world: &World) {
     let id = world.ecs.create_entity();
     world.ecs.add_component_to_entity(id, Position::of(x as f32 + 0.5, y as f32 + 0.5, id));
     world.ecs.add_component_to_entity(id, RenderShape::new_with_standard_offset(0.3, 0.3,

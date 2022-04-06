@@ -52,7 +52,7 @@ impl PickUpTarget {
 
         let positions = world.ecs.borrow_component_vec::<Position>();
         let item_position = positions.get(target_id).unwrap().as_ref().unwrap();
-        world.map.set_tile_passable(item_position.x as i32, item_position.y as i32, false);
+        world.map.set_tile_passable(item_position.x as usize, item_position.y as usize, false);
 
         SUCCESS
     }

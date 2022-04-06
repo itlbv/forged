@@ -7,7 +7,7 @@ use sdl2::render::BlendMode::Blend;
 use sdl2::render::Texture;
 use sdl2::Sdl;
 use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
-use crate::Properties;
+use crate::{Properties, World};
 use self::sdl2::rect::Rect;
 
 const DEFAULT_CLEAR_FRAME_COLOR: Color = Color::RGB(50, 50, 50);
@@ -39,13 +39,34 @@ impl Renderer {
         self.sdl_canvas.present();
     }
 
-    pub fn render_rect(&mut self, x: i32, y: i32, w: i32, h: i32, r: u8, g: u8, b: u8, a: u8) {
+    // pub fn render_rect(&mut self, x: i32, y: i32, w: i32, h: i32, r: u8, g: u8, b: u8, a: u8) {
+    //     self.sdl_canvas.set_draw_color(Color::RGBA(r, g, b, a));
+    //     self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
+    // }
+
+    pub fn render_rect_world(&mut self,
+                             x_world: f32, y_world: f32,
+                             w_world: f32, h_world: f32,
+                             r: u8, g: u8, b: u8, a: u8,
+                             camera: (i32, i32, usize),
+    ) {
         self.sdl_canvas.set_draw_color(Color::RGBA(r, g, b, a));
+
+        let x = Renderer::world_to_screen(x_world, camera.2) + camera.0;
+        let y = Renderer::world_to_screen(y_world, camera.2) + camera.1;
+        let w = Renderer::world_to_screen(w_world, camera.2);
+        let h = Renderer::world_to_screen(h_world, camera.2);
+
+
         self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
+
     }
 
-    pub fn render_line(&mut self, x_1: i32, y_1: i32, x_2: i32, y_2: i32) {
-        self.sdl_canvas.draw_line(Point::new(x_1, y_1), Point::new(x_2, y_2));
+    pub fn render_line(&mut self, x_1: usize, y_1: usize, x_2: usize, y_2: usize) {
+        self.sdl_canvas.draw_line(
+            Point::new(x_1 as i32, y_1 as i32),
+            Point::new(x_2 as i32, y_2 as i32)
+        );
     }
 
     pub fn render_dot(&mut self, x: i32, y: i32) {
@@ -63,7 +84,7 @@ impl Renderer {
                              Rect::new(pos_x, pos_y, w, h));
     }
 
-    pub fn world_to_screen(world: f32, zoom_factor: u8) -> i32 {
+    pub fn world_to_screen(world: f32, zoom_factor: usize) -> i32 {
         (world * zoom_factor as f32) as i32
     }
 }
