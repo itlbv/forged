@@ -18,7 +18,7 @@ pub fn place_trees(world: &World) {
 fn draw_river(noise_map: &Noise, world: &World) {
     let (start_x, start_y) = (100, 100);
     let (finish_x, finish_y) = (0, 0);
-    let path = pathfinding::breadth_first(noise_map, (start_x, start_y), (finish_x, finish_y));
+    let path = pathfinding::dijkstra(noise_map, (start_x, start_y), (finish_x, finish_y));
 
     for node in path {
         let id = world.ecs.create_entity();
