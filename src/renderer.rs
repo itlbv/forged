@@ -7,7 +7,7 @@ use sdl2::render::BlendMode::Blend;
 use sdl2::render::Texture;
 use sdl2::Sdl;
 use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
-use crate::{Properties, World};
+use crate::{Properties};
 use crate::properties::Camera;
 use self::sdl2::rect::Rect;
 

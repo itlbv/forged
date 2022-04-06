@@ -2,7 +2,7 @@ use std::path::Path;
 use sdl2::render::TextureCreator;
 use sdl2::video::WindowContext;
 use crate::map::Map;
-use crate::{entities, InputHandler, map_generator, Properties, Renderer, systems};
+use crate::{entities, InputHandler, Properties, Renderer, systems};
 use crate::components::{Behavior, Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
