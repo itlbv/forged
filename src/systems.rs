@@ -73,10 +73,10 @@ pub fn render_textures(world: &mut World) {
             texture_comp.sprite_in_tileset_y,
             texture_comp.sprite_w,
             texture_comp.sprite_h,
-            Renderer::world_to_screen(pos.x, world.properties.zoom_factor) - (texture_comp.render_offset_x * world.properties.zoom_factor as u32 / 50) as i32 + world.properties.camera_x,
-            Renderer::world_to_screen(pos.y, world.properties.zoom_factor) - (texture_comp.render_offset_y * world.properties.zoom_factor as u32 / 50) as i32 + world.properties.camera_y,
-            (texture_comp.object_w_tiles as f32 * world.properties.zoom_factor as f32 * texture_comp.scale) as u32,
-            (texture_comp.object_h_tiles as f32 * world.properties.zoom_factor as f32 * texture_comp.scale) as u32,
+            Renderer::world_to_screen(pos.x, world.properties.camera.zoom) - (texture_comp.render_offset_x * world.properties.camera.zoom as u32 / 50) as i32 + world.properties.camera.x,
+            Renderer::world_to_screen(pos.y, world.properties.camera.zoom) - (texture_comp.render_offset_y * world.properties.camera.zoom as u32 / 50) as i32 + world.properties.camera.y,
+            (texture_comp.object_w_tiles as f32 * world.properties.camera.zoom as f32 * texture_comp.scale) as u32,
+            (texture_comp.object_h_tiles as f32 * world.properties.camera.zoom as f32 * texture_comp.scale) as u32,
         );
     }
 }
@@ -97,11 +97,7 @@ pub fn render_entities(world: &mut World) {
             shape.w,
             shape.h,
             (shape.color.r, shape.color.g, shape.color.b, shape.color.a),
-            (
-                world.properties.camera_x,
-                world.properties.camera_y,
-                world.properties.zoom_factor,
-                )
+            &world.properties.camera,
         );
 
         // let x = Renderer::world_to_screen(pos.x + shape.offset_x, world.properties.zoom_factor);
@@ -130,11 +126,7 @@ pub fn render_map(world: &mut World) {
             MAP_TILE_SIZE,
             MAP_TILE_SIZE,
             (color.r, color.g, color.b, color.a),
-            (
-                world.properties.camera_x,
-                world.properties.camera_y,
-                world.properties.zoom_factor,
-            ),
+            &world.properties.camera,
         );
 
         // world.renderer.render_texture(
@@ -151,11 +143,7 @@ pub fn render_map_grid(world: &mut World) {
             (x as f32 * MAP_TILE_SIZE, 0.),
             (x as f32 * MAP_TILE_SIZE, MAP_HEIGHT as f32 * MAP_TILE_SIZE),
             (0, 0, 0, 255),
-            (
-                world.properties.camera_x,
-                world.properties.camera_y,
-                world.properties.zoom_factor,
-            ),
+            &world.properties.camera,
         );
     }
 
@@ -164,11 +152,7 @@ pub fn render_map_grid(world: &mut World) {
             (0., y as f32 * MAP_TILE_SIZE),
             (MAP_WIDTH as f32 * MAP_TILE_SIZE, y as f32 * MAP_TILE_SIZE),
             (0, 0, 0, 255),
-            (
-                world.properties.camera_x,
-                world.properties.camera_y,
-                world.properties.zoom_factor,
-            ),
+            &world.properties.camera,
         );
     }
 }

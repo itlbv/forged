@@ -4,9 +4,7 @@ pub struct Properties {
     pub delta_time: f32,
     pub quit: bool,
 
-    pub camera_x: i32,
-    pub camera_y: i32,
-    pub zoom_factor: usize,
+    pub camera: Camera,
 }
 
 impl Properties {
@@ -15,9 +13,13 @@ impl Properties {
             player_id: 0,
             delta_time: 0.0,
             quit: false,
-            camera_x: 0,
-            camera_y: 0,
-            zoom_factor: 50,
+            camera: Camera { x: 0, y: 0, zoom: 50 },
         }
     }
+}
+
+pub struct Camera {
+    pub x: i32,
+    pub y: i32,
+    pub zoom: usize,
 }

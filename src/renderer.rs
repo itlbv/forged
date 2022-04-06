@@ -8,6 +8,7 @@ use sdl2::render::Texture;
 use sdl2::Sdl;
 use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::{Properties, World};
+use crate::properties::Camera;
 use self::sdl2::rect::Rect;
 
 const DEFAULT_CLEAR_FRAME_COLOR: Color = Color::RGB(50, 50, 50);
@@ -43,14 +44,14 @@ impl Renderer {
                        x_world: f32, y_world: f32,
                        w_world: f32, h_world: f32,
                        color: (u8, u8, u8, u8),
-                       camera: (i32, i32, usize),
+                       camera: &Camera,
     ) {
         self.sdl_canvas.set_draw_color(Color::RGBA(color.0, color.1, color.2, color.3));
 
-        let x = Renderer::world_to_screen(x_world, camera.2) + camera.0;
-        let y = Renderer::world_to_screen(y_world, camera.2) + camera.1;
-        let w = Renderer::world_to_screen(w_world, camera.2);
-        let h = Renderer::world_to_screen(h_world, camera.2);
+        let x = Renderer::world_to_screen(x_world, camera.zoom) + camera.x;
+        let y = Renderer::world_to_screen(y_world, camera.zoom) + camera.y;
+        let w = Renderer::world_to_screen(w_world, camera.zoom);
+        let h = Renderer::world_to_screen(h_world, camera.zoom);
 
 
         self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
@@ -60,14 +61,14 @@ impl Renderer {
                        start: (f32, f32),
                        end: (f32, f32),
                        color: (u8, u8, u8, u8),
-                       camera: (i32, i32, usize),
+                       camera: &Camera,
     ) {
         self.sdl_canvas.set_draw_color(Color::RGBA(color.0, color.1, color.2, color.3));
 
-        let start_x = Renderer::world_to_screen(start.0, camera.2) + camera.0;
-        let start_y = Renderer::world_to_screen(start.1, camera.2) + camera.1;
-        let end_x = Renderer::world_to_screen(end.0, camera.2) + camera.0;
-        let end_y = Renderer::world_to_screen(end.1, camera.2) + camera.1;
+        let start_x = Renderer::world_to_screen(start.0, camera.zoom) + camera.x;
+        let start_y = Renderer::world_to_screen(start.1, camera.zoom) + camera.y;
+        let end_x = Renderer::world_to_screen(end.0, camera.zoom) + camera.x;
+        let end_y = Renderer::world_to_screen(end.1, camera.zoom) + camera.y;
 
         self.sdl_canvas.draw_line(
             Point::new(start_x, start_y),
