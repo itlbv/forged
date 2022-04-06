@@ -56,10 +56,22 @@ impl Renderer {
         self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
     }
 
-    pub fn render_line(&mut self, x_1: usize, y_1: usize, x_2: usize, y_2: usize) {
+    pub fn render_line(&mut self,
+                       start: (f32, f32),
+                       end: (f32, f32),
+                       color: (u8, u8, u8, u8),
+                       camera: (i32, i32, usize),
+    ) {
+        self.sdl_canvas.set_draw_color(Color::RGBA(color.0, color.1, color.2, color.3));
+
+        let start_x = Renderer::world_to_screen(start.0, camera.2) + camera.0;
+        let start_y = Renderer::world_to_screen(start.1, camera.2) + camera.1;
+        let end_x = Renderer::world_to_screen(end.0, camera.2) + camera.0;
+        let end_y = Renderer::world_to_screen(end.1, camera.2) + camera.1;
+
         self.sdl_canvas.draw_line(
-            Point::new(x_1 as i32, y_1 as i32),
-            Point::new(x_2 as i32, y_2 as i32),
+            Point::new(start_x, start_y),
+            Point::new(end_x, end_y),
         );
     }
 

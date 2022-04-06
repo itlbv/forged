@@ -142,31 +142,33 @@ pub fn render_map(world: &mut World) {
         //     tile.tileset_x, tile.tileset_y, tile.tileset_w, tile.tileset_h,
         //     x + world.properties.camera_x, y + world.properties.camera_y, world.properties.zoom_factor as u32, world.properties.zoom_factor as u32);
     }
-    // render_map_grid(world);
+    render_map_grid(world);
 }
 
 pub fn render_map_grid(world: &mut World) {
     for x in 0..=MAP_WIDTH { // vertical lines
-        let x_1: usize = world.properties.zoom_factor * x * MAP_TILE_SIZE as usize;
-        let y_1: usize = 0;
-        let x_2: usize = x_1;
-        let y_2: usize = world.properties.zoom_factor * MAP_HEIGHT * MAP_TILE_SIZE as usize;
-        world.renderer.render_line(x_1 + world.properties.camera_x as usize,
-                                   y_1 + world.properties.camera_y as usize,
-                                   x_2 + world.properties.camera_x as usize,
-                                   y_2 + world.properties.camera_y as usize
+        world.renderer.render_line(
+            (x as f32 * MAP_TILE_SIZE, 0.),
+            (x as f32 * MAP_TILE_SIZE, MAP_HEIGHT as f32 * MAP_TILE_SIZE),
+            (0, 0, 0, 255),
+            (
+                world.properties.camera_x,
+                world.properties.camera_y,
+                world.properties.zoom_factor,
+            ),
         );
     }
 
     for y in 0..=MAP_HEIGHT { // horizontal lines
-        let x_1: usize = 0;
-        let y_1: usize = world.properties.zoom_factor * y * MAP_TILE_SIZE as usize;
-        let x_2: usize = world.properties.zoom_factor * MAP_WIDTH * MAP_TILE_SIZE as usize;
-        let y_2: usize = y_1;
-        world.renderer.render_line(x_1 + world.properties.camera_x as usize,
-                                   y_1 + world.properties.camera_y as usize,
-                                   x_2 + world.properties.camera_x as usize,
-                                   y_2 + world.properties.camera_y as usize
+        world.renderer.render_line(
+            (0., y as f32 * MAP_TILE_SIZE),
+            (MAP_WIDTH as f32 * MAP_TILE_SIZE, y as f32 * MAP_TILE_SIZE),
+            (0, 0, 0, 255),
+            (
+                world.properties.camera_x,
+                world.properties.camera_y,
+                world.properties.zoom_factor,
+            ),
         );
     }
 }
