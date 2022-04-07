@@ -1,8 +1,9 @@
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, SUCCESS};
 use crate::components::{Inventory, MainTarget, Position, Recipe, Remove, Storage, Target};
+use crate::util::entity_util::mark_entity_for_removal;
 use crate::World;
-use crate::util::map_util;
+use crate::util::{entity_util, map_util};
 
 pub struct DropItemToMainTargetStorage {}
 
@@ -49,11 +50,11 @@ impl PickUpTarget {
         let target_id = inventory.items_needed.remove(0);
         inventory.item_carried = target_id as i32;
 
-        world.ecs.add_component_to_entity(target_id, Remove::new(target_id));
+        entity_util::mark_entity_for_removal(target_id, world);
 
         let positions = world.ecs.borrow_component_vec::<Position>();
         let item_position = positions.get(target_id).unwrap().as_ref().unwrap();
-        world.map.set_tile_passable(item_position.x as usize, item_position.y as usize, false);
+        map_util::pick_up_item_from_tile(target_id, item_position.x as usize, item_position.y as usize, &world.map);
 
         SUCCESS
     }
