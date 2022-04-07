@@ -5,3 +5,4 @@ pub mod map_util;
 pub mod util_structs;
 pub mod log;
 pub mod physics;
+pub mod entity_util;

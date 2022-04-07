@@ -1,9 +1,11 @@
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::components::{Food, Position, Recipe, Remove, Target, Destination, MainTarget, Building};
+use crate::util::entity_util::mark_entity_for_removal;
+use crate::util::{entity_util, map_util};
 use crate::util::map_util::{pick_up_item_from_tile, place_item_to_tile};
 use crate::util::physics::{distance_between, Vect};
-use crate::World;
+use crate::{util, World};
 
 pub struct SetDestinationFromMainTarget {}
 
@@ -159,12 +161,11 @@ impl EatTarget {
     fn eat(&self, owner: usize, world: &World) -> Status {
         let targets = world.ecs.borrow_component_vec::<Target>();
         let target_id = targets.get(owner).unwrap().as_ref().unwrap().target_id;
-        world.ecs.add_component_to_entity::<Remove>(target_id, Remove::new(target_id));
+        entity_util::mark_entity_for_removal(target_id, world);
 
         let positions = world.ecs.borrow_component_vec::<Position>();
         let target_pos = positions.get(target_id).unwrap().as_ref().unwrap();
-
-        pick_up_item_from_tile(target_id, target_pos.x as usize, target_pos.y as usize, &world.map);
+        map_util::pick_up_item_from_tile(target_id, target_pos.x as usize, target_pos.y as usize, &world.map);
 
         SUCCESS
     }
