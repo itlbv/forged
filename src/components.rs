@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 use crate::btree::BehaviorTreeNode;
 use crate::needs::{Hunger, Need};
-use crate::util_structs::Color;
+use crate::util::util_structs::Color;
 
 pub struct Behavior {
     pub owner: usize,

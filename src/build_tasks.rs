@@ -1,7 +1,8 @@
-use crate::{entities, log, map_util, World};
+use crate::{entities, World};
 use crate::btree::{BehaviorTreeNode, Status};
 use crate::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{MainTarget, Destination, Recipe, Position, RenderShape, Building};
+use crate::components::{Building, Destination, MainTarget, Position, Recipe, RenderShape};
+use crate::util::{log, map_util};
 
 pub struct FinishBuilding {}
 

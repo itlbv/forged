@@ -4,9 +4,10 @@
 
 use crate::components::{Position, RenderShape};
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
-use crate::util_structs::Color;
-use crate::{entities, noise_generator, path, World};
-use crate::noise_generator::Noise;
+use crate::util::util_structs::Color;
+use crate::{entities, World};
+use crate::util::noise_generator::Noise;
+use crate::util::{noise_generator, path};
 
 pub fn place_trees(world: &World) {
     let noise = noise_generator::fbm(MAP_WIDTH as usize, MAP_HEIGHT as usize, 4);

@@ -1,7 +1,7 @@
 use std::cell::{Ref, RefCell, RefMut};
 use std::slice::Iter;
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
-use crate::util_structs::Color;
+use crate::util::util_structs::Color;
 
 pub struct Map {
     tiles: Box<RefCell<dyn MapTilesVec>>,

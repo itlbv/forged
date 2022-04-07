@@ -1,7 +1,7 @@
 use std::collections::{HashMap};
 
 
-use crate::noise_generator::Noise;
+use crate::util::noise_generator::Noise;
 
 pub fn dijkstra(map: &Noise, start: (usize, usize), finish: (usize, usize))
                 -> Vec<(usize, usize)> {

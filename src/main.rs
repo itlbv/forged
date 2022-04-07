@@ -18,16 +18,10 @@ mod items;
 mod move_tasks;
 mod item_tasks;
 mod build_tasks;
-mod map_util;
-mod util_structs;
-mod log;
 mod resources;
 mod textures;
 mod properties;
 mod needs;
-mod map_generator;
-mod noise_generator;
-mod path;
 mod util;
 
 use std::time::{Duration, Instant};

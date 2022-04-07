@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::components::{Recipe, RenderShape};
 use crate::items::{Stone, Wood};
 use crate::textures;
-use crate::util_structs::Color;
+use crate::util::util_structs::Color;
 
 pub fn house() -> Recipe {
     let mut ingredients_type_ids = HashMap::new();

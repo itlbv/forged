@@ -1,7 +1,7 @@
 use crate::components::{Behavior, Building, Food, Inventory, Name, Position, Recipe, RenderShape, Storage};
 use crate::{behaviors, textures, World};
 use crate::items::{Item, Stone, Wood};
-use crate::util_structs::Color;
+use crate::util::util_structs::Color;
 
 pub fn house_from_recipe(x: f32, y: f32, recipe: Recipe, world: &World) -> (usize, f32, f32) {
     let id = world.ecs.create_entity();

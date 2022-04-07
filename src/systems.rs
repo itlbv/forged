@@ -3,7 +3,7 @@ use crate::components::{Behavior, Position, Remove, RenderShape, Texture};
 use crate::{Renderer, World};
 
 use crate::constants::{MAP_HEIGHT, MAP_TILE_SIZE, MAP_WIDTH};
-use crate::util_structs::Color;
+use crate::util::util_structs::Color;
 
 pub fn behavior(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
