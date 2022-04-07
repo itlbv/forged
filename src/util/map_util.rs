@@ -1,5 +1,6 @@
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::map::Map;
+use crate::World;
 
 pub fn sort_entities_by_proximity(_owner_entity: usize, mut _entities: &Vec<usize>) {}
 
@@ -73,4 +74,12 @@ fn is_tile_suitable_for_building(start_tile_x: usize, start_tile_y: usize, w: us
         }
     }
     true
+}
+
+pub fn place_item_to_tile(_: usize, x: usize, y: usize, map: &Map) {
+    map.set_tile_passable(x, y, false);
+}
+
+pub fn pick_up_item_from_tile(_: usize, x: usize, y: usize, map: &Map) {
+    map.set_tile_passable(x, y, true);
 }
