@@ -2,7 +2,6 @@ use crate::World;
 use crate::behavior::behaviors;
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 
-
 pub trait Need {
     fn evaluate(&mut self);
     fn run_behavior(&mut self, owner:usize, world: &World) -> Status;
