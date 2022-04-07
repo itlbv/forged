@@ -2,6 +2,8 @@ use std::any::{Any, TypeId};
 use std::cell::{Ref, RefCell, RefMut};
 use std::collections::HashMap;
 
+pub type EntityId = usize;
+
 pub struct Ecs {
     entity_count: RefCell<usize>,
     component_registry: HashMap<TypeId, Box<dyn ComponentVec>>,
@@ -19,7 +21,7 @@ impl Ecs {
         self.component_registry.insert(TypeId::of::<Comp>(), Box::new(RefCell::new(vec![] as Vec<Option<Comp>>)));
     }
 
-    pub fn create_entity(&self) -> usize {
+    pub fn create_entity(&self) -> EntityId {
         let new_entity_id = self.entity_count.take();
         self.entity_count.replace(new_entity_id + 1);
         for (_, comp) in &self.component_registry {
@@ -28,17 +30,17 @@ impl Ecs {
         new_entity_id
     }
 
-    pub fn add_component_to_entity<Comp: 'static>(&self, entity_id: usize, comp: Comp) {
+    pub fn add_component_to_entity<Comp: 'static>(&self, entity_id: EntityId, comp: Comp) {
         self.borrow_component_vec_mut::<Comp>()[entity_id] = Some(comp);
     }
 
-    pub fn remove_entity(&mut self, entity_id: usize) {
+    pub fn remove_entity(&mut self, entity_id: EntityId) {
         for (_, comp_vec) in &self.component_registry {
             comp_vec.set_none_at_index(entity_id);
         }
     }
 
-    pub fn get_entities_by_type_id(&self, type_id: &TypeId) -> Vec<usize> {
+    pub fn get_entities_with_component_type_id(&self, type_id: &TypeId) -> Vec<EntityId> {
         self.component_registry
             .get(type_id)
             .unwrap()
