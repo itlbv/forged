@@ -101,7 +101,7 @@ fn render_map_tile_info(world: &mut World) {
                 tile.y as f32,
                 MAP_TILE_SIZE,
                 MAP_TILE_SIZE,
-                (10, 10, 10, 255),
+                (10, 10, 10, 150),
                 &world.properties.camera,
             );
         };
