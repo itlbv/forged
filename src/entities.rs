@@ -19,7 +19,7 @@ pub fn house_from_recipe(x: f32, y: f32, recipe: Recipe, world: &World) -> (usiz
 pub fn human(x: f32, y: f32, name: &str, world: &World) {
     let id = world.ecs.create_entity();
 
-    world.ecs.add_component_to_entity(id, Behavior::new_with_initial_behavior(Box::new(behaviors::do_nothing()), id));
+    world.ecs.add_component_to_entity(id, Behavior::new(id));
     world.ecs.add_component_to_entity(id, Position::of(x, y, id));
     world.ecs.add_component_to_entity(id, textures::human());
     world.ecs.add_component_to_entity(id, RenderShape::new_with_standard_offset(0.49, 0.49,

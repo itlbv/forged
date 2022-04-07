@@ -1,24 +1,34 @@
 use std::any::TypeId;
 use std::collections::HashMap;
+use crate::behavior::behaviors;
 
 use crate::behavior::btree::BehaviorTreeNode;
-use crate::needs::{Hunger, Need};
+use crate::ecs::EntityId;
+use crate::behavior::needs::{Hunger, Need};
+use crate::util::physics::Vect;
 use crate::util::util_structs::Color;
 
 pub struct Behavior {
-    pub owner: usize,
+    pub owner: EntityId,
     pub needs: Vec<Box<dyn Need>>,
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
+
+    pub target: Option<EntityId>,
+    pub main_target: Option<EntityId>,
+    pub destination: Option<Vect>,
 }
 
 impl Behavior {
-    pub fn new_with_initial_behavior(behavior_tree: Box<dyn BehaviorTreeNode>, owner: usize) -> Self {
+    pub fn new(owner: EntityId) -> Self {
         Self {
-            behavior_tree,
             owner,
             needs: vec![
                 Box::new(Hunger::new()),
             ],
+            behavior_tree: Box::new(behaviors::do_nothing()),
+            target: None,
+            main_target: None,
+            destination: None,
         }
     }
 }
