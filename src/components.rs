@@ -1,7 +1,7 @@
 use std::any::TypeId;
 use std::collections::HashMap;
 
-use crate::btree::BehaviorTreeNode;
+use crate::behavior::btree::BehaviorTreeNode;
 use crate::needs::{Hunger, Need};
 use crate::util::util_structs::Color;
 

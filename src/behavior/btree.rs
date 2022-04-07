@@ -1,4 +1,4 @@
-use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
+use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::World;
 
 #[derive(PartialEq)] // needed for match expression

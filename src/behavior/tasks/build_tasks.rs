@@ -1,6 +1,6 @@
 use crate::{entities, World};
-use crate::btree::{BehaviorTreeNode, Status};
-use crate::btree::Status::{FAILURE, SUCCESS};
+use crate::behavior::btree::{BehaviorTreeNode, Status};
+use crate::behavior::btree::Status::{FAILURE, SUCCESS};
 use crate::components::{Building, Destination, MainTarget, Position, Recipe, RenderShape};
 use crate::util::{log, map_util};
 

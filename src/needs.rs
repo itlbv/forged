@@ -1,5 +1,6 @@
-use crate::{behaviors, World};
-use crate::btree::{BehaviorTreeNode, Status};
+use crate::World;
+use crate::behavior::behaviors;
+use crate::behavior::btree::{BehaviorTreeNode, Status};
 
 
 pub trait Need {

@@ -1,7 +1,7 @@
-use crate::btree::{BehaviorTreeNode, Status};
-use crate::btree::Status::{FAILURE, RUNNING, SUCCESS};
+use crate::behavior::btree::{BehaviorTreeNode, Status};
+use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::components::{Food, Position, Recipe, Remove, Target, Destination, MainTarget, Building};
-use crate::physics::{distance_between, Vect};
+use crate::util::physics::{distance_between, Vect};
 use crate::World;
 
 pub struct SetDestinationFromMainTarget {}

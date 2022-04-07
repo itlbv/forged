@@ -1,12 +1,13 @@
 use std::collections::HashMap;
 
-use crate::btree::{BehaviorTreeNode, Status};
-use crate::components::{Position, Target, Destination};
-use crate::physics::{Vect};
-use crate::{physics, World};
-use crate::btree::Status::{RUNNING, SUCCESS};
+use crate::behavior::btree::{BehaviorTreeNode, Status};
+use crate::components::{Destination, Position, Target};
+use crate::util::physics::Vect;
+use crate::World;
+use crate::behavior::btree::Status::{RUNNING, SUCCESS};
 use crate::constants::MOB_SPEED;
 use crate::map::MapTile;
+use crate::util::physics;
 
 
 pub struct MoveToDestination {
