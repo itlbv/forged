@@ -55,14 +55,14 @@ pub trait MapTilesVec {
 
 impl MapTilesVec for Vec<MapTile> {
     fn borrow_tile(&self, x: usize, y: usize) -> &MapTile {
-        if x < 0 || y < 0 || x >= MAP_WIDTH || y >= MAP_HEIGHT {
+        if x >= MAP_WIDTH || y >= MAP_HEIGHT {
             panic!("Accessing map tiles outside of bounds!");
         }
         self.get(y * MAP_WIDTH + x).unwrap()
     }
 
     fn borrow_tile_mut(&mut self, x: usize, y: usize) -> &mut MapTile {
-        if x < 0 || y < 0 || x >= MAP_WIDTH || y >= MAP_HEIGHT {
+        if x >= MAP_WIDTH || y >= MAP_HEIGHT {
             panic!("Accessing map tiles outside of bounds!");
         }
         self.get_mut(y * MAP_WIDTH + x).unwrap()

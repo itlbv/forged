@@ -40,14 +40,17 @@ pub fn find_free_tiles(start_x: usize, start_y: usize, w: usize, h: usize, margi
 }
 
 fn is_tile_suitable_for_building(start_tile_x: usize, start_tile_y: usize, w: usize, h: usize, margin: usize, map: &Map) -> bool {
+    if margin > start_tile_x
+        || margin > start_tile_y {
+        return false;
+    }
+
     let start_tile_with_margin_x = start_tile_x - margin;
     let start_tile_with_margin_y = start_tile_y - margin;
     let w_with_margin = w + margin * 2;
     let h_with_margin = h + margin * 2;
 
-    if start_tile_with_margin_x < 0
-        || start_tile_with_margin_y < 0
-        || start_tile_with_margin_x + w_with_margin > MAP_WIDTH
+    if start_tile_with_margin_x + w_with_margin > MAP_WIDTH
         || start_tile_with_margin_y + h_with_margin > MAP_HEIGHT {
         return false;
     }
