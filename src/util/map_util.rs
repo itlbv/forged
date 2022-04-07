@@ -62,7 +62,7 @@ fn is_tile_suitable_for_building(start_tile_x: usize, start_tile_y: usize, w: us
             let new_x = start_tile_with_margin_x + x;
             let new_y = start_tile_with_margin_y + y;
 
-            if new_x < 0 || new_y < 0 || new_x >= MAP_WIDTH || new_y >= MAP_HEIGHT {
+            if new_x >= MAP_WIDTH || new_y >= MAP_HEIGHT {
                 continue;
             }
 
