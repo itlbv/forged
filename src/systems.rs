@@ -1,4 +1,3 @@
-
 use crate::components::{Behavior, Position, Remove, RenderShape, Texture};
 use crate::{Renderer, World};
 
@@ -50,13 +49,37 @@ pub fn input(world: &mut World) {
 
 pub fn render(world: &mut World) {
     world.renderer.start_frame(&world.properties);
+
     render_map(world);
     render_textures(world);
-    render_entities(world);
+    render_debug(world);
+
     world.renderer.present_frame();
 }
 
-pub fn render_textures(world: &mut World) {
+fn render_map(world: &mut World) {
+    if world.properties.render_flags.map_textures {
+        // for tile in world.map.borrow_tiles().iterator() {
+        //     world.renderer.render_texture(
+        //         world.assets.borrow_texture("map_tileset"),
+        //         tile.tileset_x, tile.tileset_y, tile.tileset_w, tile.tileset_h,
+        //         x + world.properties.camera_x, y + world.properties.camera_y, world.properties.zoom_factor as u32, world.properties.zoom_factor as u32);
+        // }
+    } else {
+        for tile in world.map.borrow_tiles().iterator() {
+            world.renderer.render_rect(
+                tile.x as f32,
+                tile.y as f32,
+                MAP_TILE_SIZE,
+                MAP_TILE_SIZE,
+                (tile.color.r, tile.color.g, tile.color.b, tile.color.a),
+                &world.properties.camera,
+            );
+        }
+    }
+}
+
+fn render_textures(world: &mut World) {
     let textures = world.ecs.borrow_component_vec::<Texture>();
     let positions = world.ecs.borrow_component_vec::<Position>();
 
@@ -65,23 +88,72 @@ pub fn render_textures(world: &mut World) {
         |(texture, pos)| Some((texture.as_ref()?, pos.as_ref()?))
     );
 
-    for (texture_comp, pos) in iter {
-        let texture_sprite = world.assets.borrow_texture(texture_comp.sprite_id.as_str());
+    for (texture, pos) in iter {
+        let sprite = world.assets.borrow_texture(texture.sprite_id.as_str());
         world.renderer.render_texture(
-            texture_sprite,
-            texture_comp.sprite_in_tileset_x,
-            texture_comp.sprite_in_tileset_y,
-            texture_comp.sprite_w,
-            texture_comp.sprite_h,
-            Renderer::world_to_screen(pos.x, world.properties.camera.zoom) - (texture_comp.render_offset_x * world.properties.camera.zoom as u32 / 50) as i32 + world.properties.camera.x,
-            Renderer::world_to_screen(pos.y, world.properties.camera.zoom) - (texture_comp.render_offset_y * world.properties.camera.zoom as u32 / 50) as i32 + world.properties.camera.y,
-            (texture_comp.object_w_tiles as f32 * world.properties.camera.zoom as f32 * texture_comp.scale) as u32,
-            (texture_comp.object_h_tiles as f32 * world.properties.camera.zoom as f32 * texture_comp.scale) as u32,
+            sprite,
+            texture.sprite_in_tileset_x,
+            texture.sprite_in_tileset_y,
+            texture.sprite_w,
+            texture.sprite_h,
+            Renderer::world_to_screen(pos.x, world.properties.camera.zoom) - (texture.render_offset_x * world.properties.camera.zoom as u32 / 50) as i32 + world.properties.camera.x,
+            Renderer::world_to_screen(pos.y, world.properties.camera.zoom) - (texture.render_offset_y * world.properties.camera.zoom as u32 / 50) as i32 + world.properties.camera.y,
+            (texture.object_w_tiles as f32 * world.properties.camera.zoom as f32 * texture.scale) as u32,
+            (texture.object_h_tiles as f32 * world.properties.camera.zoom as f32 * texture.scale) as u32,
         );
     }
 }
 
-pub fn render_entities(world: &mut World) {
+fn render_debug(world: &mut World) {
+    if world.properties.render_flags.map_grid {
+        render_map_grid(world);
+    }
+
+    if world.properties.render_flags.map_tile_info {
+        render_map_tile_info(world);
+    }
+
+    if world.properties.render_flags.shapes {
+        render_debug_shapes(world);
+    }
+}
+
+fn render_map_grid(world: &mut World) {
+    for x in 0..=MAP_WIDTH { // vertical lines
+        world.renderer.render_line(
+            (x as f32 * MAP_TILE_SIZE, 0.),
+            (x as f32 * MAP_TILE_SIZE, MAP_HEIGHT as f32 * MAP_TILE_SIZE),
+            (0, 0, 0, 255),
+            &world.properties.camera,
+        );
+    }
+
+    for y in 0..=MAP_HEIGHT { // horizontal lines
+        world.renderer.render_line(
+            (0., y as f32 * MAP_TILE_SIZE),
+            (MAP_WIDTH as f32 * MAP_TILE_SIZE, y as f32 * MAP_TILE_SIZE),
+            (0, 0, 0, 255),
+            &world.properties.camera,
+        );
+    }
+}
+
+fn render_map_tile_info(world: &mut World) {
+    for tile in world.map.borrow_tiles().iterator() {
+        if !tile.passable {
+            world.renderer.render_rect(
+                tile.x as f32,
+                tile.y as f32,
+                MAP_TILE_SIZE,
+                MAP_TILE_SIZE,
+                (10, 10, 10, 255),
+                &world.properties.camera,
+            );
+        };
+    }
+}
+
+fn render_debug_shapes(world: &mut World) {
     let shapes = world.ecs.borrow_component_vec::<RenderShape>();
     let positions = world.ecs.borrow_component_vec::<Position>();
 
@@ -108,51 +180,5 @@ pub fn render_entities(world: &mut World) {
         // let _true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
         // let _true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
         // world.renderer.render_dot(true_pos_x + world.properties.camera_x, true_pos_y + world.properties.camera_y); // true position
-    }
-}
-
-pub fn render_map(world: &mut World) {
-    for tile in world.map.borrow_tiles().iterator() {
-        let color: Color;
-        if !tile.passable {
-            color = Color::new(10, 10, 10, 255);
-        } else {
-            color = Color::new(tile.color.r, tile.color.g, tile.color.b, tile.color.a);
-        };
-
-        world.renderer.render_rect(
-            tile.x as f32,
-            tile.y as f32,
-            MAP_TILE_SIZE,
-            MAP_TILE_SIZE,
-            (color.r, color.g, color.b, color.a),
-            &world.properties.camera,
-        );
-
-        // world.renderer.render_texture(
-        //     world.assets.borrow_texture("map_tileset"),
-        //     tile.tileset_x, tile.tileset_y, tile.tileset_w, tile.tileset_h,
-        //     x + world.properties.camera_x, y + world.properties.camera_y, world.properties.zoom_factor as u32, world.properties.zoom_factor as u32);
-    }
-    render_map_grid(world);
-}
-
-pub fn render_map_grid(world: &mut World) {
-    for x in 0..=MAP_WIDTH { // vertical lines
-        world.renderer.render_line(
-            (x as f32 * MAP_TILE_SIZE, 0.),
-            (x as f32 * MAP_TILE_SIZE, MAP_HEIGHT as f32 * MAP_TILE_SIZE),
-            (0, 0, 0, 255),
-            &world.properties.camera,
-        );
-    }
-
-    for y in 0..=MAP_HEIGHT { // horizontal lines
-        world.renderer.render_line(
-            (0., y as f32 * MAP_TILE_SIZE),
-            (MAP_WIDTH as f32 * MAP_TILE_SIZE, y as f32 * MAP_TILE_SIZE),
-            (0, 0, 0, 255),
-            &world.properties.camera,
-        );
     }
 }
