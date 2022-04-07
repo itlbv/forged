@@ -81,9 +81,9 @@ impl<'assets> World<'assets> {
     pub fn tick(&mut self, _delta_time: f32) {
         self.properties.delta_time = 0.016; // fixed framerate for debugging
 
+        systems::input(self);
         systems::remove_entities(self);
         systems::behavior(self);
-        systems::input(self);
         systems::render(self);
     }
 }
