@@ -1,3 +1,4 @@
+use std::f32::MAX;
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::components::{Food, Position, Recipe, Target, Destination, MainTarget, Building};
@@ -6,6 +7,7 @@ use crate::util::{entity_util, map_util};
 
 use crate::util::physics::{distance_between, Vect};
 use crate::{World};
+use crate::ecs::EntityId;
 
 pub struct SetDestinationFromMainTarget {}
 
@@ -111,11 +113,11 @@ impl FindFood {
         Self {}
     }
 
-    fn find_food(&self, owner: usize, world: &World) -> Status {
+    fn find_food(&self, owner: EntityId, world: &World) -> Status {
         let foods = world.ecs.borrow_component_vec::<Food>();
         let positions = world.ecs.borrow_component_vec::<Position>();
 
-        let own_pos_vect = Vect::of(
+        let own_pos = Vect::of(
             positions.get(owner).unwrap().as_ref().unwrap().x,
             positions.get(owner).unwrap().as_ref().unwrap().y,
         );
@@ -125,21 +127,21 @@ impl FindFood {
             |(food, pos)| Some((food.as_ref()?, pos.as_ref()?))
         );
 
-        let mut target_entity_id: i32 = -1;
-        let mut shortest_distance: f32 = 10000.0;
+        let mut target = None;
+        let mut shortest_distance = f32::MAX;
         for (_food, pos) in iter {
-            let distance = distance_between(&own_pos_vect, &Vect::of(pos.x, pos.y));
+            let distance = distance_between(&own_pos, &Vect::of(pos.x, pos.y));
             if distance < shortest_distance {
                 shortest_distance = distance;
-                target_entity_id = pos.entity_id as i32;
+                target = Some(pos.owner);
             }
         }
 
-        if target_entity_id < 0 {
+        if target.is_none() {
             return FAILURE;
         }
 
-        world.ecs.add_component_to_entity(owner, Target::new(target_entity_id as usize));
+        world.ecs.add_component_to_entity(owner, Target::new(target.unwrap()));
         SUCCESS
     }
 }
@@ -148,7 +150,7 @@ pub struct EatTarget {
 }
 
 impl BehaviorTreeNode for EatTarget {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
+    fn run(&mut self, owner: EntityId, world: &World) -> Status {
         self.eat(owner, world)
     }
 }
@@ -158,7 +160,7 @@ impl EatTarget {
         Self {  }
     }
 
-    fn eat(&self, owner: usize, world: &World) -> Status {
+    fn eat(&self, owner: EntityId, world: &World) -> Status {
         let targets = world.ecs.borrow_component_vec::<Target>();
         let target_id = targets.get(owner).unwrap().as_ref().unwrap().target_id;
         entity_util::mark_entity_for_removal(target_id, world);

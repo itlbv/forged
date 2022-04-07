@@ -1,4 +1,5 @@
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
+use crate::ecs::EntityId;
 use crate::World;
 
 #[derive(PartialEq)] // needed for match expression
@@ -9,7 +10,7 @@ pub enum Status {
 }
 
 pub trait BehaviorTreeNode {
-    fn run(&mut self, owner: usize, world: &World) -> Status;
+    fn run(&mut self, owner: EntityId, world: &World) -> Status;
 }
 
 pub struct Sequence {
@@ -27,7 +28,7 @@ impl Sequence {
 }
 
 impl BehaviorTreeNode for Sequence {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
+    fn run(&mut self, owner: EntityId, world: &World) -> Status {
         for (i, child) in self.children.iter_mut().enumerate() {
             if self.idx >= 0 && self.idx != i as i8 { continue; }
 

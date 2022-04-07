@@ -192,12 +192,12 @@ impl MainTarget {
 pub struct Position {
     pub x: f32,
     pub y: f32,
-    pub entity_id: usize,
+    pub owner: EntityId,
 }
 
 impl Position {
-    pub fn of(x: f32, y: f32, entity_id: usize) -> Self {
-        Self { x, y, entity_id }
+    pub fn of(x: f32, y: f32, owner: EntityId) -> Self {
+        Self { x, y, owner }
     }
 }
 
