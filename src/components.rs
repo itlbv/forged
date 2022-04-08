@@ -11,7 +11,7 @@ use crate::util::util_structs::Color;
 pub struct Behavior {
     pub needs: Vec<Box<dyn Need>>,
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
-    pub blackboard: BehaviorBlackboard,
+    pub state: BehaviorState,
 }
 
 impl Behavior {
@@ -21,19 +21,19 @@ impl Behavior {
                 Box::new(Hunger::new()),
             ],
             behavior_tree: Box::new(behaviors::do_nothing()),
-            blackboard: BehaviorBlackboard::new(owner),
+            state: BehaviorState::new(owner),
         }
     }
 }
 
-pub struct BehaviorBlackboard {
+pub struct BehaviorState {
     pub owner: EntityId,
     pub target: Option<EntityId>,
     pub main_target: Option<EntityId>,
     pub destination: Option<Vect>,
 }
 
-impl BehaviorBlackboard {
+impl BehaviorState {
     pub fn new(owner: EntityId) -> Self {
         Self {
             owner,

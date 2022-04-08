@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::behavior::btree::{BehaviorTreeNode, Status};
-use crate::components::{BehaviorBlackboard, Destination, Position, Target};
+use crate::components::{BehaviorState, Destination, Position, Target};
 use crate::util::physics::Vect;
 use crate::World;
 use crate::behavior::btree::Status::{RUNNING, SUCCESS};
@@ -14,8 +14,8 @@ pub struct MoveToDestination {
 }
 
 impl BehaviorTreeNode for MoveToDestination {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.move_to(blackboard.owner, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.move_to(state.owner, world)
     }
 }
 
@@ -100,8 +100,8 @@ pub struct MoveCloseToTarget {
 }
 
 impl BehaviorTreeNode for MoveCloseToTarget {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.move_close(blackboard, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.move_close(state, world)
     }
 }
 
@@ -110,8 +110,8 @@ impl MoveCloseToTarget {
         Self {  }
     }
 
-    fn move_close(&self, blackboard: &BehaviorBlackboard, world: &World) -> Status {
-        let target = blackboard.target.expect(&*format!("Target is not set for {}", blackboard.owner));
+    fn move_close(&self, state: &BehaviorState, world: &World) -> Status {
+        let target = state.target.expect(&*format!("Target is not set for {}", state.owner));
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
         let target_pos = positions.get(target).unwrap().as_ref().unwrap();
@@ -121,7 +121,7 @@ impl MoveCloseToTarget {
             target_pos.y,
         );
 
-        let own_pos = positions.get_mut(blackboard.owner).unwrap().as_mut().unwrap();
+        let own_pos = positions.get_mut(state.owner).unwrap().as_mut().unwrap();
 
         if physics::distance_between(
             &destination,

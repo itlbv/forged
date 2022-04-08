@@ -1,6 +1,6 @@
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{BehaviorBlackboard, Inventory, MainTarget, Position, Recipe, Storage, Target};
+use crate::components::{BehaviorState, Inventory, MainTarget, Position, Recipe, Storage, Target};
 use crate::util::entity_util::mark_entity_for_removal;
 use crate::World;
 use crate::util::{entity_util, map_util};
@@ -8,8 +8,8 @@ use crate::util::{entity_util, map_util};
 pub struct DropItemToMainTargetStorage {}
 
 impl BehaviorTreeNode for DropItemToMainTargetStorage {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.drop_item(blackboard.owner, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.drop_item(state.owner, world)
     }
 }
 
@@ -35,8 +35,8 @@ impl DropItemToMainTargetStorage {
 pub struct PickUpTarget {}
 
 impl BehaviorTreeNode for PickUpTarget {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.pick_up(blackboard.owner, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.pick_up(state.owner, world)
     }
 }
 
@@ -63,8 +63,8 @@ impl PickUpTarget {
 pub struct FindIngredients {}
 
 impl BehaviorTreeNode for FindIngredients {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.find(blackboard.owner, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.find(state.owner, world)
     }
 }
 
@@ -102,8 +102,8 @@ impl FindIngredients {
 pub struct ChooseIngredient {}
 
 impl BehaviorTreeNode for ChooseIngredient {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.choose_ingredient(blackboard.owner, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.choose_ingredient(state.owner, world)
     }
 }
 

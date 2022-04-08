@@ -20,7 +20,7 @@ pub fn behavior(world: &World) {
                         priority_need_idx = i;
                     }
                 }
-                needs[priority_need_idx].run_behavior(&mut behavior.blackboard, world);
+                needs[priority_need_idx].run_behavior(&mut behavior.state, world);
             }
         };
     }

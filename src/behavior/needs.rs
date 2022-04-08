@@ -1,12 +1,12 @@
 use crate::World;
 use crate::behavior::behaviors;
 use crate::behavior::btree::{BehaviorTreeNode, Status};
-use crate::components::BehaviorBlackboard;
+use crate::components::BehaviorState;
 use crate::ecs::EntityId;
 
 pub trait Need {
     fn evaluate(&mut self);
-    fn run_behavior(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status;
+    fn run_behavior(&mut self, state: &mut BehaviorState, world: &World) -> Status;
     fn get_value(&self) -> usize;
 }
 
@@ -20,8 +20,8 @@ impl Need for Hunger {
 
     }
 
-    fn run_behavior(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.behavior.run(blackboard, world)
+    fn run_behavior(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.behavior.run(state, world)
     }
 
     fn get_value(&self) -> usize {

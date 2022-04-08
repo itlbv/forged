@@ -1,15 +1,15 @@
 use crate::{entities, World};
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{BehaviorBlackboard, Building, Destination, MainTarget, Position, Recipe, RenderShape};
+use crate::components::{BehaviorState, Building, Destination, MainTarget, Position, Recipe, RenderShape};
 use crate::ecs::EntityId;
 use crate::util::{log, map_util};
 
 pub struct FinishBuilding {}
 
 impl BehaviorTreeNode for FinishBuilding {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.finish_building(blackboard.owner, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.finish_building(state.owner, world)
     }
 }
 
@@ -38,8 +38,8 @@ impl FinishBuilding {
 pub struct MakeBuildingTransparent {}
 
 impl BehaviorTreeNode for MakeBuildingTransparent {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.make_transparent(blackboard.owner, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.make_transparent(state.owner, world)
     }
 }
 
@@ -67,8 +67,8 @@ impl MakeBuildingTransparent {
 pub struct FindTilesAndPlaceInvisibleBuilding {}
 
 impl BehaviorTreeNode for FindTilesAndPlaceInvisibleBuilding {
-    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.find_tiles(blackboard.owner, world)
+    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+        self.find_tiles(state.owner, world)
     }
 }
 
