@@ -141,11 +141,10 @@ impl FindFood {
         return match target {
             None => { FAILURE }
             Some(_) => {
-                world.ecs.add_component_to_entity(blackboard.owner, Target::new(target.unwrap()));
                 blackboard.target = target;
                 SUCCESS
             }
-        }
+        };
     }
 }
 
