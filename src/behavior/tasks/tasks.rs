@@ -1,4 +1,5 @@
 use std::f32::MAX;
+use sdl2::keyboard::Scancode::F;
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::components::{Food, Position, Recipe, Target, Destination, MainTarget, Building, BehaviorBlackboard};
@@ -137,18 +138,18 @@ impl FindFood {
             }
         }
 
-        if target.is_none() {
-            return FAILURE;
+        return match target {
+            None => { FAILURE }
+            Some(_) => {
+                world.ecs.add_component_to_entity(blackboard.owner, Target::new(target.unwrap()));
+                blackboard.target = target;
+                SUCCESS
+            }
         }
-
-        world.ecs.add_component_to_entity(blackboard.owner, Target::new(target.unwrap()));
-        blackboard.target = target;
-        SUCCESS
     }
 }
 
-pub struct EatTarget {
-}
+pub struct EatTarget {}
 
 impl BehaviorTreeNode for EatTarget {
     fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
@@ -158,7 +159,7 @@ impl BehaviorTreeNode for EatTarget {
 
 impl EatTarget {
     pub fn new() -> Self {
-        Self {  }
+        Self {}
     }
 
     fn eat(&self, owner: EntityId, world: &World) -> Status {
