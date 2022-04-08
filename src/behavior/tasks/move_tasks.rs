@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::behavior::btree::{BehaviorTreeNode, Status};
-use crate::components::{Destination, Position, Target};
+use crate::components::{BehaviorBlackboard, Destination, Position, Target};
 use crate::util::physics::Vect;
 use crate::World;
 use crate::behavior::btree::Status::{RUNNING, SUCCESS};
@@ -14,8 +14,8 @@ pub struct MoveToDestination {
 }
 
 impl BehaviorTreeNode for MoveToDestination {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.move_to(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.move_to(blackboard.owner, world)
     }
 }
 
@@ -100,8 +100,8 @@ pub struct MoveCloseToTarget {
 }
 
 impl BehaviorTreeNode for MoveCloseToTarget {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.move_close(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.move_close(blackboard, world)
     }
 }
 
@@ -110,19 +110,18 @@ impl MoveCloseToTarget {
         Self {  }
     }
 
-    fn move_close(&self, owner: usize, world: &World) -> Status {
-        let targets = world.ecs.borrow_component_vec::<Target>();
-        let target_id = targets.get(owner).unwrap().as_ref().unwrap().target_id;
+    fn move_close(&self, blackboard: &BehaviorBlackboard, world: &World) -> Status {
+        let target = blackboard.target.expect(&*format!("Target is not set for {}", blackboard.owner));
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
-        let target_pos = positions.get(target_id).unwrap().as_ref().unwrap();
+        let target_pos = positions.get(target).unwrap().as_ref().unwrap();
 
         let destination = Vect::of(
             target_pos.x,
             target_pos.y,
         );
 
-        let own_pos = positions.get_mut(owner).unwrap().as_mut().unwrap();
+        let own_pos = positions.get_mut(blackboard.owner).unwrap().as_mut().unwrap();
 
         if physics::distance_between(
             &destination,

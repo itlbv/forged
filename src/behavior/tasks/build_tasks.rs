@@ -1,14 +1,15 @@
 use crate::{entities, World};
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{Building, Destination, MainTarget, Position, Recipe, RenderShape};
+use crate::components::{BehaviorBlackboard, Building, Destination, MainTarget, Position, Recipe, RenderShape};
+use crate::ecs::EntityId;
 use crate::util::{log, map_util};
 
 pub struct FinishBuilding {}
 
 impl BehaviorTreeNode for FinishBuilding {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.finish_building(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.finish_building(blackboard.owner, world)
     }
 }
 
@@ -17,7 +18,7 @@ impl FinishBuilding {
         Self {}
     }
 
-    fn finish_building(&self, owner: usize, world: &World) -> Status {
+    fn finish_building(&self, owner: EntityId, world: &World) -> Status {
         let main_targets = world.ecs.borrow_component_vec::<MainTarget>();
         let own_main_target = main_targets.get(owner).unwrap().as_ref().unwrap();
         let building_id = own_main_target.owner;
@@ -37,8 +38,8 @@ impl FinishBuilding {
 pub struct MakeBuildingTransparent {}
 
 impl BehaviorTreeNode for MakeBuildingTransparent {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.make_transparent(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.make_transparent(blackboard.owner, world)
     }
 }
 
@@ -63,18 +64,17 @@ impl MakeBuildingTransparent {
     }
 }
 
-pub struct FindTilesAndPlaceInvisibleBuilding {
-}
+pub struct FindTilesAndPlaceInvisibleBuilding {}
 
 impl BehaviorTreeNode for FindTilesAndPlaceInvisibleBuilding {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.find_tiles(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.find_tiles(blackboard.owner, world)
     }
 }
 
 impl FindTilesAndPlaceInvisibleBuilding {
     pub fn new() -> Self {
-        Self {  }
+        Self {}
     }
 
     fn find_tiles(&self, owner: usize, world: &World) -> Status {

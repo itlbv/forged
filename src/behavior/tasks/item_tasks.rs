@@ -1,6 +1,6 @@
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, SUCCESS};
-use crate::components::{Inventory, MainTarget, Position, Recipe, Remove, Storage, Target};
+use crate::components::{BehaviorBlackboard, Inventory, MainTarget, Position, Recipe, Storage, Target};
 use crate::util::entity_util::mark_entity_for_removal;
 use crate::World;
 use crate::util::{entity_util, map_util};
@@ -8,8 +8,8 @@ use crate::util::{entity_util, map_util};
 pub struct DropItemToMainTargetStorage {}
 
 impl BehaviorTreeNode for DropItemToMainTargetStorage {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.drop_item(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.drop_item(blackboard.owner, world)
     }
 }
 
@@ -35,8 +35,8 @@ impl DropItemToMainTargetStorage {
 pub struct PickUpTarget {}
 
 impl BehaviorTreeNode for PickUpTarget {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.pick_up(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.pick_up(blackboard.owner, world)
     }
 }
 
@@ -63,8 +63,8 @@ impl PickUpTarget {
 pub struct FindIngredients {}
 
 impl BehaviorTreeNode for FindIngredients {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.find(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.find(blackboard.owner, world)
     }
 }
 
@@ -79,7 +79,7 @@ impl FindIngredients {
 
         let mut ingredients = Vec::new();
         for (ingr_type_id, amount) in &recipe.ingredients_type_ids {
-            let items_of_type = world.ecs.get_entities_by_type_id(ingr_type_id);
+            let items_of_type = world.ecs.get_entities_with_component_type_id(ingr_type_id);
             if items_of_type.len() < *amount { return FAILURE; }
 
             map_util::sort_entities_by_proximity(owner, &items_of_type);
@@ -102,8 +102,8 @@ impl FindIngredients {
 pub struct ChooseIngredient {}
 
 impl BehaviorTreeNode for ChooseIngredient {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.choose_ingredient(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.choose_ingredient(blackboard.owner, world)
     }
 }
 

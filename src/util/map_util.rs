@@ -1,6 +1,6 @@
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::map::Map;
-use crate::World;
+
 
 pub fn sort_entities_by_proximity(_owner_entity: usize, mut _entities: &Vec<usize>) {}
 

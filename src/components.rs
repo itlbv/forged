@@ -1,24 +1,45 @@
 use std::any::TypeId;
 use std::collections::HashMap;
+use crate::behavior::behaviors;
 
 use crate::behavior::btree::BehaviorTreeNode;
-use crate::needs::{Hunger, Need};
+use crate::ecs::EntityId;
+use crate::behavior::needs::{Hunger, Need};
+use crate::util::physics::Vect;
 use crate::util::util_structs::Color;
 
 pub struct Behavior {
-    pub owner: usize,
     pub needs: Vec<Box<dyn Need>>,
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
+    pub blackboard: BehaviorBlackboard,
 }
 
 impl Behavior {
-    pub fn new_with_initial_behavior(behavior_tree: Box<dyn BehaviorTreeNode>, owner: usize) -> Self {
+    pub fn new(owner: EntityId) -> Self {
         Self {
-            behavior_tree,
-            owner,
             needs: vec![
                 Box::new(Hunger::new()),
             ],
+            behavior_tree: Box::new(behaviors::do_nothing()),
+            blackboard: BehaviorBlackboard::new(owner),
+        }
+    }
+}
+
+pub struct BehaviorBlackboard {
+    pub owner: EntityId,
+    pub target: Option<EntityId>,
+    pub main_target: Option<EntityId>,
+    pub destination: Option<Vect>,
+}
+
+impl BehaviorBlackboard {
+    pub fn new(owner: EntityId) -> Self {
+        Self {
+            owner,
+            target: None,
+            main_target: None,
+            destination: None,
         }
     }
 }
@@ -182,12 +203,12 @@ impl MainTarget {
 pub struct Position {
     pub x: f32,
     pub y: f32,
-    pub entity_id: usize,
+    pub owner: EntityId,
 }
 
 impl Position {
-    pub fn of(x: f32, y: f32, entity_id: usize) -> Self {
-        Self { x, y, entity_id }
+    pub fn of(x: f32, y: f32, owner: EntityId) -> Self {
+        Self { x, y, owner }
     }
 }
 

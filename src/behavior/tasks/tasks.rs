@@ -1,17 +1,20 @@
+use std::f32::MAX;
+use sdl2::keyboard::Scancode::F;
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Recipe, Remove, Target, Destination, MainTarget, Building};
-use crate::util::entity_util::mark_entity_for_removal;
+use crate::components::{Food, Position, Recipe, Target, Destination, MainTarget, Building, BehaviorBlackboard};
+
 use crate::util::{entity_util, map_util};
-use crate::util::map_util::{pick_up_item_from_tile, place_item_to_tile};
+
 use crate::util::physics::{distance_between, Vect};
-use crate::{util, World};
+use crate::{World};
+use crate::ecs::EntityId;
 
 pub struct SetDestinationFromMainTarget {}
 
 impl BehaviorTreeNode for SetDestinationFromMainTarget {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.set_destination(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.set_destination(blackboard.owner, world)
     }
 }
 
@@ -42,12 +45,12 @@ impl DoUntilFailure {
 }
 
 impl BehaviorTreeNode for DoUntilFailure {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
         loop {
             for (i, child) in self.children.iter_mut().enumerate() {
                 if self.idx >= 0 && self.idx != i as i8 { continue; }
 
-                let status = child.run(owner, world);
+                let status = child.run(blackboard, world);
                 if status == SUCCESS {
                     self.idx = -1;
                     continue;
@@ -68,8 +71,8 @@ pub struct SetRecipe {
 }
 
 impl BehaviorTreeNode for SetRecipe {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.set_recipe(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.set_recipe(blackboard.owner, world)
     }
 }
 
@@ -87,7 +90,7 @@ impl SetRecipe {
 pub struct DoNothingTask {}
 
 impl BehaviorTreeNode for DoNothingTask {
-    fn run(&mut self, _: usize, _: &World) -> Status {
+    fn run(&mut self, _: &mut BehaviorBlackboard, _: &World) -> Status {
         SUCCESS
     }
 }
@@ -101,8 +104,8 @@ impl DoNothingTask {
 pub struct FindFood {}
 
 impl BehaviorTreeNode for FindFood {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.find_food(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.find_food(blackboard, world)
     }
 }
 
@@ -111,13 +114,13 @@ impl FindFood {
         Self {}
     }
 
-    fn find_food(&self, owner: usize, world: &World) -> Status {
+    fn find_food(&self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
         let foods = world.ecs.borrow_component_vec::<Food>();
         let positions = world.ecs.borrow_component_vec::<Position>();
 
-        let own_pos_vect = Vect::of(
-            positions.get(owner).unwrap().as_ref().unwrap().x,
-            positions.get(owner).unwrap().as_ref().unwrap().y,
+        let own_pos = Vect::of(
+            positions.get(blackboard.owner).unwrap().as_ref().unwrap().x,
+            positions.get(blackboard.owner).unwrap().as_ref().unwrap().y,
         );
 
         let zip = foods.iter().zip(positions.iter());
@@ -125,40 +128,41 @@ impl FindFood {
             |(food, pos)| Some((food.as_ref()?, pos.as_ref()?))
         );
 
-        let mut target_entity_id: i32 = -1;
-        let mut shortest_distance: f32 = 10000.0;
+        let mut target = None;
+        let mut shortest_distance = f32::MAX;
         for (_food, pos) in iter {
-            let distance = distance_between(&own_pos_vect, &Vect::of(pos.x, pos.y));
+            let distance = distance_between(&own_pos, &Vect::of(pos.x, pos.y));
             if distance < shortest_distance {
                 shortest_distance = distance;
-                target_entity_id = pos.entity_id as i32;
+                target = Some(pos.owner);
             }
         }
 
-        if target_entity_id < 0 {
-            return FAILURE;
+        return match target {
+            None => { FAILURE }
+            Some(_) => {
+                world.ecs.add_component_to_entity(blackboard.owner, Target::new(target.unwrap()));
+                blackboard.target = target;
+                SUCCESS
+            }
         }
-
-        world.ecs.add_component_to_entity(owner, Target::new(target_entity_id as usize));
-        SUCCESS
     }
 }
 
-pub struct EatTarget {
-}
+pub struct EatTarget {}
 
 impl BehaviorTreeNode for EatTarget {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.eat(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.eat(blackboard.owner, world)
     }
 }
 
 impl EatTarget {
     pub fn new() -> Self {
-        Self {  }
+        Self {}
     }
 
-    fn eat(&self, owner: usize, world: &World) -> Status {
+    fn eat(&self, owner: EntityId, world: &World) -> Status {
         let targets = world.ecs.borrow_component_vec::<Target>();
         let target_id = targets.get(owner).unwrap().as_ref().unwrap().target_id;
         entity_util::mark_entity_for_removal(target_id, world);
