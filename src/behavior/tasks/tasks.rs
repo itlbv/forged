@@ -153,7 +153,7 @@ pub struct EatTarget {}
 
 impl BehaviorTreeNode for EatTarget {
     fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
-        self.eat(blackboard.owner, world)
+        self.eat(blackboard, world)
     }
 }
 
@@ -162,9 +162,8 @@ impl EatTarget {
         Self {}
     }
 
-    fn eat(&self, owner: EntityId, world: &World) -> Status {
-        let targets = world.ecs.borrow_component_vec::<Target>();
-        let target_id = targets.get(owner).unwrap().as_ref().unwrap().target_id;
+    fn eat(&self, blackboard: &BehaviorBlackboard, world: &World) -> Status {
+        let target_id = blackboard.target.expect(&*format!("Target is not set for {}", blackboard.owner));
         entity_util::mark_entity_for_removal(target_id, world);
 
         let positions = world.ecs.borrow_component_vec::<Position>();
