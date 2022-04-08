@@ -9,12 +9,12 @@ pub trait Need {
     fn get_value(&self) -> usize;
 }
 
-pub struct Hunger {
+pub struct Eat {
     pub value: usize,
     pub behavior: Box<dyn BehaviorTreeNode>,
 }
 
-impl Need for Hunger {
+impl Need for Eat {
     fn evaluate(&mut self) {
 
     }
@@ -28,7 +28,7 @@ impl Need for Hunger {
     }
 }
 
-impl Hunger {
+impl Eat {
     pub fn new() -> Self {
         Self {
             value: 0,

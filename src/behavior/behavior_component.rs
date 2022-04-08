@@ -1,6 +1,6 @@
 use crate::behavior::behaviors;
 use crate::behavior::btree::BehaviorTreeNode;
-use crate::behavior::needs::{Hunger, Need};
+use crate::behavior::needs::{Eat, Need};
 use crate::ecs::EntityId;
 use crate::util::physics::Vect;
 
@@ -14,7 +14,7 @@ impl Behavior {
     pub fn new(owner: EntityId) -> Self {
         Self {
             needs: vec![
-                Box::new(Hunger::new()),
+                Box::new(Eat::new()),
             ],
             behavior_tree: Box::new(behaviors::do_nothing()),
             state: BehaviorState::new(owner),

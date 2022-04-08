@@ -4,7 +4,7 @@ use crate::behavior::behaviors;
 
 use crate::behavior::btree::BehaviorTreeNode;
 use crate::ecs::EntityId;
-use crate::behavior::needs::{Hunger, Need};
+use crate::behavior::needs::{Eat, Need};
 use crate::util::physics::Vect;
 use crate::util::util_structs::Color;
 
