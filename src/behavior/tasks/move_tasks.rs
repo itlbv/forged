@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::behavior::btree::{BehaviorTreeNode, Status};
-use crate::components::{Destination, Position, Target};
+use crate::components::{BehaviorBlackboard, Destination, Position, Target};
 use crate::util::physics::Vect;
 use crate::World;
 use crate::behavior::btree::Status::{RUNNING, SUCCESS};
@@ -14,8 +14,8 @@ pub struct MoveToDestination {
 }
 
 impl BehaviorTreeNode for MoveToDestination {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.move_to(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.move_to(blackboard.owner, world)
     }
 }
 
@@ -100,8 +100,8 @@ pub struct MoveCloseToTarget {
 }
 
 impl BehaviorTreeNode for MoveCloseToTarget {
-    fn run(&mut self, owner: usize, world: &World) -> Status {
-        self.move_close(owner, world)
+    fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
+        self.move_close(blackboard.owner, world)
     }
 }
 

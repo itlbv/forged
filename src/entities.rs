@@ -1,6 +1,5 @@
 use crate::components::{Behavior, Building, Food, Inventory, Name, Position, Recipe, RenderShape, Storage};
 use crate::{textures, World};
-use crate::behavior::behaviors;
 use crate::items::{Item, Stone, Wood};
 use crate::util::map_util::place_item_to_tile;
 use crate::util::util_structs::Color;
