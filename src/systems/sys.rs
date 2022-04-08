@@ -1,5 +1,6 @@
-use crate::components::{Behavior, Remove};
 use crate::{World};
+use crate::behavior::Behavior;
+use crate::components::Remove;
 
 pub fn behavior(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();

@@ -1,5 +1,5 @@
+use crate::behavior::BehaviorState;
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::BehaviorState;
 use crate::World;
 
 #[derive(PartialEq)] // needed for match expression

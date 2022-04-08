@@ -1,13 +1,12 @@
-use std::f32::MAX;
-use sdl2::keyboard::Scancode::F;
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Recipe, Target, Destination, MainTarget, Building, BehaviorState};
+use crate::components::{Food, Position, Recipe, Target, Destination, MainTarget, Building};
 
 use crate::util::{entity_util, map_util};
 
 use crate::util::physics::{distance_between, Vect};
 use crate::{World};
+use crate::behavior::behavior_component::BehaviorState;
 use crate::ecs::EntityId;
 
 pub struct SetDestinationFromMainTarget {}

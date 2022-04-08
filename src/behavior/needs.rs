@@ -1,7 +1,6 @@
 use crate::World;
-use crate::behavior::behaviors;
+use crate::behavior::{behaviors, BehaviorState};
 use crate::behavior::btree::{BehaviorTreeNode, Status};
-use crate::components::BehaviorState;
 use crate::ecs::EntityId;
 
 pub trait Need {
