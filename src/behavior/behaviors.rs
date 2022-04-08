@@ -2,12 +2,12 @@ use crate::behavior::btree::Sequence;
 use crate::behavior::tasks::build_tasks::{MakeBuildingTransparent, FindTilesAndPlaceInvisibleBuilding, FinishBuilding};
 use crate::behavior::tasks::item_tasks::{ChooseIngredient, DropItemToMainTargetStorage, FindIngredients, PickUpTarget};
 use crate::behavior::tasks::move_tasks::{MoveCloseToTarget, MoveToDestination};
-use crate::behavior::tasks::tasks::{DoNothingTask, DoUntilFailure, EatTarget, FindFood, SetDestinationFromMainTarget, SetRecipe};
+use crate::behavior::tasks::tasks::{DoNothingTask, DoUntilFailure, EatTarget, FindNearestFood, SetDestinationFromMainTarget, SetRecipe};
 use crate::recipes;
 
 pub fn find_food() -> Sequence {
     Sequence::of(vec![
-        Box::new(FindFood::new()),
+        Box::new(FindNearestFood::new()),
         Box::new(MoveCloseToTarget::new()),
         Box::new(EatTarget::new()),
     ])

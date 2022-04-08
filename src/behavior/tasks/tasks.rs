@@ -101,15 +101,15 @@ impl DoNothingTask {
     }
 }
 
-pub struct FindFood {}
+pub struct FindNearestFood {}
 
-impl BehaviorTreeNode for FindFood {
+impl BehaviorTreeNode for FindNearestFood {
     fn run(&mut self, blackboard: &mut BehaviorBlackboard, world: &World) -> Status {
         self.find_food(blackboard, world)
     }
 }
 
-impl FindFood {
+impl FindNearestFood {
     pub fn new() -> Self {
         Self {}
     }
