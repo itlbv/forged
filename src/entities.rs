@@ -1,4 +1,4 @@
-use crate::components::{Building, Food, Inventory, Name, Position, Recipe, RenderShape, Storage};
+use crate::components::{Building, Food, Inventory, Label, Position, Recipe, RenderShape, Storage};
 use crate::{textures, World};
 use crate::behavior::Behavior;
 use crate::items::{Item, Stone, Wood};
@@ -24,7 +24,7 @@ pub fn human(x: f32, y: f32, name: &str, world: &World) {
     world.ecs.add_component_to_entity(id, textures::human());
     world.ecs.add_component_to_entity(id, RenderShape::new_with_standard_offset(0.49, 0.49,
                                                                                 Color::new(0, 0, 150, 255))); // blue
-    world.ecs.add_component_to_entity(id, Name { v: name.to_string() });
+    world.ecs.add_component_to_entity(id, Label { text: name.to_string() });
     world.ecs.add_component_to_entity(id, Inventory::new());
 }
 

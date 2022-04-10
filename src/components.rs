@@ -176,8 +176,8 @@ impl Position {
     }
 }
 
-pub struct Name {
-    pub v: String,
+pub struct Label {
+    pub text: String,
 }
 
 pub struct RenderShape {

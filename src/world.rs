@@ -4,7 +4,7 @@ use sdl2::video::WindowContext;
 use crate::map::Map;
 use crate::{entities, InputHandler, Properties, Renderer, systems};
 use crate::behavior::Behavior;
-use crate::components::{Food, Inventory, Name, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
+use crate::components::{Food, Inventory, Label, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
 use crate::resources::AssetManager;
@@ -37,7 +37,7 @@ impl<'assets> World<'assets> {
         self.assets.load_texture("houses", Path::new("assets/houses.png"));
 
         self.ecs.register_component::<Position>();
-        self.ecs.register_component::<Name>();
+        self.ecs.register_component::<Label>();
         self.ecs.register_component::<RenderShape>();
         self.ecs.register_component::<Behavior>();
         self.ecs.register_component::<Food>();
@@ -57,7 +57,7 @@ impl<'assets> World<'assets> {
         // self.properties.player_id = entities::player(12.5, 12.5, self);
         // map_generator::place_trees(self);
 
-        entities::human(1.5, 1.5, "Alice", self);
+        entities::human(1.5, 1.5, "Tanja", self);
 
         entities::food(5, 8, self);
         entities::food(4, 1, self);
