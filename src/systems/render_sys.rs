@@ -9,6 +9,8 @@ pub fn render(world: &mut World) {
     render_textures(world);
     render_debug(world);
 
+    world.renderer.render_text();
+
     world.renderer.present_frame();
 }
 
