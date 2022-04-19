@@ -6,11 +6,9 @@ use crate::util::text_util;
 pub fn behavior(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
     for behavior in behaviors.iter_mut() {
-        let b = behavior.as_mut();
-        match b {
+        match behavior {
             None => { continue; }
-            Some(_) => {
-                let behavior = b.unwrap();
+            Some(behavior) => {
                 let needs = &mut behavior.needs;
                 for need in needs.iter_mut() {
                     need.evaluate();
@@ -38,7 +36,7 @@ pub fn update_labels_textures(world: &mut World) {
                     text_util::update_text_in_asset_manager(
                         &label.label_id,
                         label.borrow_text(),
-                        &mut world.assets
+                        &mut world.assets,
                     );
                     label.updated = false;
                 }
