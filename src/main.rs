@@ -11,7 +11,7 @@ mod world;
 mod entities;
 mod recipes;
 mod items;
-mod resources;
+mod asset_manager;
 mod textures;
 mod properties;
 mod util;

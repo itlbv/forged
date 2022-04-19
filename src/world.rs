@@ -8,7 +8,7 @@ use crate::behavior::Behavior;
 use crate::components::{Food, Inventory, Label, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
 use crate::ecs::Ecs;
 use crate::items::{Item, Stone, Wood};
-use crate::resources::AssetManager;
+use crate::asset_manager::AssetManager;
 
 pub struct World<'assets> {
     pub properties: Properties,
