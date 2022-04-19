@@ -24,7 +24,7 @@ pub fn human(x: f32, y: f32, name: &str, world: &World) {
     world.ecs.add_component_to_entity(id, textures::human());
     world.ecs.add_component_to_entity(id, RenderShape::new_with_standard_offset(0.49, 0.49,
                                                                                 Color::new(0, 0, 150, 255))); // blue
-    world.ecs.add_component_to_entity(id, Label { text: name.to_string() });
+    world.ecs.add_component_to_entity(id, Label::new(name.to_string(), &id));
     world.ecs.add_component_to_entity(id, Inventory::new());
 }
 

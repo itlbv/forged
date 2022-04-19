@@ -21,6 +21,7 @@ impl Properties {
                 shapes: true,
                 map_textures: false,
                 textures: true,
+                labels: true,
             },
         }
     }
@@ -39,4 +40,5 @@ pub struct RenderFlags {
 
     pub map_textures: bool,
     pub textures: bool,
+    pub labels: bool,
 }

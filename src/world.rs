@@ -88,8 +88,9 @@ impl<'assets> World<'assets> {
         self.properties.delta_time = 0.016; // fixed framerate for debugging
 
         systems::input(self);
-        systems::remove_entities(self);
         systems::behavior(self);
+        systems::update_labels_textures(self);
+        systems::remove_entities(self);
         systems::render(self);
     }
 }

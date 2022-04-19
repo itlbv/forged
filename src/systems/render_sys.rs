@@ -1,4 +1,4 @@
-use crate::components::{Position, RenderShape, Texture};
+use crate::components::{Label, Position, RenderShape, Texture};
 use crate::constants::{MAP_HEIGHT, MAP_TILE_SIZE, MAP_WIDTH};
 use crate::{Renderer, World};
 
@@ -8,8 +8,7 @@ pub fn render(world: &mut World) {
     render_map(world);
     render_textures(world);
     render_debug(world);
-
-    world.renderer.render_text();
+    render_labels(world);
 
     world.renderer.present_frame();
 }
@@ -137,5 +136,27 @@ fn render_debug_shapes(world: &mut World) {
         // let _true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
         // let _true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
         // world.renderer.render_dot(true_pos_x + world.properties.camera_x, true_pos_y + world.properties.camera_y); // true position
+    }
+}
+
+fn render_labels(world: &mut World) {
+    if !world.properties.render_flags.labels { return; }
+
+    let labels = world.ecs.borrow_component_vec::<Label>();
+    let positions = world.ecs.borrow_component_vec::<Position>();
+
+    let zip = labels.iter().zip(positions.iter());
+    let iter = zip.filter_map(
+        |(label, pos)| Some((label.as_ref()?, pos.as_ref()?))
+    );
+
+    for (label, pos) in iter {
+        let label_texture = world.assets.borrow_texture(label.label_id.as_str());
+        world.renderer.render_label_texture(
+            label_texture,
+            pos.x,
+            pos.y,
+            &world.properties.camera,
+        );
     }
 }

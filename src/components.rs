@@ -1,4 +1,5 @@
 use std::any::TypeId;
+use std::borrow::Borrow;
 use std::collections::HashMap;
 use crate::behavior::behaviors;
 
@@ -6,6 +7,7 @@ use crate::behavior::btree::BehaviorTreeNode;
 use crate::ecs::EntityId;
 use crate::behavior::needs::{Eat, Need};
 use crate::util::physics::Vect;
+use crate::util::text_util;
 use crate::util::util_structs::Color;
 
 pub struct Texture {
@@ -177,7 +179,26 @@ impl Position {
 }
 
 pub struct Label {
-    pub text: String,
+    pub label_id: String,
+    pub updated: bool,
+    text: String,
+}
+
+impl Label {
+    pub fn new(text: String, own_id: &EntityId) -> Self {
+        Self {
+            label_id: String::from("label") + &own_id.to_string(),
+            text,
+            updated: true,
+        }
+    }
+
+    pub fn set_text(&mut self, text: String) {
+        self.text = text;
+        self.updated = true;
+    }
+
+    pub fn borrow_text(&self) -> &String { &self.text }
 }
 
 pub struct RenderShape {

@@ -1,6 +1,7 @@
 use crate::{World};
 use crate::behavior::Behavior;
-use crate::components::Remove;
+use crate::components::{Label, Remove};
+use crate::util::text_util;
 
 pub fn behavior(world: &World) {
     let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
@@ -22,6 +23,24 @@ pub fn behavior(world: &World) {
                     }
                 }
                 needs[priority_need_idx].run_behavior(&mut behavior.state, world);
+            }
+        };
+    }
+}
+
+pub fn update_labels_textures(world: &mut World) {
+    let mut labels = world.ecs.borrow_component_vec_mut::<Label>();
+    for label in labels.iter_mut() {
+        match label {
+            None => { continue; }
+            Some(label) => {
+                if label.updated {
+                    text_util::update_text_in_asset_manager(
+                        &label.label_id,
+                        label.borrow_text(),
+                        &mut world.assets
+                    );
+                }
             }
         };
     }
