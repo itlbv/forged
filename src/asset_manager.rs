@@ -28,7 +28,7 @@ impl<'l> AssetManager<'l> {
         self.textures.insert(String::from(texture_id), texture);
     }
 
-    pub fn insert_text_texture(&mut self, text: &str, texture_id: &str) {
+    pub fn insert_text_texture(&mut self, text: &str, texture_id: &String) {
         let font_surface = self.font
             .render(text)
             .blended_wrapped(Color::RGBA(255, 255, 255, 255), 250)
@@ -36,7 +36,7 @@ impl<'l> AssetManager<'l> {
         let font_texture = self.texture_creator
             .create_texture_from_surface(&font_surface)
             .map_err(|e| e.to_string()).unwrap();
-        self.textures.insert(String::from(texture_id), font_texture);
+        self.textures.insert(texture_id.clone(), font_texture);
     }
 
     pub fn borrow_texture(&self, texture_id: &str) -> &Texture<'l> {

@@ -40,6 +40,7 @@ pub fn update_labels_textures(world: &mut World) {
                         label.borrow_text(),
                         &mut world.assets
                     );
+                    label.updated = false;
                 }
             }
         };

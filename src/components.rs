@@ -179,17 +179,21 @@ impl Position {
 }
 
 pub struct Label {
+    text: String,
     pub label_id: String,
     pub updated: bool,
-    text: String,
+    pub render_offset_x: f32,
+    pub render_offset_y: f32,
 }
 
 impl Label {
     pub fn new(text: String, own_id: &EntityId) -> Self {
         Self {
-            label_id: String::from("label") + &own_id.to_string(),
             text,
+            label_id: String::from("label") + &own_id.to_string(),
             updated: true,
+            render_offset_x: -0.5,
+            render_offset_y: 0.2,
         }
     }
 

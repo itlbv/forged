@@ -16,9 +16,9 @@ impl Properties {
             quit: false,
             camera: Camera { x: 0, y: 0, zoom: 50 },
             render_flags: RenderFlags {
-                map_grid: true,
-                map_tile_info: true,
-                shapes: true,
+                map_grid: false,
+                map_tile_info: false,
+                shapes: false,
                 map_textures: false,
                 textures: true,
                 labels: true,

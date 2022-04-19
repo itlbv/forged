@@ -154,8 +154,8 @@ fn render_labels(world: &mut World) {
         let label_texture = world.assets.borrow_texture(label.label_id.as_str());
         world.renderer.render_label_texture(
             label_texture,
-            pos.x,
-            pos.y,
+            pos.x + label.render_offset_x,
+            pos.y + label.render_offset_y,
             &world.properties.camera,
         );
     }
