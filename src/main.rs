@@ -17,6 +17,7 @@ mod properties;
 mod util;
 mod behavior;
 
+use std::borrow::Borrow;
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
 use crate::properties::Properties;
@@ -28,8 +29,9 @@ fn main() {
     let renderer = Renderer::new(&sdl_context);
     let input_handler = InputHandler::new(&sdl_context);
     let texture_creator = renderer.sdl_canvas.texture_creator();
+    let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string()).unwrap();
 
-    let mut world = World::new(renderer, input_handler, &texture_creator);
+    let mut world = World::new(renderer, input_handler, &texture_creator, &ttf_context);
     world.setup();
 
     let mut instant = Instant::now();
