@@ -31,7 +31,7 @@ impl<'l> AssetManager<'l> {
     pub fn insert_text_texture(&mut self, text: &str, texture_id: &str) {
         let font_surface = self.font
             .render(text)
-            .blended(Color::RGBA(255, 255, 255, 255))
+            .blended_wrapped(Color::RGBA(255, 255, 255, 255), 250)
             .map_err(|e| e.to_string()).unwrap();
         let font_texture = self.texture_creator
             .create_texture_from_surface(&font_surface)
