@@ -18,7 +18,7 @@ impl Properties {
             render_flags: RenderFlags {
                 map_grid: false,
                 map_tile_info: false,
-                shapes: false,
+                shapes: true,
                 map_textures: false,
                 textures: true,
                 labels: true,

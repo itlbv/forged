@@ -78,8 +78,15 @@ impl Renderer {
         );
     }
 
-    pub fn render_dot(&mut self, x: i32, y: i32) {
+    pub fn render_dot(&mut self,
+                      world_x: f32,
+                      world_y: f32,
+                      camera: &Camera
+    ) {
         self.sdl_canvas.set_draw_color(Color::RGB(255, 255, 255)); //white
+
+        let x = Renderer::world_to_screen(world_x, camera.zoom) + camera.x;
+        let y = Renderer::world_to_screen(world_y, camera.zoom) + camera.y;
         self.sdl_canvas.draw_point(Point::new(x, y));
     }
 

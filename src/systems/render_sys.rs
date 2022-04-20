@@ -127,15 +127,7 @@ fn render_debug_shapes(world: &mut World) {
             (shape.color.r, shape.color.g, shape.color.b, shape.color.a),
             &world.properties.camera,
         );
-
-        // let x = Renderer::world_to_screen(pos.x + shape.offset_x, world.properties.zoom_factor);
-        // let y = Renderer::world_to_screen(pos.y + shape.offset_y, world.properties.zoom_factor);
-        // let w = Renderer::world_to_screen(shape.w, world.properties.zoom_factor);
-        // let h = Renderer::world_to_screen(shape.h, world.properties.zoom_factor);
-        // world.renderer.render_rect(x + world.properties.camera_x, y + world.properties.camera_y, w, h, shape.color.r, shape.color.g, shape.color.b, shape.color.a);
-        // let _true_pos_x = Renderer::world_to_screen(pos.x, world.properties.zoom_factor);
-        // let _true_pos_y = Renderer::world_to_screen(pos.y, world.properties.zoom_factor);
-        // world.renderer.render_dot(true_pos_x + world.properties.camera_x, true_pos_y + world.properties.camera_y); // true position
+        world.renderer.render_dot(pos.x, pos.y, &world.properties.camera);
     }
 }
 
