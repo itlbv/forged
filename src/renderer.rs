@@ -1,13 +1,11 @@
 extern crate sdl2;
 
-use std::path::Path;
 use self::sdl2::render::WindowCanvas;
 use sdl2::pixels::Color;
 use sdl2::rect::Point;
 use sdl2::render::BlendMode::Blend;
 use sdl2::render::{Texture, TextureQuery};
 use sdl2::Sdl;
-use sdl2::ttf::Font;
 use crate::constants::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::{Properties};
 use crate::properties::Camera;

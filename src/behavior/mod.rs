@@ -2,7 +2,9 @@ pub mod behaviors;
 pub mod btree;
 mod tasks;
 pub mod needs;
-mod behavior_component;
+mod behavior_comp;
+mod behavior_sys;
 
-pub use behavior_component::Behavior;
-pub use behavior_component::BehaviorState;
+pub use behavior_comp::Behavior;
+pub use behavior_comp::BehaviorState;
+pub use behavior_sys::behavior;
