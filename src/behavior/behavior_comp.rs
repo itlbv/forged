@@ -1,10 +1,14 @@
 use crate::behavior::behaviors;
 use crate::behavior::btree::BehaviorTreeNode;
+use crate::behavior::behavior_events::BehaviorEvent;
 use crate::behavior::needs::{Eat, Need};
 use crate::ecs::EntityId;
 use crate::util::physics::Vect;
 
 pub struct Behavior {
+    pub events: Vec<BehaviorEvent>,
+    pub routine: Box<dyn BehaviorTreeNode>,
+
     pub needs: Vec<Box<dyn Need>>,
     pub behavior_tree: Box<dyn BehaviorTreeNode>,
     pub state: BehaviorState,
@@ -13,6 +17,9 @@ pub struct Behavior {
 impl Behavior {
     pub fn new(owner: EntityId) -> Self {
         Self {
+            events: vec![],
+            routine: Box::new(behaviors::do_nothing()),
+
             needs: vec![
                 Box::new(Eat::new()),
             ],
