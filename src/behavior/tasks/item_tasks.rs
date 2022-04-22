@@ -2,7 +2,7 @@ use crate::behavior::BehaviorState;
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, SUCCESS};
 use crate::components::{Inventory, MainTarget, Position, Recipe, Storage, Target};
-use crate::util::entity_util::mark_entity_for_removal;
+
 use crate::World;
 use crate::util::{entity_util, map_util};
 

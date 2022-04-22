@@ -17,7 +17,7 @@ mod properties;
 mod util;
 mod behavior;
 
-use std::borrow::Borrow;
+
 use std::time::{Duration, Instant};
 use crate::input_handler::InputHandler;
 use crate::properties::Properties;

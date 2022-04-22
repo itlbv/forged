@@ -1,5 +1,5 @@
 use crate::{World};
-use crate::behavior::Behavior;
+
 use crate::components::{Label, Remove};
 use crate::util::text_util;
 

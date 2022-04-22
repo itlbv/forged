@@ -1,13 +1,13 @@
 use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
-use crate::components::{Food, Position, Recipe, Target, Destination, MainTarget, Building};
+use crate::components::{Food, Position, Recipe, Destination, MainTarget, Building};
 
 use crate::util::{entity_util, map_util};
 
 use crate::util::physics::{distance_between, Vect};
 use crate::{World};
 use crate::behavior::behavior_comp::BehaviorState;
-use crate::ecs::EntityId;
+
 
 pub struct SetDestinationFromMainTarget {}
 

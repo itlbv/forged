@@ -1,7 +1,7 @@
 use crate::World;
 use crate::behavior::{behaviors, BehaviorState};
 use crate::behavior::btree::{BehaviorTreeNode, Status};
-use crate::ecs::EntityId;
+
 
 pub trait Need {
     fn evaluate(&mut self);

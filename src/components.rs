@@ -1,13 +1,13 @@
 use std::any::TypeId;
-use std::borrow::Borrow;
-use std::collections::HashMap;
-use crate::behavior::behaviors;
 
-use crate::behavior::btree::BehaviorTreeNode;
+use std::collections::HashMap;
+
+
+
 use crate::ecs::EntityId;
-use crate::behavior::needs::{Eat, Need};
-use crate::util::physics::Vect;
-use crate::util::text_util;
+
+
+
 use crate::util::util_structs::Color;
 
 pub struct Texture {

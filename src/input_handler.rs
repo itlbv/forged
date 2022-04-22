@@ -1,9 +1,9 @@
-use std::collections::HashSet;
+
 use sdl2::event::Event;
 use sdl2::{EventPump, Sdl};
 use sdl2::keyboard::Keycode;
 use sdl2::mouse::MouseButton;
-use sdl2::mouse::MouseButton::Left;
+
 use crate::{Properties};
 
 pub struct InputHandler {
@@ -38,6 +38,6 @@ impl InputHandler {
     }
 }
 
-fn left_mouse_click(x: i32, y: i32) {}
+fn left_mouse_click(_x: i32, _y: i32) {}
 
-fn right_mouse_click(x: i32, y: i32) {}
+fn right_mouse_click(_x: i32, _y: i32) {}
