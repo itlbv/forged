@@ -1,6 +1,9 @@
+use std::collections::HashSet;
 use sdl2::event::Event;
 use sdl2::{EventPump, Sdl};
 use sdl2::keyboard::Keycode;
+use sdl2::mouse::MouseButton;
+use sdl2::mouse::MouseButton::Left;
 use crate::{Properties};
 
 pub struct InputHandler {
@@ -13,23 +16,28 @@ impl InputHandler {
         Self { sdl_events }
     }
 
-    pub fn update(&mut self, properties: &mut Properties) -> bool {
+    pub fn update(&mut self, properties: &mut Properties) {
         for event in self.sdl_events.poll_iter() {
             match event {
                 Event::Quit { .. } |
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     properties.quit = true;
                 }
-                Event::KeyDown { keycode: Some(Keycode::W), .. } => {properties.camera.y += 20}
-                Event::KeyDown { keycode: Some(Keycode::S), .. } => {properties.camera.y -= 20}
-                Event::KeyDown { keycode: Some(Keycode::A), .. } => {properties.camera.x += 20}
-                Event::KeyDown { keycode: Some(Keycode::D), .. } => {properties.camera.x -= 20}
-                Event::KeyDown { keycode: Some(Keycode::Z), .. } => {properties.camera.zoom -= 5}
-                Event::KeyDown { keycode: Some(Keycode::X), .. } => {properties.camera.zoom += 5}
+                Event::KeyDown { keycode: Some(Keycode::W), .. } => { properties.camera.y += 20 }
+                Event::KeyDown { keycode: Some(Keycode::S), .. } => { properties.camera.y -= 20 }
+                Event::KeyDown { keycode: Some(Keycode::A), .. } => { properties.camera.x += 20 }
+                Event::KeyDown { keycode: Some(Keycode::D), .. } => { properties.camera.x -= 20 }
+                Event::KeyDown { keycode: Some(Keycode::Z), .. } => { properties.camera.zoom -= 5 }
+                Event::KeyDown { keycode: Some(Keycode::X), .. } => { properties.camera.zoom += 5 }
+
+                Event::MouseButtonUp { mouse_btn: MouseButton::Left, x, y, .. } => { left_mouse_click(x, y) }
+                Event::MouseButtonUp { mouse_btn: MouseButton::Right, x, y, .. } => { right_mouse_click(x, y) }
                 _ => {}
             }
         }
-
-        false
     }
 }
+
+fn left_mouse_click(x: i32, y: i32) {}
+
+fn right_mouse_click(x: i32, y: i32) {}
