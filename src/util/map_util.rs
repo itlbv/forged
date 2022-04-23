@@ -1,6 +1,28 @@
+use crate::components::Position;
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
+use crate::ecs::{Ecs, EntityId};
 use crate::map::Map;
+use crate::util::physics::distance_between;
 
+pub fn entity_closest_to_pos(x: f32, y: f32, entities: Vec<EntityId>, ecs: &Ecs) -> Option<EntityId> {
+    let mut closest_entity = None;
+    let mut min_distance = 0.5;
+    for entity in entities {
+        let entity_pos = entity_position(entity, ecs);
+        let distance_to_entity = distance_between(x, y, entity_pos.0, entity_pos.1);
+        if distance_to_entity < min_distance {
+            closest_entity = Some(entity);
+            min_distance = distance_to_entity;
+        }
+    }
+    closest_entity
+}
+
+pub fn entity_position(entity: EntityId, ecs: &Ecs) -> (f32, f32) {
+    let positions = ecs.borrow_component_vec::<Position>();
+    let pos = positions.get(entity).unwrap().as_ref().unwrap();
+    (pos.x , pos.y)
+}
 
 pub fn sort_entities_by_proximity(_owner_entity: usize, mut _entities: &Vec<usize>) {}
 

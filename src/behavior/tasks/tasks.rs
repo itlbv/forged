@@ -4,7 +4,7 @@ use crate::components::{Food, Position, Recipe, Destination, MainTarget, Buildin
 
 use crate::util::{entity_util, map_util};
 
-use crate::util::physics::{distance_between, Vect};
+use crate::util::physics::{distance_between_vect, Vect};
 use crate::{World};
 use crate::behavior::behavior_comp::BehaviorState;
 
@@ -130,7 +130,7 @@ impl FindNearestFood {
         let mut target = None;
         let mut shortest_distance = f32::MAX;
         for (_food, pos) in iter {
-            let distance = distance_between(&own_pos, &Vect::of(pos.x, pos.y));
+            let distance = distance_between_vect(&own_pos, &Vect::of(pos.x, pos.y));
             if distance < shortest_distance {
                 shortest_distance = distance;
                 target = Some(pos.owner);

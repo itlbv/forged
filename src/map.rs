@@ -1,6 +1,7 @@
 use std::cell::{Ref, RefCell, RefMut};
 use std::slice::Iter;
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
+use crate::ecs::EntityId;
 use crate::util::util_structs::Color;
 
 pub struct Map {
@@ -37,11 +38,36 @@ impl Map {
     pub fn borrow_tiles_mut(&self) -> RefMut<dyn MapTilesVec> {
         self.tiles.borrow_mut()
     }
+
+    pub fn entities_around_tile(&self, x: usize, y: usize) -> Vec<EntityId> {
+        let tiles = self.tiles.borrow();
+        let neighbors = tiles.borrow_neighbors(tiles.borrow_tile(x, y));
+        let mut entities = vec![];
+        for neighbor in neighbors {
+            for entity in &neighbor.entities {
+                entities.push(entity.clone());
+            }
+        }
+        entities
+    }
 }
 
 pub trait MapTilesVec {
     fn borrow_tile(&self, x: usize, y: usize) -> &MapTile;
     fn borrow_tile_mut(&mut self, x: usize, y: usize) -> &mut MapTile;
+    fn borrow_neighbors(&self, tile: &MapTile) -> Vec<&MapTile> {
+        let mut vec = vec![];
+        if tile.x > 0 { vec.push(self.borrow_tile(tile.x - 1, tile.y)); }
+        if tile.y > 0 { vec.push(self.borrow_tile(tile.x, tile.y - 1)); }
+
+        if tile.x > 0 && tile.y > 0 { vec.push(self.borrow_tile(tile.x - 1, tile.y - 1)); }
+
+        if tile.x + 1 < MAP_WIDTH { vec.push(self.borrow_tile(tile.x + 1, tile.y)); }
+        if tile.y + 1 < MAP_HEIGHT { vec.push(self.borrow_tile(tile.x, tile.y + 1)); }
+
+        if tile.x + 1 < MAP_WIDTH && tile.y + 1 < MAP_HEIGHT { vec.push(self.borrow_tile(tile.x + 1, tile.y + 1)); }
+        vec
+    }
     fn borrow_orthogonal_neighbors(&self, tile: &MapTile) -> Vec<&MapTile> {
         let mut vec = vec![];
         if tile.x > 0 { vec.push(self.borrow_tile(tile.x - 1, tile.y)); }
@@ -78,6 +104,8 @@ pub struct MapTile {
     pub x: usize,
     pub y: usize,
     pub passable: bool,
+    pub entities: Vec<EntityId>,
+
     pub color: Color,
     pub tileset_x: i32,
     pub tileset_y: i32,
@@ -91,6 +119,7 @@ impl MapTile {
             x,
             y,
             passable,
+            entities: vec![],
             color,
             tileset_x: 32,
             tileset_y: 32,

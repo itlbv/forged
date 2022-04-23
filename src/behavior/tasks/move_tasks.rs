@@ -32,7 +32,7 @@ impl MoveToDestination {
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
         let own_pos = positions.get_mut(owner).unwrap().as_mut().unwrap();
 
-        if physics::distance_between(
+        if physics::distance_between_vect(
             &Vect::of(dest.x, dest.y),
             &Vect::of(own_pos.x, own_pos.y),
         ) < 0.02 {
@@ -124,7 +124,7 @@ impl MoveCloseToTarget {
 
         let own_pos = positions.get_mut(state.owner).unwrap().as_mut().unwrap();
 
-        if physics::distance_between(
+        if physics::distance_between_vect(
             &destination,
             &Vect::of(own_pos.x, own_pos.y),
         ) < 0.5 {

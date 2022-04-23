@@ -29,8 +29,12 @@ impl Vect {
     }
 }
 
-pub fn distance_between(vec_1: &Vect, vec_2: &Vect) -> f32 {
+pub fn distance_between_vect(vec_1: &Vect, vec_2: &Vect) -> f32 {
     (vec_1.x - vec_2.x).hypot(vec_1.y - vec_2.y)
+}
+
+pub fn distance_between(x1: f32, y1: f32, x2: f32, y2: f32) -> f32 {
+    (x1 - x2).hypot(y1 - y2)
 }
 
 pub fn vector_to(source: &Vect, target: &Vect) -> Vect {

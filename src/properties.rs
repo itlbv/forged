@@ -1,5 +1,8 @@
+use crate::ecs::EntityId;
+
 pub struct Properties {
     pub player_id: usize,
+    pub selected_entity: Option<EntityId>,
 
     pub delta_time: f32,
     pub quit: bool,
@@ -12,6 +15,7 @@ impl Properties {
     pub fn new() -> Self {
         Self {
             player_id: 0,
+            selected_entity: None,
             delta_time: 0.0,
             quit: false,
             camera: Camera { x: 0, y: 0, zoom: 50 },
