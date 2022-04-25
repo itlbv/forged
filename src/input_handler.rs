@@ -53,5 +53,5 @@ fn left_mouse_click(x_screen: i32, y_screen: i32, map: &Map, properties: &mut Pr
 fn right_mouse_click(_x: i32, _y: i32) {}
 
 fn screen_to_world(screen: i32, camera: i32, zoom: usize) -> f32 {
-    ((screen - camera) / zoom as i32) as f32
+    ((screen - camera) as f32 / zoom as f32) as f32
 }

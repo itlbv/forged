@@ -2,7 +2,7 @@ use crate::components::{Building, Food, Inventory, Label, Position, Recipe, Rend
 use crate::{textures, World};
 use crate::behavior::Behavior;
 use crate::items::{Item, Stone, Wood};
-use crate::util::map_util::place_item_to_tile;
+use crate::util::map_util::put_item_to_tile;
 use crate::util::util_structs::Color;
 
 pub fn house_from_recipe(x: f32, y: f32, recipe: Recipe, world: &World) -> (usize, f32, f32) {
@@ -69,7 +69,7 @@ fn item(x: usize, y: usize, world: &World) -> usize {
     world.ecs.add_component_to_entity(id, Item {});
     world.ecs.add_component_to_entity(id, Position::of(x as f32 + 0.5, y as f32 + 0.5, id));
 
-    place_item_to_tile(id, x, y, &world.map);
+    put_item_to_tile(id, x, y, &world.map);
 
     id
 }

@@ -1,6 +1,8 @@
 use crate::components::{Label, Position, RenderShape, Texture};
 use crate::constants::{MAP_HEIGHT, MAP_TILE_SIZE, MAP_WIDTH};
 use crate::{Renderer, World};
+use crate::ecs::EntityId;
+use crate::util::map_util::entity_position;
 
 pub fn render(world: &mut World) {
     world.renderer.start_frame(&world.properties);
@@ -9,6 +11,7 @@ pub fn render(world: &mut World) {
     render_textures(world);
     render_debug(world);
     render_labels(world);
+    render_ui(world);
 
     world.renderer.present_frame();
 }
@@ -150,5 +153,20 @@ fn render_labels(world: &mut World) {
             pos.y + label.render_offset_y,
             &world.properties.camera,
         );
+    }
+}
+
+fn render_ui(world: &mut World) {
+    match world.properties.selected_entity {
+        None => {}
+        Some(entity) => {
+            let entity_pos = entity_position(entity, &world.ecs);
+            world.renderer.render_empty_rect(
+                entity_pos.0 - 0.5, entity_pos.1 - 1.5,
+                1.0, 2.0,
+                (255, 255, 255, 255),
+                &world.properties.camera,
+            );
+        }
     }
 }

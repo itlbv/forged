@@ -31,6 +31,22 @@ impl Map {
         tile.passable = passable;
     }
 
+    pub fn put_item_to_tile(&self, item: EntityId, x: usize, y: usize) {
+        let mut tiles = self.borrow_tiles_mut();
+        let mut tile = tiles.borrow_tile_mut(x, y);
+        tile.entities.push(item);
+    }
+
+    pub fn remove_item_from_tile(&self, item: EntityId, x: usize, y: usize) {
+        let mut tiles = self.borrow_tiles_mut();
+        let mut entities = &mut tiles.borrow_tile_mut(x, y).entities;
+        for i in 0..entities.len() {
+            if entities[i] == item {
+                entities.swap_remove(i);
+            }
+        }
+    }
+
     pub fn borrow_tiles(&self) -> Ref<dyn MapTilesVec> {
         self.tiles.borrow()
     }
@@ -41,7 +57,8 @@ impl Map {
 
     pub fn entities_around_tile(&self, x: usize, y: usize) -> Vec<EntityId> {
         let tiles = self.tiles.borrow();
-        let neighbors = tiles.borrow_neighbors(tiles.borrow_tile(x, y));
+        let mut neighbors = tiles.borrow_neighbors(tiles.borrow_tile(x, y));
+        neighbors.push(tiles.borrow_tile(x, y));
         let mut entities = vec![];
         for neighbor in neighbors {
             for entity in &neighbor.entities {

@@ -53,8 +53,23 @@ impl Renderer {
         let w = Renderer::world_to_screen(w_world, camera.zoom);
         let h = Renderer::world_to_screen(h_world, camera.zoom);
 
-
         self.sdl_canvas.fill_rect(Rect::new(x, y, w as u32, h as u32));
+    }
+
+    pub fn render_empty_rect(&mut self,
+                             x_world: f32, y_world: f32,
+                             w_world: f32, h_world: f32,
+                             color: (u8, u8, u8, u8),
+                             camera: &Camera,
+    ) {
+        self.sdl_canvas.set_draw_color(Color::RGBA(color.0, color.1, color.2, color.3));
+
+        let x = Renderer::world_to_screen(x_world, camera.zoom) + camera.x;
+        let y = Renderer::world_to_screen(y_world, camera.zoom) + camera.y;
+        let w = Renderer::world_to_screen(w_world, camera.zoom);
+        let h = Renderer::world_to_screen(h_world, camera.zoom);
+
+        self.sdl_canvas.draw_rect(Rect::new(x, y, w as u32, h as u32));
     }
 
     pub fn render_line(&mut self,

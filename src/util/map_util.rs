@@ -98,10 +98,12 @@ fn is_tile_suitable_for_building(start_tile_x: usize, start_tile_y: usize, w: us
     true
 }
 
-pub fn place_item_to_tile(_: usize, x: usize, y: usize, map: &Map) {
+pub fn put_item_to_tile(item: EntityId, x: usize, y: usize, map: &Map) {
     map.set_tile_passable(x, y, false);
+    map.put_item_to_tile(item, x, y);
 }
 
-pub fn pick_up_item_from_tile(_: usize, x: usize, y: usize, map: &Map) {
+pub fn pick_up_item_from_tile(item: usize, x: usize, y: usize, map: &Map) {
     map.set_tile_passable(x, y, true);
+    map.remove_item_from_tile(item, x, y)
 }
