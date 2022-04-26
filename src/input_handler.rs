@@ -1,14 +1,13 @@
-
 use sdl2::event::Event;
 use sdl2::{EventPump, Sdl};
 use sdl2::keyboard::Keycode;
 use sdl2::mouse::MouseButton;
 
 use crate::{Properties, Renderer};
-use crate::ecs::Ecs;
+use crate::ecs::{Ecs, EntityId};
 use crate::map::Map;
 use crate::properties::Camera;
-use crate::util::map_util;
+use crate::util::{event_util, map_util};
 
 pub struct InputHandler {
     pub sdl_events: EventPump,
@@ -35,7 +34,7 @@ impl InputHandler {
                 Event::KeyDown { keycode: Some(Keycode::X), .. } => { properties.camera.zoom += 5 }
 
                 Event::MouseButtonUp { mouse_btn: MouseButton::Left, x, y, .. } => { left_mouse_click(x, y, map, properties, ecs) }
-                Event::MouseButtonUp { mouse_btn: MouseButton::Right, x, y, .. } => { right_mouse_click(x, y) }
+                Event::MouseButtonUp { mouse_btn: MouseButton::Right, x, y, .. } => { right_mouse_click(x, y, properties, ecs) }
                 _ => {}
             }
         }
@@ -50,7 +49,20 @@ fn left_mouse_click(x_screen: i32, y_screen: i32, map: &Map, properties: &mut Pr
     properties.selected_entity = closest_entity;
 }
 
-fn right_mouse_click(_x: i32, _y: i32) {}
+fn right_mouse_click(x_screen: i32, y_screen: i32, properties: &Properties, ecs: &Ecs) {
+    match properties.selected_entity {
+        None => {}
+        Some(entity) => {
+            let x = screen_to_world(x_screen, properties.camera.x, properties.camera.zoom);
+            let y = screen_to_world(y_screen, properties.camera.y, properties.camera.zoom);
+            order_move(x, y, entity, ecs);
+        }
+    }
+}
+
+fn order_move(x: f32, y: f32, entity: EntityId, ecs: &Ecs) {
+    event_util::dispatch_event(entity, x, y, ecs);
+}
 
 fn screen_to_world(screen: i32, camera: i32, zoom: usize) -> f32 {
     ((screen - camera) as f32 / zoom as f32) as f32

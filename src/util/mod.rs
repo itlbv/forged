@@ -7,3 +7,4 @@ pub mod log;
 pub mod physics;
 pub mod entity_util;
 pub mod text_util;
+pub mod event_util;

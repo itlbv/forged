@@ -6,7 +6,7 @@ use crate::ecs::EntityId;
 use crate::util::physics::Vect;
 
 pub struct Behavior {
-    pub events: Vec<BehaviorEvent>,
+    pub events: Vec<Box<dyn BehaviorEvent>>,
     pub routine: Box<dyn BehaviorTreeNode>,
 
     pub needs: Vec<Box<dyn Need>>,

@@ -2,7 +2,7 @@ use crate::components::{Building, Food, Inventory, Label, Position, Recipe, Rend
 use crate::{textures, World};
 use crate::behavior::Behavior;
 use crate::items::{Item, Stone, Wood};
-use crate::util::map_util::put_item_to_tile;
+use crate::util::map_util::put_entity_to_tile;
 use crate::util::util_structs::Color;
 
 pub fn house_from_recipe(x: f32, y: f32, recipe: Recipe, world: &World) -> (usize, f32, f32) {
@@ -26,6 +26,8 @@ pub fn human(x: f32, y: f32, name: &str, world: &World) {
                                                                                 Color::new(0, 0, 150, 255))); // blue
     world.ecs.add_component_to_entity(id, Label::new(name.to_string(), &id));
     world.ecs.add_component_to_entity(id, Inventory::new());
+
+    put_entity_to_tile(id, x as usize, y as usize, &world.map);
 }
 
 pub fn player(x: f32, y: f32, world: &World) -> usize {
@@ -69,7 +71,7 @@ fn item(x: usize, y: usize, world: &World) -> usize {
     world.ecs.add_component_to_entity(id, Item {});
     world.ecs.add_component_to_entity(id, Position::of(x as f32 + 0.5, y as f32 + 0.5, id));
 
-    put_item_to_tile(id, x, y, &world.map);
+    put_entity_to_tile(id, x, y, &world.map);
 
     id
 }
