@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use crate::behavior::BehaviorState;
 
 use crate::behavior::btree::{BehaviorTreeNode, Status};
-use crate::components::{Destination, Position};
+use crate::components::{Position};
 use crate::util::physics::Vect;
 use crate::World;
 use crate::behavior::btree::Status::{RUNNING, SUCCESS};

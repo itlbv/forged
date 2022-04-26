@@ -3,10 +3,10 @@ use sdl2::{EventPump, Sdl};
 use sdl2::keyboard::Keycode;
 use sdl2::mouse::MouseButton;
 
-use crate::{Properties, Renderer};
+use crate::{Properties};
 use crate::ecs::{Ecs, EntityId};
 use crate::map::Map;
-use crate::properties::Camera;
+
 use crate::util::{event_util, map_util};
 
 pub struct InputHandler {

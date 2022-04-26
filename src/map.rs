@@ -33,13 +33,13 @@ impl Map {
 
     pub fn put_entity_to_tile(&self, item: EntityId, x: usize, y: usize) {
         let mut tiles = self.borrow_tiles_mut();
-        let mut tile = tiles.borrow_tile_mut(x, y);
+        let tile = tiles.borrow_tile_mut(x, y);
         tile.entities.push(item);
     }
 
     pub fn remove_entity_from_tile(&self, item: EntityId, x: usize, y: usize) {
         let mut tiles = self.borrow_tiles_mut();
-        let mut entities = &mut tiles.borrow_tile_mut(x, y).entities;
+        let entities = &mut tiles.borrow_tile_mut(x, y).entities;
         for i in 0..entities.len() {
             if entities[i] == item {
                 entities.swap_remove(i);

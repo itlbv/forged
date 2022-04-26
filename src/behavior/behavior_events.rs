@@ -1,4 +1,4 @@
-use crate::behavior::{Behavior, behaviors};
+use crate::behavior::{Behavior};
 use crate::behavior::tasks::move_tasks::MoveToDestination;
 use crate::util::physics::Vect;
 

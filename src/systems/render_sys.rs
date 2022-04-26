@@ -1,7 +1,7 @@
 use crate::components::{Label, Position, RenderShape, Texture};
 use crate::constants::{MAP_HEIGHT, MAP_TILE_SIZE, MAP_WIDTH};
 use crate::{Renderer, World};
-use crate::ecs::EntityId;
+
 use crate::util::map_util::entity_position;
 
 pub fn render(world: &mut World) {
