@@ -9,4 +9,4 @@ mod behavior_events;
 pub use behavior_comp::Behavior;
 pub use behavior_comp::BehaviorState;
 pub use behavior_events::OrderMove;
-pub use behavior_sys::behavior;
+pub use behavior_sys::{behavior, react_to_events};

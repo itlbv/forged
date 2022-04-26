@@ -16,7 +16,7 @@ pub struct MoveToDestination {
 
 impl BehaviorTreeNode for MoveToDestination {
     fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
-        self.move_to(state.owner, world)
+        self.move_to(state, world)
     }
 }
 
@@ -25,15 +25,17 @@ impl MoveToDestination {
         Self {  }
     }
 
-    fn move_to(&self, owner: usize, world: &World) -> Status {
-        let destinations = world.ecs.borrow_component_vec::<Destination>();
-        let dest = destinations.get(owner).unwrap().as_ref().unwrap();
+    fn move_to(&self, state: &mut BehaviorState, world: &World) -> Status {
+        // let destinations = world.ecs.borrow_component_vec::<Destination>();
+        // let dest = destinations.get(owner).unwrap().as_ref().unwrap();
+
+        let dest = state.destination.as_ref().unwrap();
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
-        let own_pos = positions.get_mut(owner).unwrap().as_mut().unwrap();
+        let own_pos = positions.get_mut(state.owner).unwrap().as_mut().unwrap();
 
         if physics::distance_between_vect(
-            &Vect::of(dest.x, dest.y),
+            &dest,
             &Vect::of(own_pos.x, own_pos.y),
         ) < 0.02 {
             return SUCCESS;
@@ -41,7 +43,7 @@ impl MoveToDestination {
 
         let velocity_vec = get_velocity_vec_to(
             &Vect::of(own_pos.x, own_pos.y),
-            &Vect::of(dest.x, dest.y),
+            &dest,
             world.properties.delta_time);
 
         own_pos.x += velocity_vec.x;

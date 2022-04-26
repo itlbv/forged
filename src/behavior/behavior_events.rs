@@ -1,5 +1,9 @@
+use crate::behavior::{Behavior, behaviors};
+use crate::behavior::tasks::move_tasks::MoveToDestination;
+use crate::util::physics::Vect;
+
 pub trait BehaviorEvent {
-    fn execute(&self);
+    fn execute(&self, behavior: &mut Behavior);
 }
 
 pub struct OrderMove {
@@ -14,7 +18,8 @@ impl OrderMove {
 }
 
 impl BehaviorEvent for OrderMove {
-    fn execute(&self) {
-        println!("event order move")
+    fn execute(&self, behavior: &mut Behavior) {
+        behavior.state.destination = Option::from(Vect::of(self.x, self.y));
+        behavior.routine = Box::new(MoveToDestination::new())
     }
 }

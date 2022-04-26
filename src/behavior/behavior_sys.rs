@@ -7,10 +7,20 @@ pub fn behavior(world: &World) {
         match behavior {
             None => { continue; }
             Some(behavior) => {
-                if behavior.events.is_empty() {
-                    behavior.routine.run(&mut behavior.state, world);
-                } else {
-                    behavior.events.pop().unwrap().execute()
+                behavior.routine.run(&mut behavior.state, world);
+            }
+        };
+    }
+}
+
+pub fn react_to_events(world: &World) {
+    let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
+    for behavior in behaviors.iter_mut() {
+        match behavior {
+            None => { continue; }
+            Some(behavior) => {
+                if !behavior.events.is_empty() {
+                    behavior.events.pop().unwrap().execute(behavior);
                 }
             }
         };
