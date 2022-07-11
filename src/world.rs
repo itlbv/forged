@@ -62,7 +62,7 @@ impl<'assets> World<'assets> {
         // self.properties.player_id = entities::player(12.5, 12.5, self);
         // map_generator::place_trees(self);
 
-        entities::human(1.5, 1.5, "Tanja", self);
+        entities::human(1.5, 1.5, "Alice", self);
 
         entities::food(5, 8, self);
         entities::food(4, 1, self);
