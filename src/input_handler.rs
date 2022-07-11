@@ -7,7 +7,7 @@ use crate::{Properties};
 use crate::ecs::{Ecs, EntityId};
 use crate::map::Map;
 
-use crate::util::{event_util, map_util};
+use crate::util::map_util;
 
 pub struct InputHandler {
     pub sdl_events: EventPump,
@@ -61,7 +61,7 @@ fn right_mouse_click(x_screen: i32, y_screen: i32, properties: &Properties, ecs:
 }
 
 fn order_move(x: f32, y: f32, entity: EntityId, ecs: &Ecs) {
-    event_util::dispatch_event(entity, x, y, ecs);
+    // event_util::dispatch_event(entity, x, y, ecs);
 }
 
 fn screen_to_world(screen: i32, camera: i32, zoom: usize) -> f32 {

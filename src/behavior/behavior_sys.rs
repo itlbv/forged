@@ -7,24 +7,11 @@ pub fn behavior(world: &World) {
         match behavior {
             None => { continue; }
             Some(behavior) => {
-                if !behavior.events.is_empty() {
-                    behavior.events.pop().unwrap().execute(behavior);
+                if behavior.actions.is_empty() {
+                    panic!("Behavior {} has no actions!", behavior.state.owner);
                 }
-                behavior.routine.run(&mut behavior.state, world);
+                behavior.actions[0].run(&mut behavior.state, world);
             }
         };
     }
 }
-
-// let needs = &mut behavior.needs;
-// for need in needs.iter_mut() {
-//     need.evaluate();
-// }
-//
-// let mut priority_need_idx = 0;
-// for i in 0..needs.len() {
-//     if needs[i].get_value() > needs[priority_need_idx].get_value() {
-//         priority_need_idx = i;
-//     }
-// }
-// needs[priority_need_idx].run_behavior(&mut behavior.state, world);
