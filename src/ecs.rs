@@ -67,7 +67,7 @@ impl Ecs {
             .unwrap()
     }
 
-    pub fn add_event_for_entity(&self, target_entity: EntityId, action: Box<dyn Action>) {
+    pub fn add_event_for_entity(&self, action: Box<dyn Action>, target_entity: EntityId) {
         self.events_queue.borrow_mut().push(Event::new(target_entity, action));
     }
 

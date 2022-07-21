@@ -22,11 +22,11 @@ impl Action for MoveToDestinationAction {
 }
 
 impl MoveToDestinationAction {
-    pub fn new(x: f32, y: f32) -> Self {
-        Self {
+    pub fn boxed(x: f32, y: f32) -> Box<Self> {
+        Box::new(Self {
             behavior: Some(behaviors::move_to_destination()),
             x,
             y,
-        }
+        })
     }
 }

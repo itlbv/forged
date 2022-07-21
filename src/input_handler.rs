@@ -63,11 +63,7 @@ fn right_mouse_click(x_screen: i32, y_screen: i32, properties: &Properties, ecs:
 }
 
 fn order_move(x: f32, y: f32, entity: EntityId, ecs: &Ecs) {
-    ecs.add_event_for_entity(entity,
-                             Box::new(
-                                 MoveToDestinationAction::new(x, y)
-                             )
-    )
+    ecs.add_event_for_entity(MoveToDestinationAction::boxed(x, y), entity)
 }
 
 fn screen_to_world(screen: i32, camera: i32, zoom: usize) -> f32 {
