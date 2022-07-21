@@ -5,14 +5,14 @@ use crate::util::physics::Vect;
 
 pub struct Behavior {
     pub state: BehaviorState,
-    pub actions: Vec<Box<dyn BehaviorTreeNode>>
+    pub behaviors: Vec<Box<dyn BehaviorTreeNode>>
 }
 
 impl Behavior {
     pub fn new(owner: EntityId) -> Self {
         Self {
             state: BehaviorState::new(owner),
-            actions: vec![Box::new(behaviors::do_nothing())]
+            behaviors: vec![Box::new(behaviors::do_nothing())]
         }
     }
 }

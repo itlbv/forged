@@ -29,7 +29,7 @@ impl MoveToDestination {
         // let destinations = world.ecs.borrow_component_vec::<Destination>();
         // let dest = destinations.get(owner).unwrap().as_ref().unwrap();
 
-        let dest = state.destination.as_ref().unwrap();
+        let dest = state.destination.as_ref().unwrap(); // TODO check if dest is set
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
         let own_pos = positions.get_mut(state.owner).unwrap().as_mut().unwrap();

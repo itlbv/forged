@@ -36,6 +36,10 @@ pub fn remove_entities(world: &mut World) {
     }
 }
 
+pub fn process_events(world: &mut World) {
+    world.ecs.process_events()
+}
+
 pub fn input(world: &mut World) {
     world.input_handler.update(&mut world.properties, &world.map, &world.ecs);
 }

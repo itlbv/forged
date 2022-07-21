@@ -7,10 +7,10 @@ pub fn behavior(world: &World) {
         match behavior {
             None => { continue; }
             Some(behavior) => {
-                if behavior.actions.is_empty() {
+                if behavior.behaviors.is_empty() {
                     panic!("Behavior {} has no actions!", behavior.state.owner);
                 }
-                behavior.actions[0].run(&mut behavior.state, world);
+                behavior.behaviors[0].run(&mut behavior.state, world);
             }
         };
     }

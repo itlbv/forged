@@ -1,12 +1,14 @@
 use std::any::{Any, TypeId};
 use std::cell::{Ref, RefCell, RefMut};
 use std::collections::HashMap;
+use crate::World;
 
 pub type EntityId = usize;
 
 pub struct Ecs {
     entity_count: RefCell<usize>,
     component_registry: HashMap<TypeId, Box<dyn ComponentVec>>,
+    events_queue: RefCell<Vec<Event>>,
 }
 
 impl Ecs {
@@ -14,6 +16,7 @@ impl Ecs {
         Self {
             entity_count: RefCell::new(0),
             component_registry: Default::default(),
+            events_queue: RefCell::new(vec![]),
         }
     }
 
@@ -63,6 +66,16 @@ impl Ecs {
             .downcast_ref::<RefCell<Vec<Option<Comp>>>>()
             .unwrap()
     }
+
+    pub fn add_event_for_entity(&self, target_entity: EntityId, action: Box<dyn Action>) {
+        self.events_queue.borrow_mut().push(Event::new(target_entity, action));
+    }
+
+    pub fn process_events(&self) {
+        for event in self.events_queue.borrow_mut().iter_mut() {
+            event.action.execute(event.target_entity, self)
+        }
+    }
 }
 
 trait ComponentVec {
@@ -106,5 +119,23 @@ impl<Comp: 'static> ComponentVec for RefCell<Vec<Option<Comp>>> {
             }
         };
         entities
+    }
+}
+
+pub trait Action {
+    fn execute(&mut self, target_entity: EntityId, ecs: &Ecs);
+}
+
+struct Event {
+    target_entity: EntityId,
+    action: Box<dyn Action>,
+}
+
+impl Event {
+    pub fn new(target_entity: EntityId, action: Box<dyn Action>) -> Self {
+        Self {
+            target_entity,
+            action,
+        }
     }
 }
