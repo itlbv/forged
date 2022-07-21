@@ -1,7 +1,7 @@
 use std::any::{Any, TypeId};
 use std::cell::{Ref, RefCell, RefMut};
 use std::collections::HashMap;
-use crate::World;
+
 
 pub type EntityId = usize;
 

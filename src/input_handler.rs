@@ -5,7 +5,7 @@ use sdl2::mouse::MouseButton;
 
 use crate::{Properties};
 use crate::actions::MoveToDestinationAction;
-use crate::behavior::behaviors;
+
 use crate::ecs::{Ecs, EntityId};
 use crate::map::Map;
 
