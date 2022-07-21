@@ -5,6 +5,10 @@ use crate::behavior::tasks::move_tasks::{MoveCloseToTarget, MoveToDestination};
 use crate::behavior::tasks::tasks::{DoNothingTask, DoUntilFailure, EatTarget, FindNearestFood, SetDestinationFromMainTarget, SetRecipe};
 use crate::recipes;
 
+pub fn move_to_destination() -> Box<MoveToDestination> {
+    MoveToDestination::boxed()
+}
+
 pub fn find_food() -> Sequence {
     Sequence::of(vec![
         Box::new(FindNearestFood::new()),
@@ -38,10 +42,6 @@ pub fn collect_and_deliver_ingredients() -> DoUntilFailure {
 
 pub fn do_nothing() -> DoNothingTask {
     DoNothingTask {}
-}
-
-pub fn test_path() -> MoveToDestination {
-    MoveToDestination::new()
 }
 
 pub fn _test_building() -> Sequence {

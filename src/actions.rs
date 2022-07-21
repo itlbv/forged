@@ -24,7 +24,7 @@ impl Action for MoveToDestinationAction {
 impl MoveToDestinationAction {
     pub fn new(x: f32, y: f32) -> Self {
         Self {
-            behavior: Some(Box::new(behaviors::test_path())),
+            behavior: Some(behaviors::move_to_destination()),
             x,
             y,
         }

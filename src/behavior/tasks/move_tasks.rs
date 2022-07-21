@@ -11,8 +11,7 @@ use crate::map::MapTile;
 use crate::util::physics;
 
 
-pub struct MoveToDestination {
-}
+pub struct MoveToDestination {}
 
 impl BehaviorTreeNode for MoveToDestination {
     fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
@@ -22,7 +21,11 @@ impl BehaviorTreeNode for MoveToDestination {
 
 impl MoveToDestination {
     pub fn new() -> Self {
-        Self {  }
+        Self {}
+    }
+
+    pub fn boxed() -> Box<Self> {
+        Box::new(Self {})
     }
 
     fn move_to(&self, state: &mut BehaviorState, world: &World) -> Status {
@@ -99,8 +102,7 @@ impl MoveToDestination {
     }
 }
 
-pub struct MoveCloseToTarget {
-}
+pub struct MoveCloseToTarget {}
 
 impl BehaviorTreeNode for MoveCloseToTarget {
     fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
@@ -110,7 +112,7 @@ impl BehaviorTreeNode for MoveCloseToTarget {
 
 impl MoveCloseToTarget {
     pub fn new() -> Self {
-        Self {  }
+        Self {}
     }
 
     fn move_close(&self, state: &BehaviorState, world: &World) -> Status {
