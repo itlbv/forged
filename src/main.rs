@@ -18,12 +18,16 @@ mod util;
 mod behavior;
 mod actions;
 
+use std::path::Path;
 use std::time::{Duration, Instant};
 use sdl2::render::BlendMode::Blend;
 use crate::asset_manager::AssetManager;
+use crate::behavior::Behavior;
+use crate::components::{Building, Destination, Food, Inventory, Label, MainTarget, Position, Recipe, Remove, RenderShape, Storage, Target, Texture};
 use crate::constants::{WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDTH};
 use crate::ecs::Ecs;
 use crate::input_handler::InputHandler;
+use crate::items::{Item, Stone, Wood};
 use crate::map::Map;
 use crate::properties::Properties;
 use crate::renderer::Renderer;
@@ -45,7 +49,7 @@ fn main() -> Result<(), String> {
 
     let sdl_texture_creator = sdl_canvas.texture_creator();
     let sdl_ttf_context = sdl2::ttf::init().map_err(|e| e.to_string())?;
-    let asset_manager = AssetManager::new(&sdl_texture_creator, &sdl_ttf_context);
+    let mut asset_manager = AssetManager::new(&sdl_texture_creator, &sdl_ttf_context);
 
     let renderer = Renderer::new(sdl_canvas);
 
@@ -54,7 +58,10 @@ fn main() -> Result<(), String> {
 
     let properties = Properties::new();
     let map = Map::new();
-    let ecs = Ecs::new();
+    let mut ecs = Ecs::new();
+
+    load_assets(&mut asset_manager);
+    register_components(&mut ecs);
 
     let mut world = World::new(renderer, input_handler, asset_manager, ecs, properties, map);
     world.setup();
@@ -68,4 +75,31 @@ fn main() -> Result<(), String> {
     }
 
     Ok(())
+}
+
+fn load_assets(asset_manager: &mut AssetManager) {
+    asset_manager.load_texture("map_tileset", Path::new("assets/map/CL_MainLev.png"));
+    asset_manager.load_texture("crops", Path::new("assets/CL_Crops_Mining.png"));
+    asset_manager.load_texture("villager_woman", Path::new("assets/MiniVillagerWoman.png"));
+    asset_manager.load_texture("houses", Path::new("assets/houses.png"));
+}
+
+fn register_components(ecs: &mut Ecs) {
+    ecs.register_component::<Position>();
+    ecs.register_component::<Label>();
+    ecs.register_component::<RenderShape>();
+    ecs.register_component::<Behavior>();
+    ecs.register_component::<Food>();
+    ecs.register_component::<Remove>();
+    ecs.register_component::<Target>();
+    ecs.register_component::<Destination>();
+    ecs.register_component::<MainTarget>();
+    ecs.register_component::<Item>();
+    ecs.register_component::<Wood>();
+    ecs.register_component::<Stone>();
+    ecs.register_component::<Inventory>();
+    ecs.register_component::<Storage>();
+    ecs.register_component::<Recipe>();
+    ecs.register_component::<Building>();
+    ecs.register_component::<Texture>();
 }

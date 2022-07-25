@@ -24,7 +24,8 @@ impl<'l> AssetManager<'l> {
     }
 
     pub fn load_texture(&mut self, texture_id: &str, path: &Path) {
-        let texture = self.texture_creator.load_texture(path).expect("Can't load texture");
+        let texture = self.texture_creator.load_texture(path)
+            .expect(format!("Can't load texture '{}' from path '{}'", texture_id, path.to_str().unwrap()).as_str());
         self.textures.insert(String::from(texture_id), texture);
     }
 

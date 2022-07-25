@@ -35,29 +35,6 @@ impl<'assets> World<'assets> {
     }
 
     pub fn setup(&mut self) {
-        self.assets.load_texture("map_tileset", Path::new("assets/map/CL_MainLev.png"));
-        self.assets.load_texture("crops", Path::new("assets/CL_Crops_Mining.png"));
-        self.assets.load_texture("villager_woman", Path::new("assets/MiniVillagerWoman.png"));
-        self.assets.load_texture("houses", Path::new("assets/houses.png"));
-
-        self.ecs.register_component::<Position>();
-        self.ecs.register_component::<Label>();
-        self.ecs.register_component::<RenderShape>();
-        self.ecs.register_component::<Behavior>();
-        self.ecs.register_component::<Food>();
-        self.ecs.register_component::<Remove>();
-        self.ecs.register_component::<Target>();
-        self.ecs.register_component::<Destination>();
-        self.ecs.register_component::<MainTarget>();
-        self.ecs.register_component::<Item>();
-        self.ecs.register_component::<Wood>();
-        self.ecs.register_component::<Stone>();
-        self.ecs.register_component::<Inventory>();
-        self.ecs.register_component::<Storage>();
-        self.ecs.register_component::<Recipe>();
-        self.ecs.register_component::<Building>();
-        self.ecs.register_component::<Texture>();
-
         // self.properties.player_id = entities::player(12.5, 12.5, self);
         // map_generator::place_trees(self);
 
