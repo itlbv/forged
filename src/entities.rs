@@ -1,5 +1,5 @@
 use crate::components::{Building, Food, Inventory, Label, Position, Recipe, RenderShape, Storage};
-use crate::{Ecs, Map, textures, World};
+use crate::{Ecs, Map, textures};
 use crate::behavior::Behavior;
 use crate::items::{Item, Stone, Wood};
 use crate::util::map_util::put_entity_to_tile;

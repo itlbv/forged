@@ -1,10 +1,10 @@
-use std::path::Path;
+
 use crate::map::Map;
-use crate::{entities, InputHandler, Properties, Renderer, systems};
-use crate::behavior::Behavior;
-use crate::components::{Food, Inventory, Label, Position, Recipe, Remove, RenderShape, Storage, Target, MainTarget, Destination, Building, Texture};
+use crate::{InputHandler, Properties, Renderer};
+
+
 use crate::ecs::Ecs;
-use crate::items::{Item, Stone, Wood};
+
 use crate::asset_manager::AssetManager;
 
 pub struct World<'assets> {

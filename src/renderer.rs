@@ -4,7 +4,7 @@ use self::sdl2::render::WindowCanvas;
 use sdl2::pixels::Color;
 use sdl2::rect::Point;
 use sdl2::render::{Texture, TextureQuery};
-use sdl2::Sdl;
+
 use crate::{Properties};
 use crate::properties::Camera;
 use self::sdl2::rect::Rect;
