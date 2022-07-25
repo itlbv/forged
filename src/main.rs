@@ -64,14 +64,32 @@ fn main() -> Result<(), String> {
     register_components(&mut ecs);
     create_entities(&mut ecs, &map);
 
-    let mut world = World::new(renderer, input_handler, asset_manager, ecs, properties, map);
+    let mut world = World::new(
+        properties,
+        map,
+        ecs,
+        asset_manager,
+        renderer,
+        input_handler,
+    );
 
     let mut instant = Instant::now();
-    while !world.properties.quit {
-        let frame_time = Instant::now() - instant;
-        if frame_time < Duration::from_millis(16) { continue; }
-        instant = Instant::now();
-        world.tick(frame_time.as_millis() as f32 / 1000.0)
+    while !&world.properties.quit {
+        world.properties.delta_time = if world.properties.fixed_framerate {
+            0.016
+        } else {
+            let frame_time = Instant::now() - instant;
+            if frame_time < Duration::from_millis(16) { continue; }
+            instant = Instant::now();
+            frame_time.as_millis() as f32 / 1000.0
+        };
+
+        systems::input(&mut world);
+        systems::process_events(&mut world);
+        systems::behavior(&mut world);
+        systems::update_labels_textures(&mut world);
+        systems::remove_entities(&mut world);
+        systems::render(&mut world);
     }
 
     Ok(())

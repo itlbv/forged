@@ -17,31 +17,21 @@ pub struct World<'assets> {
 }
 
 impl<'assets> World<'assets> {
-    pub fn new(renderer: Renderer,
-               input_handler: InputHandler,
-               assets: AssetManager<'assets>,
-               ecs: Ecs,
-               properties: Properties,
-               map: Map,
+    pub fn new(
+        properties: Properties,
+        map: Map,
+        ecs: Ecs,
+        asset_manager: AssetManager<'assets>,
+        renderer: Renderer,
+        input_handler: InputHandler,
     ) -> Self {
         Self {
             properties,
             map,
             renderer,
             input_handler,
-            assets,
+            assets: asset_manager,
             ecs,
         }
-    }
-
-    pub fn tick(&mut self, _delta_time: f32) {
-        self.properties.delta_time = 0.016; // fixed framerate for debugging
-
-        systems::input(self);
-        systems::process_events(self);
-        systems::behavior(self);
-        systems::update_labels_textures(self);
-        systems::remove_entities(self);
-        systems::render(self);
     }
 }

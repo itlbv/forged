@@ -17,7 +17,7 @@ pub fn render(world: &mut World) {
 }
 
 fn render_map(world: &mut World) {
-    if world.properties.render_flags.map_textures {
+    if world.properties.render_options.map_textures {
         // for tile in world.map.borrow_tiles().iterator() {
         //     world.renderer.render_texture(
         //         world.assets.borrow_texture("map_tileset"),
@@ -64,15 +64,15 @@ fn render_textures(world: &mut World) {
 }
 
 fn render_debug(world: &mut World) {
-    if world.properties.render_flags.map_grid {
+    if world.properties.render_options.map_grid {
         render_map_grid(world);
     }
 
-    if world.properties.render_flags.map_tile_info {
+    if world.properties.render_options.map_tile_info {
         render_map_tile_info(world);
     }
 
-    if world.properties.render_flags.shapes {
+    if world.properties.render_options.shapes {
         render_debug_shapes(world);
     }
 }
@@ -135,7 +135,7 @@ fn render_debug_shapes(world: &mut World) {
 }
 
 fn render_labels(world: &mut World) {
-    if !world.properties.render_flags.labels { return; }
+    if !world.properties.render_options.labels { return; }
 
     let labels = world.ecs.borrow_component_vec::<Label>();
     let positions = world.ecs.borrow_component_vec::<Position>();
