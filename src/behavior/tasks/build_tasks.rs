@@ -108,7 +108,7 @@ impl FindTilesAndPlaceInvisibleBuilding {
 
         let (x, y) = build_pos.unwrap();
         map_util::claim_tiles(x, y, render_shape.w as usize, render_shape.h as usize, &world.map);
-        let (house_id, house_entry_x, house_entry_y) = entities::house_from_recipe(x as f32, y as f32, recipe.clone(), world);
+        let (house_id, house_entry_x, house_entry_y) = entities::house_from_recipe(x as f32, y as f32, recipe.clone(), &world.ecs);
 
         world.ecs.add_component_to_entity(owner, Destination::new(house_entry_x, house_entry_y));
         world.ecs.add_component_to_entity(owner, MainTarget::new(house_id));

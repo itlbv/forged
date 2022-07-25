@@ -62,9 +62,9 @@ fn main() -> Result<(), String> {
 
     load_assets(&mut asset_manager);
     register_components(&mut ecs);
+    create_entities(&mut ecs, &map);
 
     let mut world = World::new(renderer, input_handler, asset_manager, ecs, properties, map);
-    world.setup();
 
     let mut instant = Instant::now();
     while !world.properties.quit {
@@ -102,4 +102,27 @@ fn register_components(ecs: &mut Ecs) {
     ecs.register_component::<Recipe>();
     ecs.register_component::<Building>();
     ecs.register_component::<Texture>();
+}
+
+fn create_entities(ecs: &Ecs, map: &Map) {
+    entities::human(1.5, 1.5, "Alice", ecs, map);
+
+    entities::food(5, 8, ecs, map);
+    entities::food(4, 1, ecs, map);
+    entities::food(2, 5, ecs, map);
+    entities::food(9, 6, ecs, map);
+    entities::food(6, 6, ecs, map);
+    entities::food(5, 7, ecs, map);
+
+    entities::tree(3, 4, ecs, map);
+    entities::tree(7, 1, ecs, map);
+    entities::tree(8, 2, ecs, map);
+    entities::tree(1, 3, ecs, map);
+    entities::tree(3, 2, ecs, map);
+    entities::tree(5, 3, ecs, map);
+    entities::tree(6, 2, ecs, map);
+
+    entities::stone(13, 6, ecs, map);
+    entities::stone(14, 9, ecs, map);
+    entities::stone(12, 7, ecs, map);
 }

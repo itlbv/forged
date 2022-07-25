@@ -5,7 +5,7 @@
 use crate::components::{Position, RenderShape};
 use crate::constants::{MAP_HEIGHT, MAP_WIDTH};
 use crate::util::util_structs::Color;
-use crate::{entities, World};
+use crate::{Ecs, entities, Map, World};
 use crate::util::noise_generator::Noise;
 use crate::util::{noise_generator, path};
 
@@ -29,12 +29,12 @@ fn draw_river(noise_map: &Noise, world: &World) {
     }
 }
 
-fn plant_trees(noise_map: &Noise, world: &World) {
+fn plant_trees(noise_map: &Noise, ecs: &Ecs, map: &Map) {
     let (width, height) = noise_map.size();
     for y in 0..height {
         for x in 0..width {
             if noise_map.get_value(x, y) > 0.5 {
-                entities::tree(x, y, world);
+                entities::tree(x, y, ecs, map);
             }
         }
     }

@@ -34,32 +34,6 @@ impl<'assets> World<'assets> {
         }
     }
 
-    pub fn setup(&mut self) {
-        // self.properties.player_id = entities::player(12.5, 12.5, self);
-        // map_generator::place_trees(self);
-
-        entities::human(1.5, 1.5, "Alice", self);
-
-        entities::food(5, 8, self);
-        entities::food(4, 1, self);
-        entities::food(2, 5, self);
-        entities::food(9, 6, self);
-        entities::food(6, 6, self);
-        entities::food(5, 7, self);
-
-        entities::tree(3, 4, self);
-        entities::tree(7, 1, self);
-        entities::tree(8, 2, self);
-        entities::tree(1, 3, self);
-        entities::tree(3, 2, self);
-        entities::tree(5, 3, self);
-        entities::tree(6, 2, self);
-
-        entities::stone(13, 6, self);
-        entities::stone(14, 9, self);
-        entities::stone(12, 7, self);
-    }
-
     pub fn tick(&mut self, _delta_time: f32) {
         self.properties.delta_time = 0.016; // fixed framerate for debugging
 
