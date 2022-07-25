@@ -18,11 +18,13 @@ mod util;
 mod behavior;
 mod actions;
 
-
 use std::time::{Duration, Instant};
 use sdl2::render::BlendMode::Blend;
+use crate::asset_manager::AssetManager;
 use crate::constants::{WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDTH};
+use crate::ecs::Ecs;
 use crate::input_handler::InputHandler;
+use crate::map::Map;
 use crate::properties::Properties;
 use crate::renderer::Renderer;
 use crate::world::World;
@@ -41,19 +43,20 @@ fn main() -> Result<(), String> {
         .build().map_err(|e| e.to_string())?;
     sdl_canvas.set_blend_mode(Blend);
 
-    // let sdl_texture_creator = sdl_canvas.texture_creator();
-    // let sdl_ttf_context = sdl2::ttf::init().map_err(|e| e.to_string())?;
-
+    let sdl_texture_creator = sdl_canvas.texture_creator();
+    let sdl_ttf_context = sdl2::ttf::init().map_err(|e| e.to_string())?;
+    let asset_manager = AssetManager::new(&sdl_texture_creator, &sdl_ttf_context);
 
     let renderer = Renderer::new(sdl_canvas);
 
     let sdl_event_pump = sdl_context.event_pump()?;
     let input_handler = InputHandler::new(sdl_event_pump);
 
-    let texture_creator = renderer.sdl_canvas.texture_creator();
-    let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string()).unwrap();
+    let properties = Properties::new();
+    let map = Map::new();
+    let ecs = Ecs::new();
 
-    let mut world = World::new(renderer, input_handler, &texture_creator, &ttf_context);
+    let mut world = World::new(renderer, input_handler, asset_manager, ecs, properties, map);
     world.setup();
 
     let mut instant = Instant::now();

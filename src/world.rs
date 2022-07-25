@@ -1,7 +1,4 @@
 use std::path::Path;
-use sdl2::render::TextureCreator;
-use sdl2::ttf::Sdl2TtfContext;
-use sdl2::video::WindowContext;
 use crate::map::Map;
 use crate::{entities, InputHandler, Properties, Renderer, systems};
 use crate::behavior::Behavior;
@@ -22,16 +19,18 @@ pub struct World<'assets> {
 impl<'assets> World<'assets> {
     pub fn new(renderer: Renderer,
                input_handler: InputHandler,
-               texture_creator: &'assets TextureCreator<WindowContext>,
-               ttf_context: &'assets Sdl2TtfContext,
+               assets: AssetManager<'assets>,
+               ecs: Ecs,
+               properties: Properties,
+               map: Map,
     ) -> Self {
         Self {
-            properties: Properties::new(),
-            map: Map::new(),
+            properties,
+            map,
             renderer,
             input_handler,
-            ecs: Ecs::new(),
-            assets: AssetManager::new(texture_creator, ttf_context),
+            assets,
+            ecs,
         }
     }
 
