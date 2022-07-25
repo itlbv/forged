@@ -1,3 +1,4 @@
+pub const WINDOW_TITLE: &str = "Forged";
 pub const WINDOW_WIDTH: u32 = 1000;
 pub const WINDOW_HEIGHT: u32 = 800;
 

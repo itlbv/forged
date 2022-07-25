@@ -18,16 +18,7 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn new(sdl: &Sdl) -> Self {
-        let video_subsystem = sdl.video().unwrap();
-        let window = video_subsystem.window("Forged", WINDOW_WIDTH, WINDOW_HEIGHT)
-            .position_centered()
-            .build().unwrap();
-
-        let mut sdl_canvas = window.into_canvas()
-            .present_vsync()
-            .build().unwrap();
-        sdl_canvas.set_blend_mode(Blend);
+    pub fn new(sdl_canvas: WindowCanvas) -> Self {
         Self { sdl_canvas }
     }
 

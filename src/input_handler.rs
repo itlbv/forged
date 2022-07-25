@@ -12,17 +12,16 @@ use crate::map::Map;
 use crate::util::map_util;
 
 pub struct InputHandler {
-    pub sdl_events: EventPump,
+    pub sdl_event_pump: EventPump,
 }
 
 impl InputHandler {
-    pub fn new(sdl: &Sdl) -> Self {
-        let sdl_events = sdl.event_pump().unwrap();
-        Self { sdl_events }
+    pub fn new(sdl_event_pump: EventPump) -> Self {
+        Self { sdl_event_pump }
     }
 
     pub fn update(&mut self, properties: &mut Properties, map: &Map, ecs: &Ecs) {
-        for event in self.sdl_events.poll_iter() {
+        for event in self.sdl_event_pump.poll_iter() {
             match event {
                 Event::Quit { .. } |
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
