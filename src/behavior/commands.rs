@@ -13,8 +13,7 @@ pub struct MoveToDestinationCommand {
 
 impl Command for MoveToDestinationCommand {
     fn execute(&self, behavior: &mut Behavior) {
-        behavior.state.destination = Some(Vect::of(self.x, self.y));
-        behavior.behaviors.insert(0, behaviors::move_to_destination());
+        behavior.behaviors.insert(0, behaviors::move_to_spot(self.x, self.y));
     }
 }
 

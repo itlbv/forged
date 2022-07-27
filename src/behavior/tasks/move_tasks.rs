@@ -1,52 +1,52 @@
 use std::collections::HashMap;
 use crate::behavior::BehaviorState;
 
+use crate::World;
+use crate::constants::MOB_SPEED;
 use crate::behavior::btree::{BehaviorTreeNode, Status};
+use crate::behavior::btree::Status::{RUNNING, SUCCESS};
 use crate::components::{Position};
 use crate::util::physics::Vect;
-use crate::World;
-use crate::behavior::btree::Status::{RUNNING, SUCCESS};
-use crate::constants::MOB_SPEED;
-use crate::map::MapTile;
 use crate::util::physics;
+use crate::map::MapTile;
 
 
-pub struct MoveToDestination {}
+pub struct MoveToSpot {
+    spot_x: f32,
+    spot_y: f32,
+}
 
-impl BehaviorTreeNode for MoveToDestination {
+impl BehaviorTreeNode for MoveToSpot {
     fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
         self.move_to(state, world)
     }
 }
 
-impl MoveToDestination {
+impl MoveToSpot {
     pub fn new() -> Self {
-        Self {}
+        Self { spot_x: 0.0, spot_y: 0.0 }
     }
 
-    pub fn boxed() -> Box<Self> {
-        Box::new(Self {})
+    pub fn boxed(x: f32, y: f32) -> Box<Self> {
+        Box::new(Self { spot_x: x, spot_y: y })
     }
 
     fn move_to(&self, state: &mut BehaviorState, world: &World) -> Status {
-        // let destinations = world.ecs.borrow_component_vec::<Destination>();
-        // let dest = destinations.get(owner).unwrap().as_ref().unwrap();
-
-        let dest = state.destination.as_ref().unwrap(); // TODO check if dest is set
+        // let dest = state.destination.as_ref().unwrap(); // TODO check if dest is set
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
         let own_pos = positions.get_mut(state.owner).unwrap().as_mut().unwrap();
 
-        if physics::distance_between_vect(
-            &dest,
-            &Vect::of(own_pos.x, own_pos.y),
+        if physics::distance_between(
+            self.spot_x, self.spot_y,
+            own_pos.x, own_pos.y,
         ) < 0.02 {
             return SUCCESS;
         }
 
         let velocity_vec = get_velocity_vec_to(
             &Vect::of(own_pos.x, own_pos.y),
-            &dest,
+            &Vect::of(self.spot_x, self.spot_y),
             world.properties.delta_time);
 
         own_pos.x += velocity_vec.x;
