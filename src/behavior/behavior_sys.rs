@@ -7,6 +7,10 @@ pub fn behavior(world: &World) {
         match behavior {
             None => { continue; }
             Some(behavior) => {
+                if !behavior.commands.is_empty() {
+                    behavior.commands.pop().unwrap().execute(behavior);
+                }
+
                 if behavior.behaviors.is_empty() {
                     panic!("Behavior {} has no actions!", behavior.state.owner);
                 }

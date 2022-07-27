@@ -1,33 +1,34 @@
 use crate::behavior::{Behavior, behaviors};
 use crate::behavior::btree::BehaviorTreeNode;
+use crate::behavior::commands::MoveToDestinationCommand;
 use crate::ecs::{Action, Ecs, EntityId};
 use crate::util::physics::Vect;
 
 
-pub struct MoveToDestinationAction {
+pub struct OrderEntityMoveToDestinationAction {
     entity: EntityId,
-    behavior: Option<Box<dyn BehaviorTreeNode>>,
-    x: f32,
-    y: f32,
+    command: Option<Box<MoveToDestinationCommand>>,
+    // x: f32,
+    // y: f32,
 }
 
-impl Action for MoveToDestinationAction {
+impl Action for OrderEntityMoveToDestinationAction {
     fn execute(&mut self, ecs: &Ecs) {
         let mut behaviors = ecs.borrow_component_vec_mut::<Behavior>();
         let behavior_component = behaviors.get_mut(self.entity).unwrap().as_mut().unwrap();
-        if let Some(behavior) = self.behavior.take() {
-            behavior_component.state.destination = Some(Vect::of(self.x, self.y));
-            behavior_component.behaviors.insert(0, behavior);
+        if let Some(command) = self.command.take() {
+            // behavior_component.state.destination = Some(Vect::of(self.x, self.y));
+            behavior_component.commands.push(command);
         }
     }
 }
 
-impl MoveToDestinationAction {
+impl OrderEntityMoveToDestinationAction {
     pub fn boxed(entity: EntityId, x: f32, y: f32) -> Box<Self> {
         Box::new(Self {
-            behavior: Some(behaviors::move_to_destination()),
+            command: Some(MoveToDestinationCommand::boxed(x, y)),
             entity,
-            x, y,
+            // x, y,
         })
     }
 }

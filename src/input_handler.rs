@@ -4,7 +4,7 @@ use sdl2::keyboard::Keycode;
 use sdl2::mouse::MouseButton;
 
 use crate::{Properties};
-use crate::actions::MoveToDestinationAction;
+use crate::actions::OrderEntityMoveToDestinationAction;
 
 use crate::ecs::{Ecs, EntityId};
 use crate::map::Map;
@@ -62,7 +62,7 @@ fn right_mouse_click(x_screen: i32, y_screen: i32, properties: &Properties, ecs:
 }
 
 fn order_move(x: f32, y: f32, entity: EntityId, ecs: &Ecs) {
-    ecs.push_action(MoveToDestinationAction::boxed(entity, x, y));
+    ecs.push_action(OrderEntityMoveToDestinationAction::boxed(entity, x, y));
 }
 
 fn screen_to_world(screen: i32, camera: i32, zoom: usize) -> f32 {
