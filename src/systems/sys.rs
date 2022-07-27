@@ -37,7 +37,7 @@ pub fn remove_entities(world: &mut World) {
 }
 
 pub fn process_events(world: &mut World) {
-    world.ecs.process_events()
+    world.ecs.process_actions()
 }
 
 pub fn input(world: &mut World) {

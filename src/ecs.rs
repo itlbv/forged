@@ -8,7 +8,7 @@ pub type EntityId = usize;
 pub struct Ecs {
     entity_count: RefCell<usize>,
     component_registry: HashMap<TypeId, Box<dyn ComponentVec>>,
-    events_queue: RefCell<Vec<Event>>,
+    actions: RefCell<Vec<Box<dyn Action>>>,
 }
 
 impl Ecs {
@@ -16,7 +16,7 @@ impl Ecs {
         Self {
             entity_count: RefCell::new(0),
             component_registry: Default::default(),
-            events_queue: RefCell::new(vec![]),
+            actions: RefCell::new(vec![]),
         }
     }
 
@@ -67,15 +67,19 @@ impl Ecs {
             .unwrap()
     }
 
-    pub fn add_event_for_entity(&self, action: Box<dyn Action>, target_entity: EntityId) {
-        self.events_queue.borrow_mut().push(Event::new(target_entity, action));
+    pub fn push_action(&self, action: Box<dyn Action>) {
+        self.actions.borrow_mut().push(action);
     }
 
-    pub fn process_events(&self) {
-        for event in self.events_queue.borrow_mut().iter_mut() {
-            event.action.execute(event.target_entity, self)
+    pub fn process_actions(&self) {
+        for action in self.actions.borrow_mut().iter_mut() {
+            action.execute(self)
         }
     }
+}
+
+pub trait Action {
+    fn execute(&mut self, ecs: &Ecs);
 }
 
 trait ComponentVec {
@@ -119,23 +123,5 @@ impl<Comp: 'static> ComponentVec for RefCell<Vec<Option<Comp>>> {
             }
         };
         entities
-    }
-}
-
-pub trait Action {
-    fn execute(&mut self, target_entity: EntityId, ecs: &Ecs);
-}
-
-struct Event {
-    target_entity: EntityId,
-    action: Box<dyn Action>,
-}
-
-impl Event {
-    pub fn new(target_entity: EntityId, action: Box<dyn Action>) -> Self {
-        Self {
-            target_entity,
-            action,
-        }
     }
 }
