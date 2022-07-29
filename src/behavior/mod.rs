@@ -1,6 +1,6 @@
 pub mod behaviors;
-pub mod btree;
 pub mod commands;
+pub mod btree;
 mod tasks;
 mod brain;
 mod behavior_sys;

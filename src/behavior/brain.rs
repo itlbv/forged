@@ -1,6 +1,6 @@
 use crate::behavior::behaviors;
 use crate::behavior::btree::BehaviorTreeNode;
-use crate::behavior::commands::Command;
+use crate::behavior::commands::{CalculateStrategy, Command};
 use crate::ecs::EntityId;
 use crate::util::physics::Vect;
 
@@ -14,8 +14,8 @@ impl Brain {
     pub fn new(owner: EntityId) -> Self {
         Self {
             knowledge: Knowledge::new(owner),
-            commands: vec![],
-            behaviors: vec![Box::new(behaviors::do_nothing())]
+            commands: vec![CalculateStrategy::boxed()],
+            behaviors: vec![],
         }
     }
 }

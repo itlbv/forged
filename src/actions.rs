@@ -1,13 +1,13 @@
-use crate::behavior::{Brain, behaviors};
+use crate::behavior::{Brain, behaviors, commands};
 use crate::behavior::btree::BehaviorTreeNode;
-use crate::behavior::commands::MoveToDestinationCommand;
+use crate::behavior::commands::MoveToSpotCommand;
 use crate::ecs::{Action, Ecs, EntityId};
 use crate::util::physics::Vect;
 
 
 pub struct OrderEntityMoveToDestinationAction {
     entity: EntityId,
-    command: Option<Box<MoveToDestinationCommand>>,
+    command: Option<Box<MoveToSpotCommand>>,
     // x: f32,
     // y: f32,
 }
@@ -26,7 +26,7 @@ impl Action for OrderEntityMoveToDestinationAction {
 impl OrderEntityMoveToDestinationAction {
     pub fn boxed(entity: EntityId, x: f32, y: f32) -> Box<Self> {
         Box::new(Self {
-            command: Some(MoveToDestinationCommand::boxed(x, y)),
+            command: Some(commands::move_to_spot(x, y)),
             entity,
             // x, y,
         })

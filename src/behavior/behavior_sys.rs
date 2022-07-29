@@ -1,4 +1,5 @@
-use crate::behavior::Brain;
+use crate::util::log;
+use crate::behavior::{behaviors, Brain};
 use crate::World;
 
 pub fn behavior(world: &World) {
@@ -8,11 +9,12 @@ pub fn behavior(world: &World) {
             None => { continue; }
             Some(brain) => {
                 if !brain.commands.is_empty() {
-                    brain.commands.pop().unwrap().execute(brain);
+                    brain.commands.pop().unwrap().execute(brain, world);
                 }
 
                 if brain.behaviors.is_empty() {
-                    panic!("Behavior {} has no actions!", brain.knowledge.owner);
+                    log::error("No assigned behavior! Assigning DoNothing.", brain.knowledge.owner);
+                    brain.behaviors.push(behaviors::do_nothing());
                 }
                 brain.behaviors[0].run(&mut brain.knowledge, world);
             }

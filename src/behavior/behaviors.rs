@@ -19,7 +19,7 @@ pub fn find_food() -> Sequence {
 
 pub fn build_house() -> Sequence {
     Sequence::of(vec![
-        Box::new(SetRecipe::new( recipes::house())),
+        Box::new(SetRecipe::new(recipes::house())),
         Box::new(FindIngredients::new()),
         Box::new(FindTilesAndPlaceInvisibleBuilding::new()), //sets main target
         Box::new(MoveToSpot::new()),
@@ -40,8 +40,8 @@ pub fn collect_and_deliver_ingredients() -> DoUntilFailure {
     ])
 }
 
-pub fn do_nothing() -> DoNothingTask {
-    DoNothingTask {}
+pub fn do_nothing() -> Box<DoNothingTask> {
+    Box::new(DoNothingTask {})
 }
 
 pub fn _test_building() -> Sequence {
