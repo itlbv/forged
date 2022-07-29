@@ -6,5 +6,5 @@ mod brain;
 mod behavior_sys;
 
 pub use brain::Brain;
-pub use brain::BehaviorState;
+pub use brain::Knowledge;
 pub use behavior_sys::behavior;

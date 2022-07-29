@@ -6,13 +6,13 @@ use crate::util::{entity_util, map_util};
 
 use crate::util::physics::{distance_between_vect, Vect};
 use crate::{World};
-use crate::behavior::brain::BehaviorState;
+use crate::behavior::brain::Knowledge;
 
 
 pub struct SetDestinationFromMainTarget {}
 
 impl BehaviorTreeNode for SetDestinationFromMainTarget {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status {
         self.set_destination(state.owner, world)
     }
 }
@@ -44,7 +44,7 @@ impl DoUntilFailure {
 }
 
 impl BehaviorTreeNode for DoUntilFailure {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status {
         loop {
             for (i, child) in self.children.iter_mut().enumerate() {
                 if self.idx >= 0 && self.idx != i as i8 { continue; }
@@ -70,7 +70,7 @@ pub struct SetRecipe {
 }
 
 impl BehaviorTreeNode for SetRecipe {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status {
         self.set_recipe(state.owner, world)
     }
 }
@@ -89,7 +89,7 @@ impl SetRecipe {
 pub struct DoNothingTask {}
 
 impl BehaviorTreeNode for DoNothingTask {
-    fn run(&mut self, _: &mut BehaviorState, _: &World) -> Status {
+    fn run(&mut self, _: &mut Knowledge, _: &World) -> Status {
         SUCCESS
     }
 }
@@ -103,7 +103,7 @@ impl DoNothingTask {
 pub struct FindNearestFood {}
 
 impl BehaviorTreeNode for FindNearestFood {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status {
         self.find_food(state, world)
     }
 }
@@ -113,7 +113,7 @@ impl FindNearestFood {
         Self {}
     }
 
-    fn find_food(&self, state: &mut BehaviorState, world: &World) -> Status {
+    fn find_food(&self, state: &mut Knowledge, world: &World) -> Status {
         let foods = world.ecs.borrow_component_vec::<Food>();
         let positions = world.ecs.borrow_component_vec::<Position>();
 
@@ -150,7 +150,7 @@ impl FindNearestFood {
 pub struct EatTarget {}
 
 impl BehaviorTreeNode for EatTarget {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status {
         self.eat(state, world)
     }
 }
@@ -160,7 +160,7 @@ impl EatTarget {
         Self {}
     }
 
-    fn eat(&self, state: &BehaviorState, world: &World) -> Status {
+    fn eat(&self, state: &Knowledge, world: &World) -> Status {
         let target_id = state.target.expect(&*format!("Target is not set for {}", state.owner));
         entity_util::mark_entity_for_removal(target_id, world);
 

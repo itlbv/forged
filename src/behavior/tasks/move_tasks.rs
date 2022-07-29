@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::behavior::BehaviorState;
+use crate::behavior::Knowledge;
 
 use crate::World;
 use crate::constants::MOB_SPEED;
@@ -17,7 +17,7 @@ pub struct MoveToSpot {
 }
 
 impl BehaviorTreeNode for MoveToSpot {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status {
         self.move_to(state, world)
     }
 }
@@ -31,7 +31,7 @@ impl MoveToSpot {
         Box::new(Self { spot_x: x, spot_y: y })
     }
 
-    fn move_to(&self, state: &mut BehaviorState, world: &World) -> Status {
+    fn move_to(&self, state: &mut Knowledge, world: &World) -> Status {
         // let dest = state.destination.as_ref().unwrap(); // TODO check if dest is set
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();
@@ -105,7 +105,7 @@ impl MoveToSpot {
 pub struct MoveCloseToTarget {}
 
 impl BehaviorTreeNode for MoveCloseToTarget {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status {
         self.move_close(state, world)
     }
 }
@@ -115,7 +115,7 @@ impl MoveCloseToTarget {
         Self {}
     }
 
-    fn move_close(&self, state: &BehaviorState, world: &World) -> Status {
+    fn move_close(&self, state: &Knowledge, world: &World) -> Status {
         let target = state.target.expect(&*format!("Target is not set for {}", state.owner));
 
         let mut positions = world.ecs.borrow_component_vec_mut::<Position>();

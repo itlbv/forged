@@ -1,4 +1,4 @@
-use crate::behavior::BehaviorState;
+use crate::behavior::Knowledge;
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::World;
 
@@ -10,7 +10,7 @@ pub enum Status {
 }
 
 pub trait BehaviorTreeNode {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status;
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status;
 }
 
 pub struct Sequence {
@@ -28,7 +28,7 @@ impl Sequence {
 }
 
 impl BehaviorTreeNode for Sequence {
-    fn run(&mut self, state: &mut BehaviorState, world: &World) -> Status {
+    fn run(&mut self, state: &mut Knowledge, world: &World) -> Status {
         for (i, child) in self.children.iter_mut().enumerate() {
             if self.idx >= 0 && self.idx != i as i8 { continue; }
 

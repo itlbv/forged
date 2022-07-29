@@ -5,7 +5,7 @@ use crate::ecs::EntityId;
 use crate::util::physics::Vect;
 
 pub struct Brain {
-    pub state: BehaviorState,
+    pub state: Knowledge,
     pub commands: Vec<Box<dyn Command>>,
     pub behaviors: Vec<Box<dyn BehaviorTreeNode>>,
 }
@@ -13,21 +13,21 @@ pub struct Brain {
 impl Brain {
     pub fn new(owner: EntityId) -> Self {
         Self {
-            state: BehaviorState::new(owner),
+            state: Knowledge::new(owner),
             commands: vec![],
             behaviors: vec![Box::new(behaviors::do_nothing())]
         }
     }
 }
 
-pub struct BehaviorState {
+pub struct Knowledge {
     pub owner: EntityId,
     pub target: Option<EntityId>,
     pub main_target: Option<EntityId>,
     pub destination: Option<Vect>,
 }
 
-impl BehaviorState {
+impl Knowledge {
     pub fn new(owner: EntityId) -> Self {
         Self {
             owner,
