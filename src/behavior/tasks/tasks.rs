@@ -6,7 +6,7 @@ use crate::util::{entity_util, map_util};
 
 use crate::util::physics::{distance_between_vect, Vect};
 use crate::{World};
-use crate::behavior::behavior_comp::BehaviorState;
+use crate::behavior::brain::BehaviorState;
 
 
 pub struct SetDestinationFromMainTarget {}

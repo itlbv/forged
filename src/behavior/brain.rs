@@ -4,13 +4,13 @@ use crate::behavior::commands::Command;
 use crate::ecs::EntityId;
 use crate::util::physics::Vect;
 
-pub struct Behavior {
+pub struct Brain {
     pub state: BehaviorState,
     pub commands: Vec<Box<dyn Command>>,
     pub behaviors: Vec<Box<dyn BehaviorTreeNode>>,
 }
 
-impl Behavior {
+impl Brain {
     pub fn new(owner: EntityId) -> Self {
         Self {
             state: BehaviorState::new(owner),

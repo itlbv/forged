@@ -2,9 +2,9 @@ pub mod behaviors;
 pub mod btree;
 pub mod commands;
 mod tasks;
-mod behavior_comp;
+mod brain;
 mod behavior_sys;
 
-pub use behavior_comp::Behavior;
-pub use behavior_comp::BehaviorState;
+pub use brain::Brain;
+pub use brain::BehaviorState;
 pub use behavior_sys::behavior;

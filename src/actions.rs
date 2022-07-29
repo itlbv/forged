@@ -1,4 +1,4 @@
-use crate::behavior::{Behavior, behaviors};
+use crate::behavior::{Brain, behaviors};
 use crate::behavior::btree::BehaviorTreeNode;
 use crate::behavior::commands::MoveToDestinationCommand;
 use crate::ecs::{Action, Ecs, EntityId};
@@ -14,7 +14,7 @@ pub struct OrderEntityMoveToDestinationAction {
 
 impl Action for OrderEntityMoveToDestinationAction {
     fn execute(&mut self, ecs: &Ecs) {
-        let mut behaviors = ecs.borrow_component_vec_mut::<Behavior>();
+        let mut behaviors = ecs.borrow_component_vec_mut::<Brain>();
         let behavior_component = behaviors.get_mut(self.entity).unwrap().as_mut().unwrap();
         if let Some(command) = self.command.take() {
             // behavior_component.state.destination = Some(Vect::of(self.x, self.y));

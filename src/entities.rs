@@ -1,6 +1,6 @@
 use crate::components::{Building, Food, Inventory, Label, Position, Recipe, RenderShape, Storage};
 use crate::{Ecs, Map, textures};
-use crate::behavior::Behavior;
+use crate::behavior::Brain;
 use crate::items::{Item, Stone, Wood};
 use crate::util::map_util::put_entity_to_tile;
 use crate::util::util_structs::Color;
@@ -19,7 +19,7 @@ pub fn house_from_recipe(x: f32, y: f32, recipe: Recipe, ecs: &Ecs) -> (usize, f
 pub fn human(x: f32, y: f32, name: &str, ecs: &Ecs, map: &Map) {
     let id = ecs.create_entity();
 
-    ecs.add_component_to_entity(id, Behavior::new(id));
+    ecs.add_component_to_entity(id, Brain::new(id));
     ecs.add_component_to_entity(id, Position::of(x, y, id));
     ecs.add_component_to_entity(id, textures::human());
     ecs.add_component_to_entity(id, RenderShape::new_with_standard_offset(0.49, 0.49,

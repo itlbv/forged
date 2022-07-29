@@ -1,9 +1,9 @@
-use crate::{Behavior, World};
+use crate::{Brain, World};
 use crate::behavior::behaviors;
 use crate::util::physics::Vect;
 
 pub trait Command {
-    fn execute(&self, behavior: &mut Behavior) {}
+    fn execute(&self, behavior: &mut Brain) {}
 }
 
 pub struct MoveToDestinationCommand {
@@ -12,7 +12,7 @@ pub struct MoveToDestinationCommand {
 }
 
 impl Command for MoveToDestinationCommand {
-    fn execute(&self, behavior: &mut Behavior) {
+    fn execute(&self, behavior: &mut Brain) {
         behavior.behaviors.insert(0, behaviors::move_to_spot(self.x, self.y));
     }
 }

@@ -22,7 +22,7 @@ use std::path::Path;
 use std::time::{Duration, Instant};
 use sdl2::render::BlendMode::Blend;
 use crate::asset_manager::AssetManager;
-use crate::behavior::Behavior;
+use crate::behavior::Brain;
 use crate::components::{Building, Destination, Food, Inventory, Label, MainTarget, Position, Recipe, Remove, RenderShape, Storage, Target, Texture};
 use crate::constants::{WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDTH};
 use crate::ecs::Ecs;
@@ -106,7 +106,7 @@ fn register_components(ecs: &mut Ecs) {
     ecs.register_component::<Position>();
     ecs.register_component::<Label>();
     ecs.register_component::<RenderShape>();
-    ecs.register_component::<Behavior>();
+    ecs.register_component::<Brain>();
     ecs.register_component::<Food>();
     ecs.register_component::<Remove>();
     ecs.register_component::<Target>();

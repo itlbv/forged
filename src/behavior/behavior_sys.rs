@@ -1,8 +1,8 @@
-use crate::behavior::Behavior;
+use crate::behavior::Brain;
 use crate::World;
 
 pub fn behavior(world: &World) {
-    let mut behaviors = world.ecs.borrow_component_vec_mut::<Behavior>();
+    let mut behaviors = world.ecs.borrow_component_vec_mut::<Brain>();
     for behavior in behaviors.iter_mut() {
         match behavior {
             None => { continue; }
