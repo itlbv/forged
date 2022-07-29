@@ -12,13 +12,28 @@ pub struct MoveToDestinationCommand {
 }
 
 impl Command for MoveToDestinationCommand {
-    fn execute(&self, behavior: &mut Brain) {
-        behavior.behaviors.insert(0, behaviors::move_to_spot(self.x, self.y));
+    fn execute(&self, brain: &mut Brain) {
+        brain.behaviors.insert(0, behaviors::move_to_spot(self.x, self.y));
     }
 }
 
 impl MoveToDestinationCommand {
     pub fn boxed(x: f32, y: f32) -> Box<Self> {
         Box::new(Self { x, y })
+    }
+}
+
+pub struct CalculateStrategy {
+}
+
+impl Command for CalculateStrategy {
+    fn execute(&self, brain: &mut Brain) {
+        todo!()
+    }
+}
+
+impl CalculateStrategy {
+    pub fn boxed() -> Box<Self> {
+        Box::new(Self)
     }
 }
