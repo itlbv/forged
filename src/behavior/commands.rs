@@ -1,9 +1,9 @@
-use crate::{Brain, World};
+use crate::Brain;
 use crate::behavior::behaviors;
 use crate::util::physics::Vect;
 
 pub trait Command {
-    fn execute(&self, behavior: &mut Brain) {}
+    fn execute(&self, brain: &mut Brain) {}
 }
 
 pub struct MoveToDestinationCommand {
@@ -23,8 +23,7 @@ impl MoveToDestinationCommand {
     }
 }
 
-pub struct CalculateStrategy {
-}
+pub struct CalculateStrategy {}
 
 impl Command for CalculateStrategy {
     fn execute(&self, brain: &mut Brain) {
@@ -34,6 +33,6 @@ impl Command for CalculateStrategy {
 
 impl CalculateStrategy {
     pub fn boxed() -> Box<Self> {
-        Box::new(Self)
+        Box::new(Self {})
     }
 }

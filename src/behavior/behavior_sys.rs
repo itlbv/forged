@@ -2,19 +2,19 @@ use crate::behavior::Brain;
 use crate::World;
 
 pub fn behavior(world: &World) {
-    let mut behaviors = world.ecs.borrow_component_vec_mut::<Brain>();
-    for behavior in behaviors.iter_mut() {
-        match behavior {
+    let mut brains = world.ecs.borrow_component_vec_mut::<Brain>();
+    for brain in brains.iter_mut() {
+        match brain {
             None => { continue; }
-            Some(behavior) => {
-                if !behavior.commands.is_empty() {
-                    behavior.commands.pop().unwrap().execute(behavior);
+            Some(brain) => {
+                if !brain.commands.is_empty() {
+                    brain.commands.pop().unwrap().execute(brain);
                 }
 
-                if behavior.behaviors.is_empty() {
-                    panic!("Behavior {} has no actions!", behavior.state.owner);
+                if brain.behaviors.is_empty() {
+                    panic!("Behavior {} has no actions!", brain.knowledge.owner);
                 }
-                behavior.behaviors[0].run(&mut behavior.state, world);
+                brain.behaviors[0].run(&mut brain.knowledge, world);
             }
         };
     }

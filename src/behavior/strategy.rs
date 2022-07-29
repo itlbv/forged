@@ -1,1 +1,1 @@
-pub fn calculate
+pub fn calculate() {}
