@@ -5,19 +5,19 @@ use crate::World;
 pub fn behavior(world: &World) {
     let mut brains = world.ecs.borrow_component_vec_mut::<Brain>();
     for brain in brains.iter_mut() {
-        match brain {
-            None => { continue; }
-            Some(brain) => {
-                if !brain.commands.is_empty() {
-                    brain.commands.pop().unwrap().execute(brain, world);
-                }
+        if let Some(brain) = brain {
 
-                if brain.behaviors.is_empty() {
-                    log::error("No assigned behavior! Assigning DoNothing.", brain.knowledge.owner);
-                    brain.behaviors.push(behaviors::do_nothing());
-                }
-                brain.behaviors[0].run(&mut brain.knowledge, world);
+            if let Some(command) = brain.commands.pop() {
+                command.execute(brain, world);
             }
-        };
+
+            if let Some(behavior) = brain.behaviors.get_mut(0) {
+                behavior.run(&mut brain.knowledge, world);
+            } else {
+                log::error("No assigned behavior! Assigning DoNothing.", brain.knowledge.owner);
+                brain.behaviors.push(behaviors::do_nothing());
+            }
+
+        }
     }
 }
