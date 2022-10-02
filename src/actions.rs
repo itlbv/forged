@@ -1,8 +1,8 @@
-use crate::behavior::{Brain, behaviors, commands};
-use crate::behavior::btree::BehaviorTreeNode;
+use crate::behavior::{Brain, commands};
+
 use crate::behavior::commands::MoveToSpotCommand;
 use crate::ecs::{Action, Ecs, EntityId};
-use crate::util::physics::Vect;
+
 
 
 pub struct OrderEntityMoveToDestinationAction {

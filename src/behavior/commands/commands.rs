@@ -1,10 +1,10 @@
 use crate::{Brain, World};
 use crate::behavior::{behaviors, strategy};
 use crate::util::log;
-use crate::util::physics::Vect;
+
 
 pub trait Command {
-    fn execute(&self, brain: &mut Brain, world: &World) {}
+    fn execute(&self, _brain: &mut Brain, _world: &World) {}
 }
 
 pub struct MoveToSpotCommand {
