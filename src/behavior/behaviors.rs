@@ -9,12 +9,14 @@ pub fn move_to_spot(x: f32, y: f32) -> Box<MoveToSpot> {
     MoveToSpot::boxed(x, y)
 }
 
-pub fn find_food() -> Sequence {
-    Sequence::of(vec![
-        Box::new(FindNearestFood::new()),
-        Box::new(MoveCloseToTarget::new()),
-        Box::new(EatTarget::new()),
-    ])
+pub fn find_food() -> Box<Sequence> {
+    Box::new(
+        Sequence::of(vec![
+            Box::new(FindNearestFood::new()),
+            Box::new(MoveCloseToTarget::new()),
+            Box::new(EatTarget::new()),
+        ])
+    )
 }
 
 pub fn build_house() -> Sequence {

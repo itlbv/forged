@@ -12,6 +12,7 @@ default-features = false
 features = ["image", "ttf"]
 
 [dependencies]
+anyhow = "1.0.64"
 rand = "0.8.4"
 rand_seeder = "0.2.3"
 rand_chacha = "0.3.1"

@@ -2,7 +2,7 @@ use crate::behavior::btree::{BehaviorTreeNode, Status};
 use crate::behavior::btree::Status::{FAILURE, RUNNING, SUCCESS};
 use crate::components::{Food, Position, Recipe, Destination, MainTarget, Building};
 
-use crate::util::{entity_util, map_util};
+use crate::util::{entity_util, log, map_util};
 
 use crate::util::physics::{distance_between_vect, Vect};
 use crate::{World};
@@ -113,13 +113,13 @@ impl FindNearestFood {
         Self {}
     }
 
-    fn find_food(&self, state: &mut Knowledge, world: &World) -> Status {
+    fn find_food(&self, knowledge: &mut Knowledge, world: &World) -> Status {
         let foods = world.ecs.borrow_component_vec::<Food>();
         let positions = world.ecs.borrow_component_vec::<Position>();
 
         let own_pos = Vect::of(
-            positions.get(state.owner).unwrap().as_ref().unwrap().x,
-            positions.get(state.owner).unwrap().as_ref().unwrap().y,
+            positions.get(knowledge.owner).unwrap().as_ref().unwrap().x,
+            positions.get(knowledge.owner).unwrap().as_ref().unwrap().y,
         );
 
         let zip = foods.iter().zip(positions.iter());
@@ -140,7 +140,7 @@ impl FindNearestFood {
         return match target {
             None => { FAILURE }
             Some(_) => {
-                state.target = target;
+                knowledge.target = target;
                 SUCCESS
             }
         };
@@ -160,8 +160,8 @@ impl EatTarget {
         Self {}
     }
 
-    fn eat(&self, state: &Knowledge, world: &World) -> Status {
-        let target_id = state.target.expect(&*format!("Target is not set for {}", state.owner));
+    fn eat(&self, knowledge: &Knowledge, world: &World) -> Status {
+        let target_id = knowledge.target.expect(&*format!("Target is not set for {}", knowledge.owner));
         entity_util::mark_entity_for_removal(target_id, world);
 
         let positions = world.ecs.borrow_component_vec::<Position>();
