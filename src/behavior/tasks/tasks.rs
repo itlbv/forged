@@ -90,7 +90,7 @@ pub struct DoNothingTask {}
 
 impl BehaviorTreeNode for DoNothingTask {
     fn run(&mut self, _: &mut Knowledge, _: &World) -> Status {
-        SUCCESS
+        RUNNING
     }
 }
 
